@@ -1,0 +1,44 @@
+#################
+## CoIDE
+#################
+debug.config
+Debug/*
+*.elf.xcodeproj/*
+
+#################
+## Eclipse
+#################
+*.pydevproject
+.project
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+#################
+## C
+#################
+# Object files
+*.o
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
