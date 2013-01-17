@@ -46,7 +46,7 @@ extern unsigned long g_ul_system_clock; /*Frecuencia del clock*/
  *
  *
 */
-void CHAT_inicializacion_clock(){
+void BROADCAR_inicializacion_clock(){
 	//125ns
 	SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |SYSCTL_XTAL_8MHZ);
 	g_ul_system_clock = SysCtlClockGet();

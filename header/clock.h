@@ -31,7 +31,7 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-void CHAT_inicializacion_clock();
+void BROADCAR_inicializacion_clock();
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**

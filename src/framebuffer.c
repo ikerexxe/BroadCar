@@ -30,6 +30,7 @@
 #include <string.h>
 #include "rit128x96x4.h"
 #include "displayGenerico.h"
+#include "broadcar.h"
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
@@ -203,7 +204,7 @@ void FRAME_BUFFER_write_to_display(void){
 		(g_display_elements[i].yOld != g_display_elements[i].y ))
 		{
 			if(g_display_elements[i].what==1){ //Es un texto
-					size = MAX_ELEMS_PANTALLA;
+					size = MAX_ELEMS_LINEA;
 					for(index = 0; index < size; index ++){
 						str[index]= ' ';
 					}

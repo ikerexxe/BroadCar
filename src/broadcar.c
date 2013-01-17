@@ -25,10 +25,15 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "broadcar.h"
 #include "framebuffer.h"
 #include "clock.h"
 #include "displayGenerico.h"
 #include "display.h"
+#include "keypad.h"
 #include "hw_types.h"
 
 /*********************************************************************
@@ -36,11 +41,16 @@
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-void CHAT_inicializacion();
-void CHAT_logica();
+void BROADCAR_inicializacion();
+void BROADCAR_logica();
 
-//TODO: esto va en el header
-#define MAX_ELEMS_LINEA 10
+/*********************************************************************
+** 																	**
+** EXTERNAL VARIABLES 												**
+** 																	**
+**********************************************************************/
+extern unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
+extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
 
 /*********************************************************************
 ** 																	**
@@ -48,8 +58,6 @@ void CHAT_logica();
 ** 																	**
 **********************************************************************/
 unsigned long g_ul_system_clock; /*Frecuencia del clock*/
-unsigned char uno = 97;
-unsigned char dos = 98;
 
 /*********************************************************************
 ** 																	**
@@ -60,10 +68,10 @@ int main(void)
 {
 	int i = 0;
 
-	CHAT_inicializacion();
+	BROADCAR_inicializacion();
 
     while(1){
-    	CHAT_logica();
+    	BROADCAR_logica();
     }
 }
 
@@ -75,10 +83,10 @@ int main(void)
  * Se inicializan uno a uno el clock, el keypad, la pantalla, el PWM y
  * la UART.
 */
-void CHAT_inicializacion(){
-	CHAT_inicializacion_clock();
-//	CHAT_inicializacion_keypad();
-	CHAT_inicializacion_display();
+void BROADCAR_inicializacion(){
+	BROADCAR_inicializacion_clock();
+	BROADCAR_inicializacion_keypad();
+	BROADCAR_inicializacion_display();
 //	CHAT_inicializacion_pwm();
 //	CHAT_inicializacion_comunicacion();
 }
@@ -94,16 +102,34 @@ void CHAT_inicializacion(){
  * Si se ha reibido algo por la UART y está almacenado en el buffer de software
  * se muestra en pantalla.
 */
-void CHAT_logica(){
-	unsigned char * pantalla = malloc(sizeof(unsigned char) * MAX_ELEMS_LINEA);
+void BROADCAR_logica(){
+	unsigned char * pantalla;
 
-	pantalla[0] = uno;
-	pantalla[1] = dos;
-	pantalla[2] = '\0';
-	uno++;
-	dos++;
-
-	CHAT_escribir(pantalla);
+	BROADCAR_leer_keypad();
+	if(g_ucChangedData){
+		pantalla = malloc(sizeof(unsigned char) * MAX_ELEMS_LINEA);
+		switch(g_ul_keypad_switches){
+			case KEY_UP:
+				strcpy(pantalla, "ARRIBA");
+				break;
+			case KEY_DOWN:
+				strcpy(pantalla, "ABAJO");
+				break;
+			case KEY_LEFT:
+				strcpy(pantalla, "IZQUIERDA");
+				break;
+			case KEY_RIGHT:
+				strcpy(pantalla, "DERECHA");
+				break;
+			case KEY_SELECT:
+				strcpy(pantalla, "SELECT");
+				break;
+			default:
+				strcpy(pantalla, "NADA");
+				break;
+		}
+		BROADCAR_escribir(pantalla);
+	}
 }
 /*********************************************************************
 ** 																	**

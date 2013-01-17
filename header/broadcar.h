@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
-** project :  ChatLM3S8962					 							  	**
-** filename : display.h  						  					    	**
+** project :  BroadCar						 							  	**
+** filename : chat.h	  						  					    	**
 ** version : 1 									  							**
-** date :  	2012-10-08		 		 									    **
+** date :  	2013-01-17		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -14,38 +14,33 @@
 **										        							**
 **VERSION HISTORY:									  						**
 **----------------									  						**
-**Version : 2										  						**
-**Date : 2012-12-05									 					    **
+**Version : 1										  						**
+**Date : 2013-01-17									 					    **
 **Revised by : iker pedrosa                    	  							**
-**Description : Modified version for broadcar application.					**
+**Description : Modified version for the chat.				  				**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef DISPLAY_H
-#define DISPLAY_H
-/*****************************************************************************
-** 																			**
-** PROTOTYPES OF GLOBAL FUNCTIONS											**
-** 																			**
-******************************************************************************/
-void BROADCAR_inicializacion_display();
-void BROADCAR_escribir(unsigned char * mensaje);
-/*****************************************************************************
-**	 																		**
-** TYPEDEFS AND STRUCTURES 													**
-** 																			**
-*****************************************************************************/
-#ifndef DISPLAY_C
-#define PUB_DISPLAY extern
-#else
-#define PUB_DISPLAY
-#endif
+/*
+ * Definición de las teclas
+ */
+#define KEY_UP 0x1e     //11110
+#define KEY_DOWN 0x1d   //11101
+#define KEY_LEFT 0x1b   //11011
+#define KEY_RIGHT 0x17  //10111
+#define KEY_SELECT 15 //01111
+/*
+ * Definición del numero maximo de caracteres por linea
+ */
+#define MAX_ELEMS_LINEA 10
+
+#define NULL 0
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**
 ** 																			**
 ******************************************************************************/
-#endif
+

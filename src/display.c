@@ -31,6 +31,7 @@
 #include "framebuffer.h"
 #include "hw_types.h"
 #include <stdlib.h>
+#include <string.h>
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
@@ -100,9 +101,8 @@ const unsigned char g_puc_nada[60]  =  {
  * Primero se inicializa el buffer y luego se inicializa el texto del usuario.
  * Al final, se vuelca a la pantalla real.
 */
-void CHAT_inicializacion_display(){
+void BROADCAR_inicializacion_display(){
 	unsigned char * str = malloc(sizeof(unsigned char) * 10);
-	unsigned char * str1 = malloc(sizeof(unsigned char) * 10);
 
 	FRAME_BUFFER_init();
 	strcpy(str, "inicia");
@@ -120,7 +120,7 @@ void CHAT_inicializacion_display(){
  * Si se recibe un texto se muestra en pantalla poniendo como inicio PC-> y si
  * se envia se pone Yo->
 */
-void CHAT_escribir(unsigned char * mensaje){
+void BROADCAR_escribir(unsigned char * mensaje){
 	int contador = 0;
 	int altura = 10;
 
@@ -134,7 +134,7 @@ void CHAT_escribir(unsigned char * mensaje){
 			FRAME_BUFFER_actualiza_posicion_elemento(contador, 0, altura);
 			altura += 10;
 		}
-		FRAME_BUFFER_insert_text(mensaje, 0, altura);
+		g_i_numero_elemento = FRAME_BUFFER_insert_text(mensaje, 0, altura);
 	}
 
 	FRAME_BUFFER_write_to_display();
