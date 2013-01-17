@@ -19,6 +19,8 @@
 						<entry flags="" kind="includePath" name="lm3slib"/>
 						<entry flags="" kind="includePath" name="lm3slib/driverlib"/>
 						<entry flags="" kind="includePath" name="lm3slib/inc"/>
+						<entry flags="" kind="includePath" name="./header"/>
+						<entry flags="" kind="includePath" name="./utiles/drivers"/>
 						<entry flags="" kind="macro" name="__GNUC__" value=""/>
 						<entry flags="" kind="macro" name="gcc" value=""/>
 						<entry flags="" kind="macro" name="LM3S8962" value=""/>
@@ -34,6 +36,8 @@
 				<pathentry include="D:/EstProg/04POPBL/BroadCar/lm3slib" kind="inc" path="" system="true"/>
 				<pathentry include="D:/EstProg/04POPBL/BroadCar/lm3slib/driverlib" kind="inc" path="" system="true"/>
 				<pathentry include="D:/EstProg/04POPBL/BroadCar/lm3slib/inc" kind="inc" path="" system="true"/>
+				<pathentry include="D:/EstProg/04POPBL/BroadCar/header" kind="inc" path="" system="true"/>
+				<pathentry include="D:/EstProg/04POPBL/BroadCar/utiles/drivers" kind="inc" path="" system="true"/>
 				<pathentry kind="mac" name="__GNUC__" path="" value=""/>
 				<pathentry kind="mac" name="gcc" path="" value=""/>
 				<pathentry kind="mac" name="LM3S8962" path="" value=""/>
