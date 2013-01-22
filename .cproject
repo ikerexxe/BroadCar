@@ -21,6 +21,7 @@
 						<entry flags="" kind="includePath" name="lm3slib/inc"/>
 						<entry flags="" kind="includePath" name="./header"/>
 						<entry flags="" kind="includePath" name="./utiles/drivers"/>
+						<entry flags="" kind="includePath" name="./header/sensores"/>
 						<entry flags="" kind="macro" name="__GNUC__" value=""/>
 						<entry flags="" kind="macro" name="gcc" value=""/>
 						<entry flags="" kind="macro" name="LM3S8962" value=""/>
@@ -28,6 +29,7 @@
 				</externalSettings>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.pathentry">
 				<pathentry kind="src" path=""/>
 				<pathentry include="C:/CooCox/CoIDE/gcc/Sourcery G++ Lite/arm-none-eabi/include" kind="inc" path="" system="true"/>
@@ -38,6 +40,7 @@
 				<pathentry include="D:/EstProg/04POPBL/BroadCar/lm3slib/inc" kind="inc" path="" system="true"/>
 				<pathentry include="D:/EstProg/04POPBL/BroadCar/header" kind="inc" path="" system="true"/>
 				<pathentry include="D:/EstProg/04POPBL/BroadCar/utiles/drivers" kind="inc" path="" system="true"/>
+				<pathentry include="D:/EstProg/04POPBL/BroadCar/header/sensores" kind="inc" path="" system="true"/>
 				<pathentry kind="mac" name="__GNUC__" path="" value=""/>
 				<pathentry kind="mac" name="gcc" path="" value=""/>
 				<pathentry kind="mac" name="LM3S8962" path="" value=""/>

@@ -35,7 +35,7 @@
 #include "display.h"
 #include "keypad.h"
 #include "hw_types.h"
-
+#include "motorAutomatas.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -50,7 +50,7 @@ void BROADCAR_logica();
 ** 																	**
 **********************************************************************/
 extern unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
-extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
+extern TS_AUTOMATA automata;
 
 /*********************************************************************
 ** 																	**
@@ -58,7 +58,6 @@ extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está puls
 ** 																	**
 **********************************************************************/
 unsigned long g_ul_system_clock; /*Frecuencia del clock*/
-
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -66,8 +65,6 @@ unsigned long g_ul_system_clock; /*Frecuencia del clock*/
 **********************************************************************/
 int main(void)
 {
-	int i = 0;
-
 	BROADCAR_inicializacion();
 
     while(1){
@@ -87,7 +84,6 @@ void BROADCAR_inicializacion(){
 	BROADCAR_inicializacion_clock();
 	BROADCAR_inicializacion_keypad();
 	BROADCAR_inicializacion_display();
-//	CHAT_inicializacion_pwm();
 //	CHAT_inicializacion_comunicacion();
 }
 
@@ -103,33 +99,34 @@ void BROADCAR_inicializacion(){
  * se muestra en pantalla.
 */
 void BROADCAR_logica(){
-	unsigned char * pantalla;
-
-	BROADCAR_leer_keypad();
-	if(g_ucChangedData){
-		pantalla = malloc(sizeof(unsigned char) * MAX_ELEMS_LINEA);
-		switch(g_ul_keypad_switches){
-			case KEY_UP:
-				strcpy(pantalla, "ARRIBA");
-				break;
-			case KEY_DOWN:
-				strcpy(pantalla, "ABAJO");
-				break;
-			case KEY_LEFT:
-				strcpy(pantalla, "IZQUIERDA");
-				break;
-			case KEY_RIGHT:
-				strcpy(pantalla, "DERECHA");
-				break;
-			case KEY_SELECT:
-				strcpy(pantalla, "SELECT");
-				break;
-			default:
-				strcpy(pantalla, "NADA");
-				break;
-		}
-		BROADCAR_escribir(pantalla);
-	}
+//	unsigned char * pantalla;
+//
+//	BROADCAR_leer_keypad();
+//	if(g_ucChangedData){
+//		pantalla = malloc(sizeof(unsigned char) * MAX_ELEMS_LINEA);
+//		switch(g_ul_keypad_switches){
+//			case KEY_UP:
+//				strcpy(pantalla, "ARRIBA");
+//				break;
+//			case KEY_DOWN:
+//				strcpy(pantalla, "ABAJO");
+//				break;
+//			case KEY_LEFT:
+//				strcpy(pantalla, "IZQUIERDA");
+//				break;
+//			case KEY_RIGHT:
+//				strcpy(pantalla, "DERECHA");
+//				break;
+//			case KEY_SELECT:
+//				strcpy(pantalla, "SELECT");
+//				break;
+//			default:
+//				strcpy(pantalla, "NADA");
+//				break;
+//		}
+//		BROADCAR_escribir(pantalla);
+//	}
+	EjecutaAutomata(&automata);
 }
 /*********************************************************************
 ** 																	**

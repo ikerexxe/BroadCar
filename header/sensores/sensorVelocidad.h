@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
 ** project :  BroadCar						 							  	**
-** filename : chat.h	  						  					    	**
+** filename : sensorVelocidad.h					  					    	**
 ** version : 1 									  							**
-** date :  	2013-01-17		 		 									    **
+** date :  	2013-01-22		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -15,41 +15,34 @@
 **VERSION HISTORY:									  						**
 **----------------									  						**
 **Version : 1										  						**
-**Date : 2013-01-17									 					    **
+**Date : 2013-01-22									 					    **
 **Revised by : iker pedrosa                    	  							**
-**Description : Modified version for the chat.				  				**
+**Description : Original version.							  				**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef BROADCAR_H
-#define BROADCAR_H
-/*
- * Definición de las teclas
- */
-#define KEY_UP 0x1e     //11110
-#define KEY_DOWN 0x1d   //11101
-#define KEY_LEFT 0x1b   //11011
-#define KEY_RIGHT 0x17  //10111
-#define KEY_SELECT 15 //01111
-/*
- * Definición del numero maximo de caracteres por linea
- */
-#define MAX_ELEMS_LINEA 10
-
-#ifndef NULL
-#define NULL 0
+#ifndef SENSORVELOCIDAD_H
+#define SENSORVELOCIDAD_H
+/*****************************************************************************
+** 																			**
+** PROTOTYPES OF GLOBAL FUNCTIONS											**
+** 																			**
+******************************************************************************/
+tBoolean BROADCAR_TR_cambio_velocidad(void);
+void BROADCAR_ACCION_velocidad(void);
+/*****************************************************************************
+**	 																		**
+** TYPEDEFS AND STRUCTURES 													**
+** 																			**
+*****************************************************************************/
+#ifndef SENSORVELOCIDAD_C
+#define PUB_SENSORVELOCIDAD extern
+#else
+#define PUB_SENSORVELOCIDAD
 #endif
-
-/*********************************************************************
-** 																	**
-** TYPEDEFS AND STRUCTURES 											**
-** 																	**
-**********************************************************************/
-typedef char BYTE;
-
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

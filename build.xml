@@ -40,6 +40,7 @@
 </defineset>
 			
       <!-- include compile path -->
+      <includepath path="./header/sensores"/>
       <includepath path="./utiles/drivers"/>
       <includepath path="./header"/>
       <includepath path="lm3slib/inc"/>

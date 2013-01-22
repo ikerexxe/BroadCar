@@ -37,7 +37,6 @@
 **********************************************************************/
 unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
 unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
-
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
