@@ -68,7 +68,6 @@ UARTClass uarts[3]; /*Clase que contiene los datos de la UART*/
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-static int nElementosIn(int nPort);
 static int nHuecosIn(int nPort);
 static int nElementosOut(int nPort);
 static int nHuecosOut(int nPort);
@@ -157,6 +156,9 @@ int recvUART(int nPort, unsigned char *p, int *pSize)
   int n; /*Numero de elementos en el buffer de hardware*/
 
   n=nElementosIn(nPort);
+  if((*pSize) != 0){
+	  n = *pSize;
+  }
   *pSize=n;
   j=uarts[nPort].inTail;
   for(i=0;i<n;i++)
@@ -325,7 +327,7 @@ static int nHuecosIn(int nPort)
  * @return    Numero de elementos
  *
 */
-static int nElementosIn(int nPort)
+int nElementosIn(int nPort)
 {
 	return (uarts[nPort].inHead+BUFF_SIZE-uarts[nPort].inTail) % BUFF_SIZE;
 }

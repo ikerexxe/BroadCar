@@ -35,6 +35,7 @@ int openUART(int nPort);
 void closeUART(int nPort);
 int recvUART(int nPort, unsigned char *p, int *pSize);
 int sendUART(int nPort, unsigned char *p, int *pSize);
+int nElementosIn(int nPort);
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

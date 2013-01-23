@@ -33,6 +33,7 @@
 #include "sensorEstado.h"
 #include "sensorObras.h"
 #include "sensorVelocidad.h"
+#include "zigbee.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -147,7 +148,14 @@ void BROADCAR_ACCION_sensores(void){
  * @brief  Funcion que ejecuta el automata de los mensajes
 */
 void BROADCAR_ACCION_mensajes(void){
-	//TODO: si se ha recibido mensaje
+	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
+	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
+
+	b_mensaje = BROADCAST_hay_mensaje();
+	if(b_mensaje){
+		m_mensaje = BROADCAST_recibir_mensaje();
+		//TODO: tratamos el mensaje o lo enviamos a la app movil
+	}
 	BROADCAR_escribir("mensaje");
 }
 /**
