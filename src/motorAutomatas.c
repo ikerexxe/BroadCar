@@ -19,7 +19,6 @@
 **Revised by : iker pedrosa											**
 **Description : Modified version for broadcar application.			**
 *********************************************************************/
-
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
@@ -32,36 +31,31 @@
 #include "driverlib/gpio.h"
 #include "display.h"
 #include "motorAutomatas.h"
-
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
 ** 																	**
 **********************************************************************/
 #define MOTORAUTOMATAS_C
-
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-BYTE fms_mv = 1;
-BYTE fms_mv_anterior;
-int get_id_motor = 0;
-
+BYTE fms_mv = 1; /*Estado en el que nos encontramos actualmente*/
+BYTE fms_mv_anterior; /*Estado en el que se encontraba anteriormente*/
 /*********************************************************************
 **																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
-
 /**
  * @brief  Funcion que ejecuta el automata
  *
 */
 void EjecutaAutomata(TS_AUTOMATA *elAutomata)
 {
-	unsigned char error[10] = "ERROR!!!!";
+	unsigned char error[10] = "ERROR!!!!"; /*String que contiene el mensaje ERROR*/
 	TS_ESTADO **Indx;    /* Valor indice rastreador */
 
 	//Si ha llegado a la condicion final, termina de ejecutar el automata.

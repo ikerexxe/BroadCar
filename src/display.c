@@ -19,7 +19,6 @@
 **Revised by : iker pedrosa											**
 **Description : Modified version for broadcar application.			**
 *********************************************************************/
-
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
@@ -38,7 +37,6 @@
 ** 																	**
 **********************************************************************/
 #define DISPLAY_C
-
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -46,7 +44,6 @@
 *********************************************************************/
 extern unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
 extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
-
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -79,20 +76,17 @@ const unsigned char g_puc_nada[60]  =  {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     }; /*Dibujo vacío del tamaño del círculo*/
-
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
 //TODO: no hay
-
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
-
 /**
  * @brief  Inicializamos la pantalla.
  *
@@ -102,11 +96,11 @@ const unsigned char g_puc_nada[60]  =  {
  * Al final, se vuelca a la pantalla real.
 */
 void BROADCAR_inicializacion_display(){
-	unsigned char * str = malloc(sizeof(unsigned char) * 10);
+	unsigned char * str = malloc(sizeof(unsigned char) * 10); /*Cadena de caracteres que contiene inicia*/
 
 	FRAME_BUFFER_init();
 	strcpy(str, "inicia");
-	FRAME_BUFFER_insert_text(str, 0, g_i_altura_conversacion); //Escribimos en el buffer
+	FRAME_BUFFER_insert_text(str, 0, g_i_altura_conversacion);
 	g_i_altura_conversacion += 10;
 	g_i_numero_elemento++;
 	FRAME_BUFFER_write_to_display();
@@ -121,8 +115,8 @@ void BROADCAR_inicializacion_display(){
  * se envia se pone Yo->
 */
 void BROADCAR_escribir(unsigned char * mensaje){
-	int contador = 0;
-	int altura = 10;
+	int contador = 0; /*Contador para reubicar lo que se muestra en pantalla como si fuese una conversacion*/
+	int altura = 10; /*Altua base de la conversacion*/
 
 	if(g_i_numero_elemento < MAX_ELEMS_PANTALLA){
 		g_i_numero_elemento = FRAME_BUFFER_insert_text(mensaje, 0, g_i_altura_conversacion);

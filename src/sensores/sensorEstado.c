@@ -28,6 +28,8 @@
 #include "hw_types.h"
 #include "broadcar.h"
 #include "display.h"
+#include "data.h"
+#include "zigbee.h"
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -48,7 +50,7 @@ extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está puls
  * de la carretera
 */
 tBoolean BROADCAR_TR_cambio_estado(void){
-	tBoolean cambio = false;
+	tBoolean cambio = false; /*Si ha cambiado el estado de la tecla*/
 
 	if(g_ucChangedData && g_ucChangedData < 10){
 		if(g_ul_keypad_switches == KEY_UP){
@@ -62,6 +64,21 @@ tBoolean BROADCAR_TR_cambio_estado(void){
  * @brief  Funcion que mira el estado del sensor del estado de la carretera
 */
 void BROADCAR_ACCION_estado_carretera(void){
+	SENSORClass sensor; /*Contiene los datos del sensor*/
+
+	sensor.tipo = LIQUIDO_CARRETERA;
+	sensor.hora = 10;
+	sensor.posicion.latitud = NORTE;
+	sensor.posicion.latitud_grado = 90;
+	sensor.posicion.latitud_minuto = 59;
+	sensor.posicion.latitud_segundo = 58;
+	sensor.posicion.longitud = OESTE;
+	sensor.posicion.longitud_grado = 180;
+	sensor.posicion.longitud_minuto = 2;
+	sensor.posicion.longitud_segundo = 3;
+	sensor.valor = 15;
+
+	BROADCAR_enviar_mensaje(sensor);
 	BROADCAR_escribir("hielo");
 }
 /*********************************************************************

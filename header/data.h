@@ -28,7 +28,7 @@
 #define DATA_H
 
 //Listas numeradas
-typedef enum tipo_sensor{LUMINOSIDAD, LLUVIA, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD};
+typedef enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, SENSOR_OBRAS /*TODO: puede que no corresponda*/};
 typedef enum hemisferio{NORTE, SUR, ESTE, OESTE};
 typedef enum tipo_mensaje{TRAFICO_DENSO, OBRAS, VEHICULO_NO_VISIBLE, POCA_VISIBILIDAD, ESTADO_CARRETERA, ACCIDENTE_CARRETERA};
 typedef enum tipo_poca_visibilidad{NIEVE, LLUVIA, NIEBLA};
@@ -41,7 +41,6 @@ typedef struct s_TRAFICO_DENSOCls{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int velocidad;
 }TRAFICO_DENSOClass;
-
 /*
  * Estructura propia existente en obras
  */
@@ -49,7 +48,6 @@ typedef struct s_OBRASCls{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int carretera_cortada;
 }OBRASClass;
-
 /*
  * Estructura propia existente en vehiculo no visible
  */
@@ -57,7 +55,6 @@ typedef struct s_VEHICULO_NO_VISIBLECls{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int velocidad;
 }VEHICULO_NO_VISIBLEClass;
-
 /*
  * Estructura propia existente en poca visibilidad
  */
@@ -65,7 +62,6 @@ typedef struct s_POCA_VISIBILIDADCls{
 	enum tipo_poca_visibilidad tipo;
 	int gravedad;
 }POCA_VISIBILIDADClass;
-
 /*
  * Estructura propia existente en estado carretera
  */
@@ -74,7 +70,6 @@ typedef struct s_ESTADO_CARRETERACls{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int gravedad;
 }ESTADO_CARRETERAClass;
-
 /*
  * Estructura propia existente en accidente carretera
  */
@@ -82,6 +77,17 @@ typedef struct s_ACCIDENTE_CARRETERACls{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int carretera_cortada;
 }ACCIDENTE_CARRETERAClass;
+/*
+ * Estructura que guarda los valores del mensaje
+ */
+typedef struct s_DATO_MENSAJECls{
+	TRAFICO_DENSOClass trafico_denso;
+	OBRASClass obra;
+	VEHICULO_NO_VISIBLEClass vehiculo_no_visible;
+	POCA_VISIBILIDADClass poca_visibilidad;
+	ESTADO_CARRETERAClass estado_carretera;
+	ACCIDENTE_CARRETERAClass accidente_carretera;
+}DATO_MENSAJEClass;
 
 /*
  * Estructura que guarda las coordenadas
@@ -96,7 +102,6 @@ typedef struct s_COORDENADASCls{
 	int longitud_minuto;
 	int longitud_segundo;
 }COORDENADASClass;
-
 /*
  * Estructura que guarda los datos de un sensor
  */
@@ -106,7 +111,6 @@ typedef struct s_SENSORCls{
 	COORDENADASClass posicion;
 	float valor;
 }SENSORClass;
-
 /*
  * Estructura que guarda los mensajes recibidos de otros controladores
  */
@@ -116,16 +120,15 @@ typedef struct s_MENSAJECls{
 	int hora;				//TODO: el tipo se podria cambiar en un futuro
 	COORDENADASClass posicion;
 	int ttl;				//numero de veces que se puede reenviar
-	void * valor;
+	DATO_MENSAJEClass valor;
 }MENSAJEClass;
-
 /*
  * Estructura que guarda los datos a enviar a la interfaz grafica
  */
 typedef struct s_INTERFAZ_GRAFICACls{
 	enum tipo_mensaje tipo;
 	COORDENADASClass posicion;
-	void * valor;
+	DATO_MENSAJEClass valor;
 }INTERFAZ_GRAFICAClass;
 /*****************************************************************************
 ** 																			**

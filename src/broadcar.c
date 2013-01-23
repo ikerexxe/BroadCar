@@ -19,7 +19,6 @@
 **Revised by : iker pedrosa											**
 **Description : Original version.									**
 *********************************************************************/
-
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
@@ -36,6 +35,7 @@
 #include "keypad.h"
 #include "hw_types.h"
 #include "motorAutomatas.h"
+#include "zigbee.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -43,15 +43,13 @@
 *********************************************************************/
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
-
 /*********************************************************************
 ** 																	**
 ** EXTERNAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
 extern unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
-extern TS_AUTOMATA automata;
-
+extern TS_AUTOMATA automata; /*Automata que usa la aplicacion*/
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -71,7 +69,6 @@ int main(void)
     	BROADCAR_logica();
     }
 }
-
 /**
  * @brief  Función para inicialización de los periféricos.
  *
@@ -84,9 +81,8 @@ void BROADCAR_inicializacion(){
 	BROADCAR_inicializacion_clock();
 	BROADCAR_inicializacion_keypad();
 	BROADCAR_inicializacion_display();
-//	CHAT_inicializacion_comunicacion();
+	BROADCAR_inicializacion_zigbee();
 }
-
 /**
  * @brief  Función para elegir el paso a seguir en cada momento.
  *
@@ -99,33 +95,6 @@ void BROADCAR_inicializacion(){
  * se muestra en pantalla.
 */
 void BROADCAR_logica(){
-//	unsigned char * pantalla;
-//
-//	BROADCAR_leer_keypad();
-//	if(g_ucChangedData){
-//		pantalla = malloc(sizeof(unsigned char) * MAX_ELEMS_LINEA);
-//		switch(g_ul_keypad_switches){
-//			case KEY_UP:
-//				strcpy(pantalla, "ARRIBA");
-//				break;
-//			case KEY_DOWN:
-//				strcpy(pantalla, "ABAJO");
-//				break;
-//			case KEY_LEFT:
-//				strcpy(pantalla, "IZQUIERDA");
-//				break;
-//			case KEY_RIGHT:
-//				strcpy(pantalla, "DERECHA");
-//				break;
-//			case KEY_SELECT:
-//				strcpy(pantalla, "SELECT");
-//				break;
-//			default:
-//				strcpy(pantalla, "NADA");
-//				break;
-//		}
-//		BROADCAR_escribir(pantalla);
-//	}
 	EjecutaAutomata(&automata);
 }
 /*********************************************************************

@@ -28,6 +28,8 @@
 #include "hw_types.h"
 #include "broadcar.h"
 #include "display.h"
+#include "data.h"
+#include "zigbee.h"
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -47,7 +49,7 @@ extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está puls
  * @return        Si el cambio se ha producido en el sensor de velocidad
 */
 tBoolean BROADCAR_TR_cambio_velocidad(void){
-	tBoolean cambio = false;
+	tBoolean cambio = false; /*Si ha cambiado el estado de la tecla*/
 
 	if(g_ucChangedData && g_ucChangedData < 10){
 		if(g_ul_keypad_switches == KEY_DOWN){
@@ -61,6 +63,21 @@ tBoolean BROADCAR_TR_cambio_velocidad(void){
  * @brief  Funcion que mira el estado del sensor de velocidad
 */
 void BROADCAR_ACCION_velocidad(void){
+	SENSORClass sensor; /*Contiene los datos del sensor*/
+
+	sensor.tipo = VELOCIDAD;
+	sensor.hora = 10;
+	sensor.posicion.latitud = NORTE;
+	sensor.posicion.latitud_grado = 90;
+	sensor.posicion.latitud_minuto = 59;
+	sensor.posicion.latitud_segundo = 58;
+	sensor.posicion.longitud = OESTE;
+	sensor.posicion.longitud_grado = 180;
+	sensor.posicion.longitud_minuto = 2;
+	sensor.posicion.longitud_segundo = 3;
+	sensor.valor = 15;
+
+	BROADCAR_enviar_mensaje(sensor);
 	BROADCAR_escribir("lenta");
 }
 /*********************************************************************

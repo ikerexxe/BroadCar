@@ -33,11 +33,13 @@
 #include "sensorEstado.h"
 #include "sensorObras.h"
 #include "sensorVelocidad.h"
-
-//TODO: aqui no va
+/*********************************************************************
+** 																	**
+** PROTOTYPES OF LOCAL FUNCTIONS 									**
+** 																	**
+*********************************************************************/
 tBoolean BROADCAR_TR_no_finalizar_estado(void);
 tBoolean BROADCAR_TR_finalizar_estado(void);
-
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**

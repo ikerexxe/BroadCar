@@ -1,9 +1,9 @@
 /*********************************************************************
 ** 																	**
 ** project : BroadCar		 										**
-** filename : automataPrincipal.h									**
+** filename : zigbee.h												**
 ** version : 1 														**
-** date : 2013-01-21	 											**
+** date : 2013-01-22	 											**
 ** 																	**
 **********************************************************************
 ** 																	**
@@ -15,38 +15,39 @@
 **VERSION HISTORY:													**
 **----------------													**
 **Version : 1														**
-**Date : 2013-01-21													**
+**Date : 2013-01-22													**
 **Revised by : iker pedrosa											**
 **Description : Original version.									**
 *********************************************************************/
+/*********************************************************************
+**																	**
+** MODULES USED 													**
+** 																	**
+**********************************************************************/
+#include "data.h" //TODO: no se si va aqui
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
 ** 																	**
 *********************************************************************/
-#ifndef AUTOMATAPRINCIPAL_H
-#define AUTOMATAPRINCIPAL_H
+#ifndef ZIGBEE_H
+#define ZIGBEE_H
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF GLOBAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-void BROADCAR_ACCION_sensores(void);
-void BROADCAR_ACCION_mensajes(void);
-void BROADCAR_ACCION_poca_visibilidad(void);
-void BROADCAR_ACCION_estado_carretera(void);
-void BROADCAR_ACCION_obras(void);
-void BROADCAR_ACCION_velocidad(void);
-tBoolean BROADCAR_AUT_finish(void);
+void BROADCAR_inicializacion_zigbee(void);
+void BROADCAR_enviar_mensaje(SENSORClass sensor);
 /*********************************************************************
 **	 																**
 ** TYPEDEFS AND STRUCTURES 											**
 ** 																	**
 *********************************************************************/
-#ifndef AUTOMATAPRINCIPAL_C
-#define PUB_AUTOMATAPRINCIPAL extern
+#ifndef ZIGBEE_C
+#define PUB_ZIGBEE extern
 #else
-#define PUB_AUTOMATAPRINCIPAL
+#define PUB_ZIGBEE
 #endif
 /*********************************************************************
 ** 																	**

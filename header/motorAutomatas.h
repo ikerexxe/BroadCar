@@ -19,14 +19,12 @@
 **Revised by : iker pedrosa											**
 **Description : Modified version for broadcar application.			**
 *********************************************************************/
-
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
 #include "broadcar.h" //TODO: esto esta bien aqui?
-
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
@@ -40,7 +38,6 @@
 #define FIN_ESTADO(nombre_fin_estado,id,control) const TS_ESTADO nombre_fin_estado = {id,#id,control,(TS_EVEACC *) x##nombre_fin_estado};
 #define AUTOMATA(nombre_automata) const TS_ESTADO * const (x##nombre_automata[]) =
 #define FIN_AUTOMATA(nombre_automata,id,StopC) const TS_AUTOMATA nombre_automata = {id, #nombre_automata, StopC, (TS_ESTADO **) x##nombre_automata};
-
 /*********************************************************************
 **	 																**
 ** TYPEDEFS AND STRUCTURES 											**
@@ -79,15 +76,13 @@ typedef struct {
 #else
 #define PUB_MOTORAUTOMATAS
 #endif
-
 /*********************************************************************
 ** 																	**
-** PROTOTYPES OF LOCAL FUNCTIONS 									**
+** PROTOTYPES OF GLOBAL FUNCTIONS									**
 ** 																	**
 *********************************************************************/
 void EjecutaAutomata( TS_AUTOMATA *elAutomata);
 void EjecutaEstado  ( TS_ESTADO   *elEstado);
-
 /*********************************************************************
 ** 																	**
 ** EOF 																**

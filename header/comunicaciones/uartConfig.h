@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
-** project :  BroadCar						 							  	**
-** filename : chat.h	  						  					    	**
+** project :  ChatLM3S8962					 							  	**
+** filename : uartConfig.h 						  					    	**
 ** version : 1 									  							**
-** date :  	2013-01-17		 		 									    **
+** date :  	2012-10-08		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -14,45 +14,22 @@
 **										        							**
 **VERSION HISTORY:									  						**
 **----------------									  						**
-**Version : 1										  						**
-**Date : 2013-01-17									 					    **
+**Version : 2										  						**
+** date : 2013-01-22	 													**
 **Revised by : iker pedrosa                    	  							**
-**Description : Modified version for the chat.				  				**
+**Description : Modified version for broadcar application.					**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef BROADCAR_H
-#define BROADCAR_H
-/*
- * Definición de las teclas
- */
-#define KEY_UP 0x1e     //11110
-#define KEY_DOWN 0x1d   //11101
-#define KEY_LEFT 0x1b   //11011
-#define KEY_RIGHT 0x17  //10111
-#define KEY_SELECT 15 //01111
-/*
- * Definición del numero maximo de caracteres por linea
- */
-#define MAX_ELEMS_LINEA 10
-/*
- * Definición de NULL
- */
-#ifndef NULL
-#define NULL 0
-#endif
-/*****************************************************************************
-** 																			**
-** TYPEDEFS AND STRUCTURES 													**
-** 																			**
-*****************************************************************************/
-/*
- * Definición de BYTE
- */
-typedef char BYTE;
+#ifndef UARTCONFIG_H
+#define UARTCONFIG_H
+
+#define BUFF_SIZE 128
+#define BAUD_RATE 9600
+#define DATA_FRAME (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |UART_CONFIG_PAR_NONE)
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

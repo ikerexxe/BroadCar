@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
-** project :  BroadCar						 							  	**
-** filename : chat.h	  						  					    	**
+** project :  ChatLM3S8962					 							  	**
+** filename : uartDrv.h							  					    	**
 ** version : 1 									  							**
-** date :  	2013-01-17		 		 									    **
+** date :  	2012-10-08		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -15,7 +15,7 @@
 **VERSION HISTORY:									  						**
 **----------------									  						**
 **Version : 1										  						**
-**Date : 2013-01-17									 					    **
+**Date : 2012-12-16									 					    **
 **Revised by : iker pedrosa                    	  							**
 **Description : Modified version for the chat.				  				**
 *****************************************************************************/
@@ -24,35 +24,17 @@
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef BROADCAR_H
-#define BROADCAR_H
-/*
- * Definición de las teclas
- */
-#define KEY_UP 0x1e     //11110
-#define KEY_DOWN 0x1d   //11101
-#define KEY_LEFT 0x1b   //11011
-#define KEY_RIGHT 0x17  //10111
-#define KEY_SELECT 15 //01111
-/*
- * Definición del numero maximo de caracteres por linea
- */
-#define MAX_ELEMS_LINEA 10
-/*
- * Definición de NULL
- */
-#ifndef NULL
-#define NULL 0
-#endif
+#ifndef UARTDRV_H
+#define UARTDRV_H
 /*****************************************************************************
 ** 																			**
-** TYPEDEFS AND STRUCTURES 													**
+** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
-*****************************************************************************/
-/*
- * Definición de BYTE
- */
-typedef char BYTE;
+******************************************************************************/
+int openUART(int nPort);
+void closeUART(int nPort);
+int recvUART(int nPort, unsigned char *p, int *pSize);
+int sendUART(int nPort, unsigned char *p, int *pSize);
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**
