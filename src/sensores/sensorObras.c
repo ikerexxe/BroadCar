@@ -64,6 +64,8 @@ tBoolean BROADCAR_TR_cambio_obras(void){
  * @brief  Funcion que mira el estado del sensor de obras
 */
 void BROADCAR_ACCION_obras(void){
+	unsigned char * pantalla = malloc(sizeof(unsigned char) * 20);
+
 	if((g_sc_sensores[SENSOR_OBRAS].hora + 10) < g_i_hora){
 		g_sc_sensores[SENSOR_OBRAS].tipo = S_OBRAS;
 		g_sc_sensores[SENSOR_OBRAS].hora = g_i_hora;
@@ -78,9 +80,11 @@ void BROADCAR_ACCION_obras(void){
 		g_sc_sensores[SENSOR_OBRAS].valor = 100;
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_OBRAS]);
-		BROADCAR_escribir("obras");
+		sprintf(pantalla, "obras %d", g_sc_sensores[SENSOR_OBRAS].hora);
+		BROADCAR_escribir(pantalla);
 	}else{
-		BROADCAR_escribir("no obras");
+		strcpy(pantalla, "no obras");
+		BROADCAR_escribir(pantalla);
 	}
 }
 /*********************************************************************

@@ -148,6 +148,7 @@ void BROADCAR_ACCION_sensores(void){
  * @brief  Funcion que ejecuta el automata de los mensajes
 */
 void BROADCAR_ACCION_mensajes(void){
+	unsigned char * pantalla = malloc(sizeof(unsigned char) * 20);
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 
@@ -155,7 +156,8 @@ void BROADCAR_ACCION_mensajes(void){
 	if(b_mensaje){
 		m_mensaje = BROADCAST_recibir_mensaje();
 		//TODO: tratamos el mensaje o lo enviamos a la app movil
-		BROADCAR_escribir("mensaje");
+		sprintf(pantalla, "mensaje %d", m_mensaje.id);
+		BROADCAR_escribir(pantalla);
 	}else{
 		BROADCAR_escribir("no mensaje");
 	}
