@@ -107,12 +107,12 @@ void BROADCAR_inicializacion_display(){
 }
 
 /**
- * @brief  Insertar la ultima frase de la conversacion
+ * @brief  Insertar el último mensaje en la conversación
  *
  * @return    -
  *
- * Si se recibe un texto se muestra en pantalla poniendo como inicio PC-> y si
- * se envia se pone Yo->
+ * Inserta el ultimo mensaje recibido mediante zigbee en
+ * la conversación
 */
 void BROADCAR_escribir(unsigned char * mensaje){
 	int contador = 0; /*Contador para reubicar lo que se muestra en pantalla como si fuese una conversacion*/

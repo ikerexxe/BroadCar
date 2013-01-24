@@ -155,8 +155,10 @@ void BROADCAR_ACCION_mensajes(void){
 	if(b_mensaje){
 		m_mensaje = BROADCAST_recibir_mensaje();
 		//TODO: tratamos el mensaje o lo enviamos a la app movil
+		BROADCAR_escribir("mensaje");
+	}else{
+		BROADCAR_escribir("no mensaje");
 	}
-	BROADCAR_escribir("mensaje");
 }
 /**
  * @brief  Funcion que decide si acabar el programa del automata

@@ -35,9 +35,9 @@
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-void valor_mensaje(SENSORClass sensor);
-int valor_envio(int contador);
-void tipo_mensaje(int tipo);
+MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje);
+int valor_envio(MENSAJEClass mensaje, int contador);
+MENSAJEClass tipo_mensaje(MENSAJEClass mensaje, int tipo);
 void formatear_mensaje(MENSAJEClass mensaje);
 int calcular_checksum(uint8_t mensaje[]);
 void calcular_tamano_mensaje(MENSAJEClass mensaje);
@@ -59,7 +59,6 @@ static unsigned char caracter_vacio = 0x00; /*Byte vacio = 00000000*/
 static unsigned char caracter_lleno = 255; /*Byte lleno = 11111111*/
 int puerto_zigbee = 0; /*Puerto UART que se usa para la comunicacion con el modulo zigbee*/
 int tamano = 0; /*Tamaño del mensaje*/
-MENSAJEClass mensaje; /*Mensaje a enviar*/
 uint8_t envio[255]; /*Mensaje a enviar en formato byte*/
 uint8_t length[2]; /*Tamaño del mensaje que se usa para enviar en la cabecera de la trama*/
 /*********************************************************************
@@ -86,12 +85,14 @@ void BROADCAR_inicializacion_zigbee(){
  * mediante zigbee y lo envía.
 */
 void BROADCAR_enviar_mensaje(SENSORClass sensor){
-	tipo_mensaje(sensor.tipo);
+	MENSAJEClass mensaje;
+
+	mensaje = tipo_mensaje(mensaje, sensor.tipo);
 	mensaje.id = mi_id;
 	mensaje.hora = sensor.hora;
 	mensaje.posicion = sensor.posicion;
 	mensaje.ttl = 3;
-	valor_mensaje(sensor);
+	mensaje = valor_mensaje(sensor, mensaje);
 
 	formatear_mensaje(mensaje);
 	sendUART(puerto_zigbee, envio, &tamano);
@@ -147,16 +148,16 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 		recibido[contador+3] = temporal[contador];
 	}
 	checksum = calcular_checksum(recibido);
-	if(checksum == recibido[numero_recibido - 1]){
-		mensaje = tratar_mensaje(recibido);
-		if(mensaje.id != mi_id){ //TODO: habria que mirar tambien si anteriormente se ha recibido ese mensaje
-			//Si se puede reenviamos el mensaje
-			if(mensaje.ttl > 0){
-				mensaje.ttl--;
-				formatear_mensaje(mensaje);
-				sendUART(puerto_zigbee, envio, &tamano);
-			}
-		}
+	if(checksum == recibido[numero_recibido + 3]){
+		mensaje = tratar_mensaje(recibido); //TODO: FALLA AQUIIIIIIIII!!!!!!!!!!!!
+//		if(mensaje.id != mi_id){ //TODO: habria que mirar tambien si anteriormente se ha recibido ese mensaje
+//			//Si se puede reenviamos el mensaje
+//			if(mensaje.ttl > 0){
+//				mensaje.ttl--;
+//				formatear_mensaje(mensaje);
+//				sendUART(puerto_zigbee, envio, &tamano);
+//			}
+//		}
 	}else{
 		//TODO: ERROR!!!!!
 	}
@@ -185,7 +186,34 @@ MENSAJEClass tratar_mensaje(uint8_t recibido[]){
 	mensaje.posicion.longitud_minuto = recibido[27];
 	mensaje.posicion.longitud_segundo = recibido[28];
 	mensaje.ttl = recibido[29];
-	mensaje = valor_recibido(mensaje, recibido);
+//	mensaje = valor_recibido(mensaje, recibido); //TODO: FALLA AQUIIIIIIIII!!!!!!!!!!!!
+	switch(mensaje.tipo){
+		case TRAFICO_DENSO:
+			mensaje.valor.trafico_denso.direccion = recibido[30];
+			mensaje.valor.trafico_denso.velocidad = recibido[31];
+			break;
+		case OBRAS:
+			mensaje.valor.obra.direccion = recibido[30];
+			mensaje.valor.obra.carretera_cortada = recibido[31];
+			break;
+		case VEHICULO_NO_VISIBLE:
+			mensaje.valor.vehiculo_no_visible.direccion = recibido[30];
+			mensaje.valor.vehiculo_no_visible.velocidad = recibido[31];
+			break;
+		case POCA_VISIBILIDAD:
+			mensaje.valor.poca_visibilidad.tipo = recibido[30];
+			mensaje.valor.poca_visibilidad.gravedad = recibido[31];
+			break;
+		case ESTADO_CARRETERA:
+			mensaje.valor.estado_carretera.tipo = recibido[30];
+			mensaje.valor.estado_carretera.direccion = recibido[31];
+			mensaje.valor.estado_carretera.gravedad = recibido[32];
+			break;
+		case ACCIDENTE_CARRETERA:
+			mensaje.valor.accidente_carretera.direccion = recibido[30];
+			mensaje.valor.accidente_carretera.carretera_cortada = recibido[31];
+			break;
+	}
 
 	return mensaje;
 }
@@ -197,7 +225,7 @@ MENSAJEClass tratar_mensaje(uint8_t recibido[]){
  * Dependiendo de que sensor recoja el dato se le asigna
  * un tipo al mensaje.
 */
-void tipo_mensaje(int tipo){
+MENSAJEClass tipo_mensaje(MENSAJEClass mensaje, int tipo){
 	switch(tipo){
 		case LUMINOSIDAD:
 			mensaje.tipo = POCA_VISIBILIDAD;
@@ -218,6 +246,8 @@ void tipo_mensaje(int tipo){
 			mensaje.tipo = OBRAS;
 			break;
 	}
+
+	return mensaje;
 }
 /**
  * @brief  Función para darle formato al mensaje zigbee.
@@ -271,7 +301,7 @@ void formatear_mensaje(MENSAJEClass mensaje){
 	envio[27] = mensaje.posicion.longitud_minuto;
 	envio[28] = mensaje.posicion.longitud_segundo;
 	envio[29] = mensaje.ttl;
-	contador = valor_envio(30);
+	contador = valor_envio(mensaje, 30);
 	/*Checksum*/
 	envio[contador] = calcular_checksum(envio);
 }
@@ -283,7 +313,7 @@ void formatear_mensaje(MENSAJEClass mensaje){
  * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
-void valor_mensaje(SENSORClass sensor){
+MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 	switch(sensor.tipo){
 		case LUMINOSIDAD:
 			mensaje.valor.poca_visibilidad.tipo =  NIEBLA;
@@ -318,6 +348,8 @@ void valor_mensaje(SENSORClass sensor){
 			tamano = numero_cabecera + 16;
 			break;
 	}
+
+	return mensaje;
 }
 /**
  * @brief  Función para cargar el valor que tiene el mensaje.
@@ -327,7 +359,7 @@ void valor_mensaje(SENSORClass sensor){
  * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
-int valor_envio(int contador){
+int valor_envio(MENSAJEClass mensaje, int contador){
 	switch(mensaje.tipo){
 		case TRAFICO_DENSO:
 			envio[contador] = mensaje.valor.trafico_denso.direccion;
@@ -462,8 +494,7 @@ int calcular_checksum(uint8_t mensaje[]){
 	int contador; /*Contador que recorre el mensaje a enviar*/
 	int suma = 0; /*Suma de todos los parametros del mensaje*/
 	int resultado = 0; /*Resultado del checksum*/
-//	int tamano = mensaje[2] + 3; TODO: antes estaba asi
-	int tamano = mensaje[2] - 1; /*Tamaño del mensaje a excepcion de los tres primeros elementos de la cabecera*/
+	int tamano = mensaje[2] + 3; /*Tamaño del mensaje a excepcion de los tres primeros elementos de la cabecera*/
 
 	for(contador = 3; contador < tamano; contador++){
 		suma += mensaje[contador];
@@ -483,15 +514,16 @@ int calcular_checksum(uint8_t mensaje[]){
  * que sean comprensibles en la trama zigbee.
 */
 void calcular_tamano_mensaje(MENSAJEClass mensaje){
+	int unidad_tamano = tamano - 4; /*Calcular el tamaño del mensaje en un byte*/
 	int llevada_tamano = 0; /*Llevada para calcular el tamaño del mensaje en más de un byte*/
 
-	while(tamano > 255){
-		tamano -= 255;
+	while(unidad_tamano > 255){
+		unidad_tamano -= 255;
 		llevada_tamano++;
 	}
 
 	length[0] = llevada_tamano;
-	length[1] = tamano;
+	length[1] = unidad_tamano;
 }
 /*********************************************************************
 ** 																	**
