@@ -20,6 +20,12 @@
 **Description : Modified version for the chat.				  				**
 *****************************************************************************/
 /*****************************************************************************
+**																			**
+** MODULES USED 															**
+** 																			**
+*****************************************************************************/
+#include "data.h" //TODO: esto esta bien aqui?
+/*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
@@ -39,6 +45,17 @@
  */
 #define MAX_ELEMS_LINEA 10
 /*
+ * Numero de sensores de los que dispone el coche
+ */
+#define NUMERO_SENSORES 4
+/*
+ * Posicion del array asignada a cada sensor
+ */
+#define SENSOR_VISIBILIDAD 0
+#define SENSOR_ESTADO 1
+#define SENSOR_OBRAS 2
+#define SENSOR_VELOCIDAD 3
+/*
  * Definición de NULL
  */
 #ifndef NULL
@@ -53,6 +70,13 @@
  * Definición de BYTE
  */
 typedef char BYTE;
+/*****************************************************************************
+** 																			**
+** GLOBAL VARIABLES 														**
+** 																			**
+*****************************************************************************/
+SENSORClass g_sc_sensores[NUMERO_SENSORES]; /*Valores de todos los sensores del vehiculo*/
+int g_i_hora; /*Hora del sistema*/
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

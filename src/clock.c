@@ -28,12 +28,13 @@
 #include "hw_types.h"
 #include "clock.h"
 #include "driverlib/sysctl.h"
+#include "broadcar.h"
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
 ** 																	**
 *********************************************************************/
-extern unsigned long g_ul_system_clock; /*Frecuencia del clock*/
+static unsigned long g_ul_system_clock; /*Frecuencia del clock*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -49,7 +50,18 @@ extern unsigned long g_ul_system_clock; /*Frecuencia del clock*/
 void BROADCAR_inicializacion_clock(){
 	//125ns
 	SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |SYSCTL_XTAL_8MHZ);
+	SysTickPeriodSet(8000000);//Configuramos las interrupciones a 1 segundo.
+	SysTickIntEnable();//habilitamos la interrupcion del Systick del sistema.
+	SysTickEnable();//habilitamos el conteo de los tick del sistema.
+	IntMasterEnable();//Habilitamos las interrupciones.
 	g_ul_system_clock = SysCtlClockGet();
+	g_i_hora = 0;
+}
+/**
+ * @brief  Funcion que crea una interrupcion cada segundo
+*/
+void __attribute__((interrupt)) IntUnSegundo(void){
+	g_i_hora++;
 }
 /*********************************************************************
 ** 																	**

@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
 ** project : BroadCar		 										**
-** filename : sensorEstado.c									**
+** filename : sensorEstado.c										**
 ** version : 1 														**
 ** date : 2013-01-22	 											**
 ** 																	**
@@ -64,22 +64,24 @@ tBoolean BROADCAR_TR_cambio_estado(void){
  * @brief  Funcion que mira el estado del sensor del estado de la carretera
 */
 void BROADCAR_ACCION_estado_carretera(void){
-	SENSORClass sensor; /*Contiene los datos del sensor*/
+	if((g_sc_sensores[SENSOR_ESTADO].hora + 10) < g_i_hora){
+		g_sc_sensores[SENSOR_ESTADO].tipo = LIQUIDO_CARRETERA;
+		g_sc_sensores[SENSOR_ESTADO].hora = g_i_hora;
+		g_sc_sensores[SENSOR_ESTADO].posicion.latitud = NORTE;
+		g_sc_sensores[SENSOR_ESTADO].posicion.latitud_grado = 90;
+		g_sc_sensores[SENSOR_ESTADO].posicion.latitud_minuto = 59;
+		g_sc_sensores[SENSOR_ESTADO].posicion.latitud_segundo = 58;
+		g_sc_sensores[SENSOR_ESTADO].posicion.longitud = OESTE;
+		g_sc_sensores[SENSOR_ESTADO].posicion.longitud_grado = 180;
+		g_sc_sensores[SENSOR_ESTADO].posicion.longitud_minuto = 2;
+		g_sc_sensores[SENSOR_ESTADO].posicion.longitud_segundo = 3;
+		g_sc_sensores[SENSOR_ESTADO].valor = 15;
 
-	sensor.tipo = LIQUIDO_CARRETERA;
-	sensor.hora = 10;
-	sensor.posicion.latitud = NORTE;
-	sensor.posicion.latitud_grado = 90;
-	sensor.posicion.latitud_minuto = 59;
-	sensor.posicion.latitud_segundo = 58;
-	sensor.posicion.longitud = OESTE;
-	sensor.posicion.longitud_grado = 180;
-	sensor.posicion.longitud_minuto = 2;
-	sensor.posicion.longitud_segundo = 3;
-	sensor.valor = 15;
-
-	BROADCAR_enviar_mensaje(sensor);
-	BROADCAR_escribir("hielo");
+		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_ESTADO]);
+		BROADCAR_escribir("hielo");
+	}else{
+		BROADCAR_escribir("no hielo");
+	}
 }
 /*********************************************************************
 ** 																	**

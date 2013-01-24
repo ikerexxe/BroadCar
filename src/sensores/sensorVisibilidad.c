@@ -63,22 +63,24 @@ tBoolean BROADCAR_TR_cambio_visibilidad(void){
  * @brief  Funcion que mira el estado del sensor de visibilidad
 */
 void BROADCAR_ACCION_poca_visibilidad(void){
-	SENSORClass sensor; /*Contiene los datos del sensor*/
+	if((g_sc_sensores[SENSOR_VISIBILIDAD].hora + 10) < g_i_hora){
+		g_sc_sensores[SENSOR_VISIBILIDAD].tipo = LUMINOSIDAD;
+		g_sc_sensores[SENSOR_VISIBILIDAD].hora = g_i_hora;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.latitud = NORTE;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.latitud_grado = 90;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.latitud_minuto = 59;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.latitud_segundo = 58;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud = OESTE;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud_grado = 180;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud_minuto = 2;
+		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud_segundo = 3;
+		g_sc_sensores[SENSOR_VISIBILIDAD].valor = 3;
 
-	sensor.tipo = LUMINOSIDAD;
-	sensor.hora = 10;
-	sensor.posicion.latitud = NORTE;
-	sensor.posicion.latitud_grado = 90;
-	sensor.posicion.latitud_minuto = 59;
-	sensor.posicion.latitud_segundo = 58;
-	sensor.posicion.longitud = OESTE;
-	sensor.posicion.longitud_grado = 180;
-	sensor.posicion.longitud_minuto = 2;
-	sensor.posicion.longitud_segundo = 3;
-	sensor.valor = 3;
-
-	BROADCAR_enviar_mensaje(sensor);
-	BROADCAR_escribir("niebla");
+		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_VISIBILIDAD]);
+		BROADCAR_escribir("niebla");
+	}else{
+		BROADCAR_escribir("no niebla");
+	}
 }
 /*********************************************************************
 ** 																	**

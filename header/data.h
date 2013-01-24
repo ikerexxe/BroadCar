@@ -28,7 +28,7 @@
 #define DATA_H
 
 //Listas numeradas
-typedef enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, SENSOR_OBRAS /*TODO: puede que no corresponda*/};
+typedef enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, S_OBRAS /*TODO: puede que no corresponda*/};
 typedef enum hemisferio{NORTE, SUR, ESTE, OESTE};
 typedef enum tipo_mensaje{TRAFICO_DENSO, OBRAS, VEHICULO_NO_VISIBLE, POCA_VISIBILIDAD, ESTADO_CARRETERA, ACCIDENTE_CARRETERA};
 typedef enum tipo_poca_visibilidad{NIEVE, LLUVIA, NIEBLA};

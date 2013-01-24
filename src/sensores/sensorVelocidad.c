@@ -63,22 +63,24 @@ tBoolean BROADCAR_TR_cambio_velocidad(void){
  * @brief  Funcion que mira el estado del sensor de velocidad
 */
 void BROADCAR_ACCION_velocidad(void){
-	SENSORClass sensor; /*Contiene los datos del sensor*/
+	if((g_sc_sensores[SENSOR_VELOCIDAD].hora + 10) < g_i_hora){
+		g_sc_sensores[SENSOR_VELOCIDAD].tipo = VELOCIDAD;
+		g_sc_sensores[SENSOR_VELOCIDAD].hora = g_i_hora;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud = NORTE;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud_grado = 90;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud_minuto = 59;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud_segundo = 58;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud = OESTE;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud_grado = 180;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud_minuto = 2;
+		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud_segundo = 3;
+		g_sc_sensores[SENSOR_VELOCIDAD].valor = 15;
 
-	sensor.tipo = VELOCIDAD;
-	sensor.hora = 10;
-	sensor.posicion.latitud = NORTE;
-	sensor.posicion.latitud_grado = 90;
-	sensor.posicion.latitud_minuto = 59;
-	sensor.posicion.latitud_segundo = 58;
-	sensor.posicion.longitud = OESTE;
-	sensor.posicion.longitud_grado = 180;
-	sensor.posicion.longitud_minuto = 2;
-	sensor.posicion.longitud_segundo = 3;
-	sensor.valor = 15;
-
-	BROADCAR_enviar_mensaje(sensor);
-	BROADCAR_escribir("lenta");
+		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_VELOCIDAD]);
+		BROADCAR_escribir("lenta");
+	}else{
+		BROADCAR_escribir("no lenta");
+	}
 }
 /*********************************************************************
 ** 																	**

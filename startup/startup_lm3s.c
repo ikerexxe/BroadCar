@@ -106,6 +106,7 @@ void Default_Reset_Handler(void);   /*!< Default reset handler                */
 static void Default_Handler(void);  /*!< Default exception handler            */
 extern void  __attribute__((interrupt)) UART0IntHandler(void);
 extern void  __attribute__((interrupt)) UART1IntHandler(void);
+extern void __attribute__((interrupt)) IntUnSegundo(void);
 
 /**
   *@brief The minimal vector table for a Cortex M3.  Note that the proper constructs
@@ -128,7 +129,7 @@ void (* const g_pfnVectors[])(void) =
   DebugMon_Handler,                    /*!< Debug monitor handler             */
   0,                                   /*!< Reserved                          */
   PendSV_Handler,                      /*!< The PendSV handler                */
-  SysTick_Handler,                     /*!< The SysTick handler               */ 
+  IntUnSegundo,                     /*!< The SysTick handler               */
   
   /*----------External Exceptions---------------------------------------------*/
   GPIOPortA_IRQHandler,                /*!<  0: GPIO Port A                   */

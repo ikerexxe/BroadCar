@@ -55,8 +55,7 @@ extern TS_AUTOMATA automata; /*Automata que usa la aplicacion*/
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-unsigned long g_ul_system_clock; /*Frecuencia del clock*/
-int g_i_mi_id = 1;
+int g_i_mi_id = 1; /*Identificador del vehiculo*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -97,6 +96,28 @@ void BROADCAR_inicializacion(){
 */
 void BROADCAR_logica(){
 	EjecutaAutomata(&automata);
+}
+//TODO: hay que comentar
+void BROADCAR_inicializacion_sensores(){
+	int contador_sensores = 0;
+
+	g_sc_sensores[0].tipo = LUMINOSIDAD;
+	g_sc_sensores[1].tipo = LIQUIDO_CARRETERA;
+	g_sc_sensores[2].tipo = S_OBRAS;
+	g_sc_sensores[3].tipo = VELOCIDAD;
+
+	for(contador_sensores = 0; contador_sensores < NUMERO_SENSORES; contador_sensores++){
+		g_sc_sensores[contador_sensores].hora = 0;
+		g_sc_sensores[contador_sensores].posicion.latitud = 0;
+		g_sc_sensores[contador_sensores].posicion.latitud_grado = 0;
+		g_sc_sensores[contador_sensores].posicion.latitud_minuto = 0;
+		g_sc_sensores[contador_sensores].posicion.latitud_segundo = 0;
+		g_sc_sensores[contador_sensores].posicion.longitud = 0;
+		g_sc_sensores[contador_sensores].posicion.longitud_grado = 0;
+		g_sc_sensores[contador_sensores].posicion.longitud_minuto = 0;
+		g_sc_sensores[contador_sensores].posicion.longitud_segundo = 0;
+		g_sc_sensores[contador_sensores].valor = 0;
+	}
 }
 /*********************************************************************
 ** 																	**

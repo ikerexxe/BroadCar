@@ -48,7 +48,7 @@ MENSAJEClass valor_recibido(MENSAJEClass mensaje, uint8_t recibido[]);
 ** EXPORTED VARIABLES 												**
 ** 																	**
 *********************************************************************/
-extern int g_i_mi_id;
+extern int g_i_mi_id; /*Identificador del vehiculo*/
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -149,7 +149,7 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 	}
 	checksum = calcular_checksum(recibido);
 	if(checksum == recibido[numero_recibido + 4]){
-		mensaje = tratar_mensaje(recibido); //TODO: FALLA AQUIIIIIIIII!!!!!!!!!!!!
+		mensaje = tratar_mensaje(recibido);
 		if(mensaje.id != g_i_mi_id){ //TODO: habria que mirar tambien si anteriormente se ha recibido ese mensaje
 			//Si se puede reenviamos el mensaje
 			if(mensaje.ttl > 0){
@@ -186,34 +186,7 @@ MENSAJEClass tratar_mensaje(uint8_t recibido[]){
 	mensaje.posicion.longitud_minuto = recibido[27];
 	mensaje.posicion.longitud_segundo = recibido[28];
 	mensaje.ttl = recibido[29];
-	mensaje = valor_recibido(mensaje, recibido); //TODO: FALLA AQUIIIIIIIII!!!!!!!!!!!!
-//	switch(mensaje.tipo){
-//		case TRAFICO_DENSO:
-//			mensaje.valor.trafico_denso.direccion = recibido[30];
-//			mensaje.valor.trafico_denso.velocidad = recibido[31];
-//			break;
-//		case OBRAS:
-//			mensaje.valor.obra.direccion = recibido[30];
-//			mensaje.valor.obra.carretera_cortada = recibido[31];
-//			break;
-//		case VEHICULO_NO_VISIBLE:
-//			mensaje.valor.vehiculo_no_visible.direccion = recibido[30];
-//			mensaje.valor.vehiculo_no_visible.velocidad = recibido[31];
-//			break;
-//		case POCA_VISIBILIDAD:
-//			mensaje.valor.poca_visibilidad.tipo = recibido[30];
-//			mensaje.valor.poca_visibilidad.gravedad = recibido[31];
-//			break;
-//		case ESTADO_CARRETERA:
-//			mensaje.valor.estado_carretera.tipo = recibido[30];
-//			mensaje.valor.estado_carretera.direccion = recibido[31];
-//			mensaje.valor.estado_carretera.gravedad = recibido[32];
-//			break;
-//		case ACCIDENTE_CARRETERA:
-//			mensaje.valor.accidente_carretera.direccion = recibido[30];
-//			mensaje.valor.accidente_carretera.carretera_cortada = recibido[31];
-//			break;
-//	}
+	mensaje = valor_recibido(mensaje, recibido);
 
 	return mensaje;
 }
@@ -242,7 +215,7 @@ MENSAJEClass tipo_mensaje(MENSAJEClass mensaje, int tipo){
 		case VELOCIDAD:
 			mensaje.tipo = TRAFICO_DENSO;
 			break;
-		case SENSOR_OBRAS:
+		case S_OBRAS:
 			mensaje.tipo = OBRAS;
 			break;
 	}
@@ -342,7 +315,7 @@ MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 			mensaje.valor.trafico_denso.velocidad = sensor.valor;
 			g_i_tamano = g_i_numero_cabecera + 16;
 			break;
-		case SENSOR_OBRAS:
+		case S_OBRAS:
 			mensaje.valor.obra.direccion = 0;
 			mensaje.valor.obra.carretera_cortada = 1;
 			g_i_tamano = g_i_numero_cabecera + 16;
