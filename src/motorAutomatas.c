@@ -42,8 +42,8 @@
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-BYTE fms_mv = 1; /*Estado en el que nos encontramos actualmente*/
-BYTE fms_mv_anterior; /*Estado en el que se encontraba anteriormente*/
+static BYTE g_b_fms_mv = 1; /*Estado en el que nos encontramos actualmente*/
+static BYTE g_b_fms_mv_anterior; /*Estado en el que se encontraba anteriormente*/
 /*********************************************************************
 **																	**
 ** LOCAL FUNCTIONS 													**
@@ -64,7 +64,7 @@ void EjecutaAutomata(TS_AUTOMATA *elAutomata)
 	//Ira pasando por cada uno de los estados hasta que no haya mas
 	for (Indx = elAutomata->estado; *Indx != NULL; ++Indx)
 	{
-	    if (fms_mv == (*Indx)->id)
+	    if (g_b_fms_mv == (*Indx)->id)
 	    {
 	    	//En cada estado ejecutara las funciones que le corresponda.
 			EjecutaEstado(*Indx);
@@ -96,10 +96,10 @@ void EjecutaEstado(TS_ESTADO *elEstado)
 				//Ejecuta la accion correspondiente dentro del evento.
 				Indx->accion();
 			}
-			if (Indx->id != fms_mv)
+			if (Indx->id != g_b_fms_mv)
 			{
-				fms_mv_anterior = fms_mv;
-				fms_mv = Indx->id;
+				g_b_fms_mv_anterior = g_b_fms_mv;
+				g_b_fms_mv = Indx->id;
 
 				return;
 			}

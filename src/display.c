@@ -49,8 +49,8 @@ extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está puls
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-int g_i_numero_elemento = 0; /*Identificador del ultimo texto introducido en pantalla*/
-int g_i_altura_conversacion = 10; /*Altura en la cual se encuentra la conversacion*/
+static int g_i_numero_elemento = 0; /*Identificador del ultimo texto introducido en pantalla*/
+static int g_i_altura_conversacion = 10; /*Altura en la cual se encuentra la conversacion*/
 
 const unsigned char g_puc_circ[60]  =  {
         0x00, 0x00, 0x44, 0x44, 0x00, 0x00,

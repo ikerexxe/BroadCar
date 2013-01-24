@@ -56,7 +56,7 @@ extern TS_AUTOMATA automata; /*Automata que usa la aplicacion*/
 ** 																	**
 **********************************************************************/
 unsigned long g_ul_system_clock; /*Frecuencia del clock*/
-int mi_id = 1;
+int g_i_mi_id = 1;
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**

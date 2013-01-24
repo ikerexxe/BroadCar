@@ -33,10 +33,6 @@
 *********************************************************************/
 void BROADCAR_ACCION_sensores(void);
 void BROADCAR_ACCION_mensajes(void);
-void BROADCAR_ACCION_poca_visibilidad(void);
-void BROADCAR_ACCION_estado_carretera(void);
-void BROADCAR_ACCION_obras(void);
-void BROADCAR_ACCION_velocidad(void);
 tBoolean BROADCAR_AUT_finish(void);
 /*********************************************************************
 **	 																**
