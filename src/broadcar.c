@@ -43,6 +43,8 @@
 *********************************************************************/
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
+void BROADCAR_inicializacion_sensores();
+void BROADCAR_inicializacion_mensajes();
 /*********************************************************************
 ** 																	**
 ** EXTERNAL VARIABLES 												**
@@ -74,11 +76,13 @@ int main(void)
  *
  * @return    -
  *
- * Se inicializan uno a uno el clock, el keypad, la pantalla, el PWM y
- * la UART.
+ * Se inicializan uno a uno el clock, los sensores, los mensajes, el keypad,
+ * la pantalla y la comunicacion zigbee.
 */
 void BROADCAR_inicializacion(){
+	g_i_numero_mensaje = 0;
 	BROADCAR_inicializacion_clock();
+	BROADCAR_inicializacion_sensores();
 	BROADCAR_inicializacion_keypad();
 	BROADCAR_inicializacion_display();
 	BROADCAR_inicializacion_zigbee();
@@ -97,7 +101,14 @@ void BROADCAR_inicializacion(){
 void BROADCAR_logica(){
 	EjecutaAutomata(&automata);
 }
-//TODO: hay que comentar
+/**
+ * @brief  Función que inicializa el array que contiene el valor de los sensores.
+ *
+ * @return    -
+ *
+ * Se inicializa el array que contiene el valor de los sensores de lo que
+ * dispone el vehiculo.
+*/
 void BROADCAR_inicializacion_sensores(){
 	int contador_sensores = 0;
 

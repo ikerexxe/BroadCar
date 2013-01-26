@@ -25,6 +25,9 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "hw_types.h"
 #include "broadcar.h"
 #include "display.h"
@@ -77,7 +80,7 @@ void BROADCAR_ACCION_obras(void){
 		g_sc_sensores[SENSOR_OBRAS].posicion.longitud_grado = 180;
 		g_sc_sensores[SENSOR_OBRAS].posicion.longitud_minuto = 2;
 		g_sc_sensores[SENSOR_OBRAS].posicion.longitud_segundo = 3;
-		g_sc_sensores[SENSOR_OBRAS].valor = 100;
+		g_sc_sensores[SENSOR_OBRAS].valor = 5;
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_OBRAS]);
 		sprintf(pantalla, "obras %d", g_sc_sensores[SENSOR_OBRAS].hora);

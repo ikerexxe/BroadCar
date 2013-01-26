@@ -45,9 +45,13 @@
  */
 #define MAX_ELEMS_LINEA 10
 /*
- * Numero de sensores de los que dispone el coche
+ * Numero de sensores de los que dispone el vehiculo
  */
 #define NUMERO_SENSORES 4
+/*
+ * Numero de mensajes que puede guardar el vehiculo
+ */
+#define MAX_MENSAJES 16
 /*
  * Posicion del array asignada a cada sensor
  */
@@ -75,8 +79,10 @@ typedef char BYTE;
 ** GLOBAL VARIABLES 														**
 ** 																			**
 *****************************************************************************/
+MENSAJEClass g_mc_mensajes[MAX_MENSAJES]; /*Mensajes que se han recibido*/
 SENSORClass g_sc_sensores[NUMERO_SENSORES]; /*Valores de todos los sensores del vehiculo*/
 int g_i_hora; /*Hora del sistema*/
+int g_i_numero_mensaje; /*Indice dle numero de mensajes que se han recibido*/
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

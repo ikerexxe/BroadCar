@@ -30,12 +30,14 @@
 #include "hw_types.h"
 #include "data.h"
 #include "uartDrv.h"
+#include "broadcar.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
 MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje);
+tBoolean recibido_anteriormente(MENSAJEClass mensaje);
 int valor_envio(MENSAJEClass mensaje, int contador);
 MENSAJEClass tipo_mensaje(MENSAJEClass mensaje, int tipo);
 void formatear_mensaje(MENSAJEClass mensaje);
@@ -142,20 +144,24 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 		numero_recibido += 255;
 		recibido[1] -= 255;
 	}
-	numero_recibido += recibido[2];
+	numero_recibido += recibido[2] + 1;
 	recvUART(g_i_puerto_zigbee, temporal, &numero_recibido);
 	for(contador = 0; contador < numero_recibido; contador++){
 		recibido[contador+3] = temporal[contador];
 	}
 	checksum = calcular_checksum(recibido);
-	if(checksum == recibido[numero_recibido + 4]){
+	if(checksum == recibido[numero_recibido + 3]){
 		mensaje = tratar_mensaje(recibido);
-		if(mensaje.id != g_i_mi_id){ //TODO: habria que mirar tambien si anteriormente se ha recibido ese mensaje
-			//Si se puede reenviamos el mensaje
-			if(mensaje.ttl > 0){
-				mensaje.ttl--;
-				formatear_mensaje(mensaje);
-				sendUART(g_i_puerto_zigbee, g_ba_envio, &g_i_tamano);
+		if(mensaje.id != g_i_mi_id){
+			if(!recibido_anteriormente(mensaje)){
+				//Si se puede reenviamos el mensaje
+				if(mensaje.ttl > 0){
+					mensaje.ttl--;
+					formatear_mensaje(mensaje);
+					sendUART(g_i_puerto_zigbee, g_ba_envio, &g_i_tamano);
+				}
+			}else{
+				mensaje.id = NULL;
 			}
 		}
 	}else{
@@ -163,6 +169,22 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 	}
 
 	return mensaje;
+}
+//TODO: hay que comentar
+tBoolean recibido_anteriormente(MENSAJEClass mensaje){
+	int contador;
+	tBoolean resultado = false;
+
+	for(contador = 0; contador < g_i_numero_mensaje; contador++){
+		if(g_mc_mensajes[contador].id == mensaje.id
+				&& g_mc_mensajes[contador].tipo == mensaje.tipo
+				&& g_mc_mensajes[contador].hora == mensaje.hora){
+			resultado = true;
+			contador = g_i_numero_mensaje;
+		}
+	}
+
+	return resultado;
 }
 /**
  * @brief  Función que trata el mensaje recibido por zigbee.
@@ -290,7 +312,11 @@ MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 	switch(sensor.tipo){
 		case LUMINOSIDAD:
 			mensaje.valor.poca_visibilidad.tipo =  NIEBLA;
-			mensaje.valor.poca_visibilidad.gravedad = sensor.valor;
+			if(sensor.valor > 64) mensaje.valor.poca_visibilidad.gravedad = 1;
+			else if(sensor.valor > 48) mensaje.valor.poca_visibilidad.gravedad = 2;
+			else if(sensor.valor > 32) mensaje.valor.poca_visibilidad.gravedad = 3;
+			else if(sensor.valor > 16) mensaje.valor.poca_visibilidad.gravedad = 4;
+			else mensaje.valor.poca_visibilidad.gravedad = 5;
 			g_i_tamano = g_i_numero_cabecera + 16;
 			break;
 		case PRECIPITACION:
@@ -301,7 +327,11 @@ MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 		case LIQUIDO_CARRETERA:
 			mensaje.valor.estado_carretera.tipo = ACEITE;
 			mensaje.valor.estado_carretera.direccion = 0;
-			mensaje.valor.estado_carretera.gravedad = sensor.valor;
+			if(sensor.valor > 64) mensaje.valor.estado_carretera.gravedad = 1;
+			else if(sensor.valor > 48) mensaje.valor.estado_carretera.gravedad = 2;
+			else if(sensor.valor > 32) mensaje.valor.estado_carretera.gravedad = 3;
+			else if(sensor.valor > 16) mensaje.valor.estado_carretera.gravedad = 4;
+			else mensaje.valor.estado_carretera.gravedad = 5;
 			g_i_tamano = g_i_numero_cabecera + 17;
 			break;
 		case TEMPERATURA:
@@ -317,7 +347,8 @@ MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 			break;
 		case S_OBRAS:
 			mensaje.valor.obra.direccion = 0;
-			mensaje.valor.obra.carretera_cortada = 1;
+			if(sensor.valor > 50) mensaje.valor.obra.carretera_cortada = 0;
+			else mensaje.valor.obra.carretera_cortada = 1;
 			g_i_tamano = g_i_numero_cabecera + 16;
 			break;
 	}

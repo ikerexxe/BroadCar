@@ -25,6 +25,9 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "hw_types.h"
 #include "broadcar.h"
 #include "display.h"
@@ -80,10 +83,10 @@ void BROADCAR_ACCION_estado_carretera(void){
 		g_sc_sensores[SENSOR_ESTADO].valor = 15;
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_ESTADO]);
-		sprintf(pantalla, "hielo %d", g_sc_sensores[SENSOR_ESTADO].hora);
+		sprintf(pantalla, "aceite %d", g_sc_sensores[SENSOR_ESTADO].hora);
 		BROADCAR_escribir(pantalla);
 	}else{
-		strcpy(pantalla, "no hielo");
+		strcpy(pantalla, "no aceite");
 		BROADCAR_escribir(pantalla);
 	}
 }

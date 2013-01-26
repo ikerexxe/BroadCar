@@ -25,6 +25,9 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "hw_types.h"
 #include "broadcar.h"
 #include "display.h"
@@ -76,7 +79,7 @@ void BROADCAR_ACCION_poca_visibilidad(void){
 		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud_grado = 180;
 		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud_minuto = 2;
 		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.longitud_segundo = 3;
-		g_sc_sensores[SENSOR_VISIBILIDAD].valor = 3;
+		g_sc_sensores[SENSOR_VISIBILIDAD].valor = 33;
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_VISIBILIDAD]);
 		sprintf(pantalla, "niebla %d", g_sc_sensores[SENSOR_VISIBILIDAD].hora);

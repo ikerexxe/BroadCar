@@ -24,6 +24,8 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
 #include "hw_types.h"
 #include "automata.h"
 #include "motorAutomatas.h"
@@ -155,7 +157,15 @@ void BROADCAR_ACCION_mensajes(void){
 	b_mensaje = BROADCAST_hay_mensaje();
 	if(b_mensaje){
 		m_mensaje = BROADCAST_recibir_mensaje();
-		//TODO: tratamos el mensaje o lo enviamos a la app movil
+		if(g_i_numero_mensaje < MAX_MENSAJES){
+			if(m_mensaje.id != NULL){
+				g_mc_mensajes[g_i_numero_mensaje] = m_mensaje;
+				g_i_numero_mensaje++;
+				//TODO: enviar mendiante bluetooth
+			}
+		}else{
+			//TODO: habra que borrar
+		}
 		sprintf(pantalla, "mensaje %d", m_mensaje.id);
 		BROADCAR_escribir(pantalla);
 	}else{

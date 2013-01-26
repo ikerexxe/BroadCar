@@ -24,13 +24,13 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include <stdlib.h>
+#include <string.h>
 #include "rit128x96x4.h"
 #include "display.h"
 #include "displayGenerico.h"
 #include "framebuffer.h"
 #include "hw_types.h"
-#include <stdlib.h>
-#include <string.h>
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
