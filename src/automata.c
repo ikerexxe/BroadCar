@@ -49,7 +49,9 @@ tBoolean BROADCAR_TR_finalizar_estado(void);
 ** 																	**
 **********************************************************************/
 #define AUTOMATAPRINCIPAL_C
-
+/*
+ * Estados principales del automata
+ */
 ESTADO(Sensores){
 	TRANSICION(11, BROADCAR_TR_cambio_visibilidad, NULL),
 	TRANSICION(12, BROADCAR_TR_cambio_estado, NULL),
@@ -60,33 +62,37 @@ ESTADO(Sensores){
 FIN_ESTADO(Sensores, 1, BROADCAR_ACCION_sensores)
 
 ESTADO(Mensajes){
-	TRANSICION(1, BROADCAR_TR_finalizar_estado /*TODO: tendra que hacer algo pero no se que es*/,NULL)
+	TRANSICION(1, BROADCAR_TR_finalizar_estado,NULL)
 };
 FIN_ESTADO(Mensajes, 2, BROADCAR_ACCION_mensajes)
 
 /*
- * Niebla, velocidad, hielo y obras
+ * Estados secundarios, donde se mira el estado de los sensores de:
+ * niebla, velocidad, hielo y obras
  */
 ESTADO(Niebla){
-	TRANSICION(2, BROADCAR_TR_finalizar_estado /*TODO: tendra que hacer algo pero no se que es*/, NULL)
+	TRANSICION(2, BROADCAR_TR_finalizar_estado, NULL)
 };
 FIN_ESTADO(Niebla, 11, BROADCAR_ACCION_poca_visibilidad)
 
 ESTADO(Hielo){
-	TRANSICION(2, BROADCAR_TR_finalizar_estado /*TODO: tendra que hacer algo pero no se que es*/,NULL)
+	TRANSICION(2, BROADCAR_TR_finalizar_estado,NULL)
 };
 FIN_ESTADO(Hielo, 12, BROADCAR_ACCION_estado_carretera)
 
 ESTADO(Obras){
-	TRANSICION(2, BROADCAR_TR_finalizar_estado /*TODO: tendra que hacer algo pero no se que es*/,NULL)
+	TRANSICION(2, BROADCAR_TR_finalizar_estado,NULL)
 };
 FIN_ESTADO(Obras, 13, BROADCAR_ACCION_obras)
 
 ESTADO(Velocidad_lenta){
-	TRANSICION(2, BROADCAR_TR_finalizar_estado /*TODO: tendra que hacer algo pero no se que es*/,NULL)
+	TRANSICION(2, BROADCAR_TR_finalizar_estado,NULL)
 };
 FIN_ESTADO(Velocidad_lenta, 14, BROADCAR_ACCION_velocidad)
 
+/*
+ * Máquina de estados
+ */
 AUTOMATA(automata){
 	&Sensores,
 	&Mensajes,
@@ -96,19 +102,6 @@ AUTOMATA(automata){
 	&Velocidad_lenta
 };
 FIN_AUTOMATA(automata, 101, BROADCAR_AUT_finish)
-
-/*********************************************************************
-** 																	**
-** EXTERNAL VARIABLES 												**
-** 																	**
-**********************************************************************/
-//TODO: no hay
-/*********************************************************************
-**																	**
-** GLOBAL VARIABLES													**
-** 																	**
-**********************************************************************/
-//TODO: no hay
 /*********************************************************************
 **																	**
 ** LOCAL FUNCTIONS													**
@@ -157,14 +150,13 @@ void BROADCAR_ACCION_mensajes(void){
 	b_mensaje = BROADCAST_hay_mensaje();
 	if(b_mensaje){
 		m_mensaje = BROADCAST_recibir_mensaje();
-		if(g_i_numero_mensaje < MAX_MENSAJES){
-			if(m_mensaje.id != NULL){
-				g_mc_mensajes[g_i_numero_mensaje] = m_mensaje;
-				g_i_numero_mensaje++;
-				//TODO: enviar mendiante bluetooth
+		if(m_mensaje.id != NULL){
+			if(g_i_numero_mensaje > MAX_MENSAJES){
+				borrar_mensaje();
 			}
-		}else{
-			//TODO: habra que borrar
+			g_mc_mensajes[g_i_numero_mensaje] = m_mensaje;
+			g_i_numero_mensaje++;
+			//TODO: enviar mendiante bluetooth
 		}
 		sprintf(pantalla, "mensaje %d", m_mensaje.id);
 		BROADCAR_escribir(pantalla);

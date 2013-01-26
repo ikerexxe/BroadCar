@@ -45,6 +45,7 @@ int calcular_checksum(uint8_t mensaje[]);
 void calcular_tamano_mensaje(MENSAJEClass mensaje);
 MENSAJEClass tratar_mensaje(uint8_t recibido[]);
 MENSAJEClass valor_recibido(MENSAJEClass mensaje, uint8_t recibido[]);
+void borrar_mensaje();
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -77,6 +78,23 @@ static uint8_t g_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la
 */
 void BROADCAR_inicializacion_zigbee(){
 	openUART(g_i_puerto_zigbee);
+}
+/**
+* @brief Función para se usa para borrar el primer mensaje de la lista.
+*
+* @return -
+*
+* Permite borrar el mensaje más antiguo de la lista de mensajes para hacer
+* hueco a los nuevos mensajes.
+*/
+void borrar_mensaje(){
+int contador = 0; /*Se usa para recorrer la lista de mensajes*/
+
+for(contador = 1; contador < g_i_numero_mensaje; contador++){
+g_mc_mensajes[contador - 1] = g_mc_mensajes[contador];
+}
+
+g_i_numero_mensaje--;
 }
 /**
  * @brief  Función para enviar un mensaje mediante zigbee.
@@ -150,7 +168,7 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 		recibido[contador+3] = temporal[contador];
 	}
 	checksum = calcular_checksum(recibido);
-	if(checksum == recibido[numero_recibido + 3]){
+	if(checksum == recibido[numero_recibido + 2]){
 		mensaje = tratar_mensaje(recibido);
 		if(mensaje.id != g_i_mi_id){
 			if(!recibido_anteriormente(mensaje)){
@@ -170,10 +188,18 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 
 	return mensaje;
 }
-//TODO: hay que comentar
+/**
+* @brief Función que mira si el mensaje ya se ha recibido.
+*
+* @return Si se ha recibido con anterioridad
+*
+* Se recorre la lista de mensajes y se mira si el mensaje se había
+* recibido con anterioridad. Esto ocurre cuando el id, el tipo y la
+* hora concuerdan.
+*/
 tBoolean recibido_anteriormente(MENSAJEClass mensaje){
-	int contador;
-	tBoolean resultado = false;
+	int contador; /*Contador para recorrer el array*/
+	tBoolean resultado = false; /*Para saber si se ha recibido anteriormente*/
 
 	for(contador = 0; contador < g_i_numero_mensaje; contador++){
 		if(g_mc_mensajes[contador].id == mensaje.id
