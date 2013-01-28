@@ -113,7 +113,8 @@ FIN_AUTOMATA(automata, 101, BROADCAR_AUT_finish)
 tBoolean BROADCAR_TR_finalizar_estado(void){
 	int i = 0;
 
-	for(i = 0; i < 250000; i++){
+//	for(i = 0; i < 250000; i++){
+	for(i = 0; i < 5000; i++){
 
 	}
 
@@ -125,7 +126,8 @@ tBoolean BROADCAR_TR_finalizar_estado(void){
 tBoolean BROADCAR_TR_no_finalizar_estado(void){
 	int i = 0;
 
-	for(i = 0; i < 250000; i++){
+//	for(i = 0; i < 250000; i++){
+	for(i = 0; i < 5000; i++){
 
 	}
 
@@ -137,13 +139,12 @@ tBoolean BROADCAR_TR_no_finalizar_estado(void){
 */
 void BROADCAR_ACCION_sensores(void){
 	BROADCAR_leer_keypad();
-	BROADCAR_escribir("sensor");
 }
 /**
  * @brief  Funcion que ejecuta el automata de los mensajes
 */
 void BROADCAR_ACCION_mensajes(void){
-	unsigned char * pantalla = malloc(sizeof(unsigned char) * 20);
+	unsigned char * pantalla;
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 
@@ -158,10 +159,9 @@ void BROADCAR_ACCION_mensajes(void){
 			g_i_numero_mensaje++;
 			//TODO: enviar mendiante bluetooth
 		}
+		pantalla = malloc(sizeof(unsigned char) * 20);
 		sprintf(pantalla, "mensaje %d", m_mensaje.id);
 		BROADCAR_escribir(pantalla);
-	}else{
-		BROADCAR_escribir("no mensaje");
 	}
 }
 /**

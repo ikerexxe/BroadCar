@@ -170,6 +170,8 @@ int FRAME_BUFFER_delete_element(int id){
 	//Actualizar valor
 	g_display_elements[id].x = -5;
 	g_display_elements[id].y = -5;
+	//Desasignar memoria
+	free(g_display_elements[id].picture_or_text); //TODO: he puesto esto
 
 	for(i=id;i<MAX_ELEMS_PANTALLA;i++){
 		g_display_elements[i].picture_or_text = g_display_elements[i + 1].picture_or_text;
