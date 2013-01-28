@@ -82,6 +82,9 @@ typedef char BYTE;
 SENSORClass g_sc_sensores[NUMERO_SENSORES]; /*Valores de todos los sensores del vehiculo*/
 int g_i_hora; /*Hora del sistema*/
 int g_i_numero_mensaje; /*Indice dle numero de mensajes que se han recibido*/
+int g_i_mi_id; /*Identificador del vehiculo*/
+unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
+unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

@@ -33,7 +33,7 @@
 #include "broadcar.h"
 /*********************************************************************
 ** 																	**
-** EXPORTED VARIABLES 												**
+** GLOBAL VARIABLES 												**
 ** 																	**
 *********************************************************************/
 static unsigned long g_ul_system_clock; /*Frecuencia del clock*/

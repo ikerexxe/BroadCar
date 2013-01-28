@@ -44,7 +44,12 @@
 ** 																	**
 **********************************************************************/
 static DISPLAY_ELEMENT g_display_elements[MAX_ELEMS_PANTALLA];
-int g_display_element_kop = 0; /*Num. de elementos que hay en el buffer*/
+static int g_display_element_kop = 0; /*Num. de elementos que hay en el buffer*/
+/*********************************************************************
+** 																	**
+** EXPORTED VARIABLES 												**
+** 																	**
+*********************************************************************/
 extern const unsigned char g_puc_nada[60];/*Dibujo vacío del tamaño del círculo*/
 /*********************************************************************
 ** 																	**

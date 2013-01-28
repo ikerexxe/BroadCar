@@ -50,14 +50,13 @@ void BROADCAR_inicializacion_mensajes();
 ** EXTERNAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-extern unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
 extern TS_AUTOMATA automata; /*Automata que usa la aplicacion*/
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-int g_i_mi_id = 1; /*Identificador del vehiculo*/
+//TODO: no hay
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -81,6 +80,7 @@ int main(void)
 */
 void BROADCAR_inicializacion(){
 	g_i_numero_mensaje = 0;
+	g_i_mi_id = 1;
 	BROADCAR_inicializacion_clock();
 	BROADCAR_inicializacion_sensores();
 	BROADCAR_inicializacion_keypad();

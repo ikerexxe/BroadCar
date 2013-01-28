@@ -29,14 +29,14 @@
 #include "hw_memmap.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
+#include "broadcar.h"
 #include "keypad.h"
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
-unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
+//TODO: no hay
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**

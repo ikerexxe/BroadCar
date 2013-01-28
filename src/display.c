@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "rit128x96x4.h"
+#include "broadcar.h"
 #include "display.h"
 #include "displayGenerico.h"
 #include "framebuffer.h"
@@ -42,8 +43,7 @@
 ** EXPORTED VARIABLES 												**
 ** 																	**
 *********************************************************************/
-extern unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
-extern unsigned char g_ucChangedData; /*Si ha cambiado la tecla que se está pulsando*/
+//TODO: no hay
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**

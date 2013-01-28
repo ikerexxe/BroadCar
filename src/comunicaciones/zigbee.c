@@ -54,7 +54,7 @@ MENSAJEClass valor_recibido(MENSAJEClass mensaje, uint8_t recibido[]);
 ** EXPORTED VARIABLES 												**
 ** 																	**
 *********************************************************************/
-extern int g_i_mi_id; /*Identificador del vehiculo*/
+//TODO: no hay
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
