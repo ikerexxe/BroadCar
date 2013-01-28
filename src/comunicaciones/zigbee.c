@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "hw_types.h"
+#include "zigbee.h"
 #include "data.h"
 #include "uartDrv.h"
 #include "broadcar.h"
@@ -36,6 +37,9 @@
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
+tBoolean BROADCAST_hay_mensaje(void);
+MENSAJEClass BROADCAST_recibir_mensaje(void);
+void borrar_mensaje(void);
 MENSAJEClass valor_mensaje(SENSORClass sensor, MENSAJEClass mensaje);
 tBoolean recibido_anteriormente(MENSAJEClass mensaje);
 int valor_envio(MENSAJEClass mensaje, int contador);
@@ -45,7 +49,6 @@ int calcular_checksum(uint8_t mensaje[]);
 void calcular_tamano_mensaje(MENSAJEClass mensaje);
 MENSAJEClass tratar_mensaje(uint8_t recibido[]);
 MENSAJEClass valor_recibido(MENSAJEClass mensaje, uint8_t recibido[]);
-void borrar_mensaje();
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -57,6 +60,7 @@ extern int g_i_mi_id; /*Identificador del vehiculo*/
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
+MENSAJEClass g_mc_mensajes[MAX_MENSAJES]; /*Mensajes que se han recibido*/
 static int g_i_numero_cabecera = 17; /*Numero de elementos que tiene la cabecera de la trama zigbee*/
 static unsigned char g_uc_caracter_vacio = 0x00; /*Byte vacio = 00000000*/
 static unsigned char g_uc_caracter_lleno = 255; /*Byte lleno = 11111111*/
@@ -78,6 +82,30 @@ static uint8_t g_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la
 */
 void BROADCAR_inicializacion_zigbee(){
 	openUART(g_i_puerto_zigbee);
+}
+/**
+ * @brief  Funcion que ejecuta el automata de los mensajes
+*/
+void BROADCAR_ACCION_mensajes(void){
+	unsigned char * pantalla;
+	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
+	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
+
+	b_mensaje = BROADCAST_hay_mensaje();
+	if(b_mensaje){
+		m_mensaje = BROADCAST_recibir_mensaje();
+		if(m_mensaje.id != NULL){
+			if(g_i_numero_mensaje > MAX_MENSAJES){
+				borrar_mensaje();
+			}
+			g_mc_mensajes[g_i_numero_mensaje] = m_mensaje;
+			g_i_numero_mensaje++;
+			//TODO: enviar mendiante bluetooth
+		}
+		pantalla = malloc(sizeof(unsigned char) * 20);
+		sprintf(pantalla, "mensaje %d", m_mensaje.id);
+		BROADCAR_escribir(pantalla);
+	}
 }
 /**
 * @brief Función para se usa para borrar el primer mensaje de la lista.

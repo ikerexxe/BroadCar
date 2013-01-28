@@ -79,7 +79,6 @@ typedef char BYTE;
 ** GLOBAL VARIABLES 														**
 ** 																			**
 *****************************************************************************/
-MENSAJEClass g_mc_mensajes[MAX_MENSAJES]; /*Mensajes que se han recibido*/
 SENSORClass g_sc_sensores[NUMERO_SENSORES]; /*Valores de todos los sensores del vehiculo*/
 int g_i_hora; /*Hora del sistema*/
 int g_i_numero_mensaje; /*Indice dle numero de mensajes que se han recibido*/
