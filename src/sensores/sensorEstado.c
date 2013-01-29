@@ -66,9 +66,11 @@ tBoolean BROADCAR_TR_cambio_estado(void){
  * @brief  Funcion que mira el estado del sensor del estado de la carretera
 */
 void BROADCAR_ACCION_estado_carretera(void){
-	unsigned char * pantalla = malloc(sizeof(unsigned char) * 20);
+	unsigned char * pantalla;
 
 	if((g_sc_sensores[SENSOR_ESTADO].hora + 10) < g_i_hora){
+		pantalla = malloc(sizeof(unsigned char) * 20);
+
 		g_sc_sensores[SENSOR_ESTADO].tipo = LIQUIDO_CARRETERA;
 		g_sc_sensores[SENSOR_ESTADO].hora = g_i_hora;
 		g_sc_sensores[SENSOR_ESTADO].posicion.latitud = NORTE;
@@ -83,9 +85,6 @@ void BROADCAR_ACCION_estado_carretera(void){
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_ESTADO]);
 		sprintf(pantalla, "aceite %d", g_sc_sensores[SENSOR_ESTADO].hora);
-		BROADCAR_escribir(pantalla);
-	}else{
-		strcpy(pantalla, "no aceite");
 		BROADCAR_escribir(pantalla);
 	}
 }

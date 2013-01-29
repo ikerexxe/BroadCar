@@ -43,7 +43,7 @@
 /*
  * Definición del numero maximo de caracteres por linea
  */
-#define MAX_ELEMS_LINEA 10
+#define MAX_ELEMS_LINEA 16
 /*
  * Numero de sensores de los que dispone el vehiculo
  */

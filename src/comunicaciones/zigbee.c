@@ -101,10 +101,41 @@ void BROADCAR_ACCION_mensajes(void){
 			g_mc_mensajes[g_i_numero_mensaje] = m_mensaje;
 			g_i_numero_mensaje++;
 			//TODO: enviar mendiante bluetooth
+			pantalla = malloc(sizeof(unsigned char) * 20);
+			switch(m_mensaje.tipo){
+				case TRAFICO_DENSO:
+					sprintf(pantalla, "M_TR_DENSO %d", m_mensaje.id);
+					g_i_tamano = g_i_numero_cabecera + 16;
+					break;
+				case OBRAS:
+					sprintf(pantalla, "M_OBRAS %d", m_mensaje.id);
+					g_i_tamano = g_i_numero_cabecera + 16;
+					break;
+				case VEHICULO_NO_VISIBLE:
+					sprintf(pantalla, "M_NO_VIS %d", m_mensaje.id);
+					g_i_tamano = g_i_numero_cabecera + 16;
+					break;
+				case POCA_VISIBILIDAD:
+					sprintf(pantalla, "M_POCA_VIS %d", m_mensaje.id);
+					g_i_tamano = g_i_numero_cabecera + 16;
+					break;
+				case ESTADO_CARRETERA:
+					sprintf(pantalla, "M_EST_CAR %d", m_mensaje.id);
+					g_i_tamano = g_i_numero_cabecera + 17;
+					break;
+				case ACCIDENTE_CARRETERA:
+					sprintf(pantalla, "M_ACC_CAR %d", m_mensaje.id);
+					g_i_tamano = g_i_numero_cabecera + 16;
+					break;
+			}
+			BROADCAR_escribir(pantalla);
+			//Si se puede reenviamos el mensaje
+			if(m_mensaje.ttl > 0){
+				m_mensaje.ttl--;
+				formatear_mensaje(m_mensaje);
+				sendUART(g_i_puerto_zigbee, g_ba_envio, &g_i_tamano);
+			}
 		}
-		pantalla = malloc(sizeof(unsigned char) * 20);
-		sprintf(pantalla, "mensaje %d", m_mensaje.id);
-		BROADCAR_escribir(pantalla);
 	}
 }
 /**
@@ -118,11 +149,11 @@ void BROADCAR_ACCION_mensajes(void){
 void borrar_mensaje(){
 int contador = 0; /*Se usa para recorrer la lista de mensajes*/
 
-for(contador = 1; contador < g_i_numero_mensaje; contador++){
-g_mc_mensajes[contador - 1] = g_mc_mensajes[contador];
-}
+	for(contador = 1; contador < g_i_numero_mensaje; contador++){
+		g_mc_mensajes[contador - 1] = g_mc_mensajes[contador];
+	}
 
-g_i_numero_mensaje--;
+	g_i_numero_mensaje--;
 }
 /**
  * @brief  Función para enviar un mensaje mediante zigbee.
@@ -198,17 +229,8 @@ MENSAJEClass BROADCAST_recibir_mensaje(void){
 	checksum = calcular_checksum(recibido);
 	if(checksum == recibido[numero_recibido + 2]){
 		mensaje = tratar_mensaje(recibido);
-		if(mensaje.id != g_i_mi_id){
-			if(!recibido_anteriormente(mensaje)){
-				//Si se puede reenviamos el mensaje
-				if(mensaje.ttl > 0){
-					mensaje.ttl--;
-					formatear_mensaje(mensaje);
-					sendUART(g_i_puerto_zigbee, g_ba_envio, &g_i_tamano);
-				}
-			}else{
-				mensaje.id = NULL;
-			}
+		if(mensaje.id == g_i_mi_id || recibido_anteriormente(mensaje)){
+			mensaje.id = NULL;
 		}
 	}else{
 		//TODO: ERROR!!!!!

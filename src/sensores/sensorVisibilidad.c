@@ -65,9 +65,11 @@ tBoolean BROADCAR_TR_cambio_visibilidad(void){
  * @brief  Funcion que mira el estado del sensor de visibilidad
 */
 void BROADCAR_ACCION_poca_visibilidad(void){
-	unsigned char * pantalla = malloc(sizeof(unsigned char) * 20);
+	unsigned char * pantalla;
 
 	if((g_sc_sensores[SENSOR_VISIBILIDAD].hora + 10) < g_i_hora){
+		pantalla = malloc(sizeof(unsigned char) * 20);
+
 		g_sc_sensores[SENSOR_VISIBILIDAD].tipo = LUMINOSIDAD;
 		g_sc_sensores[SENSOR_VISIBILIDAD].hora = g_i_hora;
 		g_sc_sensores[SENSOR_VISIBILIDAD].posicion.latitud = NORTE;
@@ -82,9 +84,6 @@ void BROADCAR_ACCION_poca_visibilidad(void){
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_VISIBILIDAD]);
 		sprintf(pantalla, "niebla %d", g_sc_sensores[SENSOR_VISIBILIDAD].hora);
-		BROADCAR_escribir(pantalla);
-	}else{
-		strcpy(pantalla, "no niebla");
 		BROADCAR_escribir(pantalla);
 	}
 }

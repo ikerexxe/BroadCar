@@ -65,9 +65,11 @@ tBoolean BROADCAR_TR_cambio_velocidad(void){
  * @brief  Funcion que mira el estado del sensor de velocidad
 */
 void BROADCAR_ACCION_velocidad(void){
-	unsigned char * pantalla = malloc(sizeof(unsigned char) * 20);
+	unsigned char * pantalla;
 
 	if((g_sc_sensores[SENSOR_VELOCIDAD].hora + 10) < g_i_hora){
+		pantalla = malloc(sizeof(unsigned char) * 20);
+
 		g_sc_sensores[SENSOR_VELOCIDAD].tipo = VELOCIDAD;
 		g_sc_sensores[SENSOR_VELOCIDAD].hora = g_i_hora;
 		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud = NORTE;
@@ -82,9 +84,6 @@ void BROADCAR_ACCION_velocidad(void){
 
 		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_VELOCIDAD]);
 		sprintf(pantalla, "lento %d", g_sc_sensores[SENSOR_VELOCIDAD].hora);
-		BROADCAR_escribir(pantalla);
-	}else{
-		strcpy(pantalla, "no lento");
 		BROADCAR_escribir(pantalla);
 	}
 }
