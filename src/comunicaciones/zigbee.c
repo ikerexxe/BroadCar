@@ -27,10 +27,9 @@
 **********************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 #include "hw_types.h"
 #include "zigbee.h"
-#include "data.h"
 #include "uartDrv.h"
 #include "broadcar.h"
 #include "display.h"

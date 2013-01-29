@@ -24,8 +24,6 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include <stdlib.h>
-#include <stdio.h>
 #include "hw_types.h"
 #include "automata.h"
 #include "motorAutomatas.h"
@@ -35,7 +33,6 @@
 #include "sensorEstado.h"
 #include "sensorObras.h"
 #include "sensorVelocidad.h"
-#include "zigbee.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**

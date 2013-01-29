@@ -25,9 +25,7 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "framebuffer.h"
 #include "rit128x96x4.h"
 #include "displayGenerico.h"

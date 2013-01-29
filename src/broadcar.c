@@ -24,16 +24,11 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "hw_types.h"
 #include "broadcar.h"
-#include "framebuffer.h"
 #include "clock.h"
-#include "displayGenerico.h"
 #include "display.h"
 #include "keypad.h"
-#include "hw_types.h"
 #include "motorAutomatas.h"
 #include "zigbee.h"
 /*********************************************************************

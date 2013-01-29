@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "rit128x96x4.h"
-#include "broadcar.h"
 #include "display.h"
 #include "displayGenerico.h"
 #include "framebuffer.h"
