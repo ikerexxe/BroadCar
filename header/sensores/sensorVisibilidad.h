@@ -31,8 +31,8 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-tBoolean BROADCAR_TR_cambio_visibilidad(void);
-void BROADCAR_ACCION_poca_visibilidad(void);
+tBoolean S_VISIBILIDAD_cambio(void);
+void S_VISIBILIDAD_accion(void);
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**

@@ -42,8 +42,8 @@
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-static DISPLAY_ELEMENT g_display_elements[MAX_ELEMS_PANTALLA];
-static int g_display_element_kop = 0; /*Num. de elementos que hay en el buffer*/
+static DISPLAY_ELEMENT gs_display_elements[MAX_ELEMS_PANTALLA];
+static int gs_display_element_kop = 0; /*Num. de elementos que hay en el buffer*/
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -68,13 +68,13 @@ void FRAME_BUFFER_init(){
 	DISPLAY_GENERICO_init();
 	//Creamos el buffer
 	for (i=0; i<MAX_ELEMS_PANTALLA; i++){
-		g_display_elements[i].id = i;
-		g_display_elements[i].x = i;
-		g_display_elements[i].y = i;
-		g_display_elements[i].width = i;
-		g_display_elements[i].height = i;
-		g_display_elements[i].picture_or_text = i;
-		g_display_elements[i].what = i;
+		gs_display_elements[i].id = i;
+		gs_display_elements[i].x = i;
+		gs_display_elements[i].y = i;
+		gs_display_elements[i].width = i;
+		gs_display_elements[i].height = i;
+		gs_display_elements[i].picture_or_text = i;
+		gs_display_elements[i].what = i;
 	}
 }
 /**
@@ -87,17 +87,17 @@ void FRAME_BUFFER_init(){
  * elementos que hay en el buffer despues de haber añadido ésta imagen.
 */
 int FRAME_BUFFER_insert_image(char *puc, int x, int y, int w, int h){
-	if(g_display_element_kop < MAX_ELEMS_PANTALLA){
-		g_display_elements[g_display_element_kop].id = g_display_element_kop;
-		g_display_elements[g_display_element_kop].picture_or_text = puc;
-		g_display_elements[g_display_element_kop].what = 0; //0 para imagen
-		g_display_elements[g_display_element_kop].x = x;
-		g_display_elements[g_display_element_kop].y = y;
-		g_display_elements[g_display_element_kop].width = w;
-		g_display_elements[g_display_element_kop].height = h;
-		g_display_element_kop ++; //Aumentamos el número de elementos que hay en el buffer
+	if(gs_display_element_kop < MAX_ELEMS_PANTALLA){
+		gs_display_elements[gs_display_element_kop].id = gs_display_element_kop;
+		gs_display_elements[gs_display_element_kop].picture_or_text = puc;
+		gs_display_elements[gs_display_element_kop].what = 0; //0 para imagen
+		gs_display_elements[gs_display_element_kop].x = x;
+		gs_display_elements[gs_display_element_kop].y = y;
+		gs_display_elements[gs_display_element_kop].width = w;
+		gs_display_elements[gs_display_element_kop].height = h;
+		gs_display_element_kop ++; //Aumentamos el número de elementos que hay en el buffer
 	}
-	return g_display_element_kop;
+	return gs_display_element_kop;
 }
 /**
  * @brief  Insertamos texto en el buffer
@@ -109,17 +109,17 @@ int FRAME_BUFFER_insert_image(char *puc, int x, int y, int w, int h){
  * elementos que hay en el buffer despues de haber añadido éste texto.
 */
 int FRAME_BUFFER_insert_text(char *texto, int x, int y){
-	if(g_display_element_kop < MAX_ELEMS_PANTALLA){
-		g_display_elements[g_display_element_kop].id = g_display_element_kop;
-		g_display_elements[g_display_element_kop].picture_or_text = texto;
-		g_display_elements[g_display_element_kop].what = 1; //1 para texto
-		g_display_elements[g_display_element_kop].x = x;
-		g_display_elements[g_display_element_kop].y = y;
-		g_display_elements[g_display_element_kop].width = 0;
-		g_display_elements[g_display_element_kop].height = 0;
-		g_display_element_kop ++; //Aumentamos numero de elementos que hay en el buffer
+	if(gs_display_element_kop < MAX_ELEMS_PANTALLA){
+		gs_display_elements[gs_display_element_kop].id = gs_display_element_kop;
+		gs_display_elements[gs_display_element_kop].picture_or_text = texto;
+		gs_display_elements[gs_display_element_kop].what = 1; //1 para texto
+		gs_display_elements[gs_display_element_kop].x = x;
+		gs_display_elements[gs_display_element_kop].y = y;
+		gs_display_elements[gs_display_element_kop].width = 0;
+		gs_display_elements[gs_display_element_kop].height = 0;
+		gs_display_element_kop ++; //Aumentamos numero de elementos que hay en el buffer
 	}
-	return g_display_element_kop;
+	return gs_display_element_kop;
 }
 /**
  * @brief  Cambiamos la posición de un elemento existente
@@ -133,14 +133,14 @@ void FRAME_BUFFER_actualiza_posicion_elemento(int id, int x, int y){
 	int x_actual; /*Posicion actual en el eje x*/
 	int y_actual; /*Posicion actual en el eje y*/
 	//Obtener posición actual
-	x_actual = g_display_elements[id].x;
-	y_actual = g_display_elements[id].y;
+	x_actual = gs_display_elements[id].x;
+	y_actual = gs_display_elements[id].y;
 	//Borrar del FrameBuffer
-	g_display_elements[id].xOld = x_actual;
-	g_display_elements[id].yOld = y_actual;
+	gs_display_elements[id].xOld = x_actual;
+	gs_display_elements[id].yOld = y_actual;
 	//Actualizar valor
-	g_display_elements[id].x = x;
-	g_display_elements[id].y = y;
+	gs_display_elements[id].x = x;
+	gs_display_elements[id].y = y;
 }
 /**
  * @brief  Cambiamos el texto de un elemento existente.
@@ -150,7 +150,7 @@ void FRAME_BUFFER_actualiza_posicion_elemento(int id, int x, int y){
  * Se actualiza el texto del elemento.
 */
 void FRAME_BUFFER_actualiza_texto_elemento(int id, char *texto){
-	g_display_elements[id].picture_or_text = texto;
+	gs_display_elements[id].picture_or_text = texto;
 }
 /**
  * @brief  Borramos un elemento del buffer
@@ -166,29 +166,29 @@ int FRAME_BUFFER_delete_element(int id){
 	int y_actual; /*Posición del elemento en el eje y*/
 	int i;
 	//Obtener posición actual
-	x_actual = g_display_elements[id].x;
-	y_actual = g_display_elements[id].y;
+	x_actual = gs_display_elements[id].x;
+	y_actual = gs_display_elements[id].y;
 	//Borrar del FrameBuffer
-	g_display_elements[id].xOld = x_actual;
-	g_display_elements[id].yOld = y_actual;
+	gs_display_elements[id].xOld = x_actual;
+	gs_display_elements[id].yOld = y_actual;
 	//Actualizar valor
-	g_display_elements[id].x = -5;
-	g_display_elements[id].y = -5;
+	gs_display_elements[id].x = -5;
+	gs_display_elements[id].y = -5;
 	//Desasignar memoria
-	free(g_display_elements[id].picture_or_text);
+	free(gs_display_elements[id].picture_or_text);
 
 	for(i=id;i<MAX_ELEMS_PANTALLA;i++){
-		g_display_elements[i].picture_or_text = g_display_elements[i + 1].picture_or_text;
-		g_display_elements[i].what = g_display_elements[i + 1].what; //1 para texto
-		g_display_elements[i].x = g_display_elements[i + 1].x;
-		g_display_elements[i].y = g_display_elements[i + 1].y;
-		g_display_elements[i].width = g_display_elements[i + 1].width;
-		g_display_elements[i].height = g_display_elements[i + 1].height;
+		gs_display_elements[i].picture_or_text = gs_display_elements[i + 1].picture_or_text;
+		gs_display_elements[i].what = gs_display_elements[i + 1].what; //1 para texto
+		gs_display_elements[i].x = gs_display_elements[i + 1].x;
+		gs_display_elements[i].y = gs_display_elements[i + 1].y;
+		gs_display_elements[i].width = gs_display_elements[i + 1].width;
+		gs_display_elements[i].height = gs_display_elements[i + 1].height;
 
 	}
 	//Reducimos numero de elementos que hay en el buffer
-	g_display_element_kop =  g_display_element_kop - 1;
-	return g_display_element_kop;
+	gs_display_element_kop =  gs_display_element_kop - 1;
+	return gs_display_element_kop;
 }
 /**
  * @brief  Volcar el buffer en la pantalla
@@ -205,25 +205,25 @@ void FRAME_BUFFER_write_to_display(void){
 	int size = 0; /*Tamaño del string*/
 	int index =0; /*Indice de posición en el array str*/
 	char str[30]; /*Array donde se va guardar el string*/
-	for(i=0;i < g_display_element_kop; i++){ //Volcamos todos los elementos existentes en en buffer
-		if(( g_display_elements[i].xOld != g_display_elements[i].x ) ||
-		(g_display_elements[i].yOld != g_display_elements[i].y ))
+	for(i=0;i < gs_display_element_kop; i++){ //Volcamos todos los elementos existentes en en buffer
+		if(( gs_display_elements[i].xOld != gs_display_elements[i].x ) ||
+		(gs_display_elements[i].yOld != gs_display_elements[i].y ))
 		{
-			if(g_display_elements[i].what==1){ //Es un texto
+			if(gs_display_elements[i].what==1){ //Es un texto
 					size = MAX_ELEMS_LINEA;
 					for(index = 0; index < size; index ++){
 						str[index]= ' ';
 					}
 					str[index]='\0';
-					if(i==0 && g_display_element_kop == MAX_ELEMS_PANTALLA){
-						DISPLAY_GENERICO_dibuja_string(str, g_display_elements[i].x,g_display_elements[i].y, 15);
+					if(i==0 && gs_display_element_kop == MAX_ELEMS_PANTALLA){
+						DISPLAY_GENERICO_dibuja_string(str, gs_display_elements[i].x,gs_display_elements[i].y, 15);
 					}
-					DISPLAY_GENERICO_dibuja_string(str, g_display_elements[i].xOld,g_display_elements[i].yOld, 15);
-					DISPLAY_GENERICO_dibuja_string(g_display_elements[i].picture_or_text, g_display_elements[i].x,g_display_elements[i].y, 15);
+					DISPLAY_GENERICO_dibuja_string(str, gs_display_elements[i].xOld,gs_display_elements[i].yOld, 15);
+					DISPLAY_GENERICO_dibuja_string(gs_display_elements[i].picture_or_text, gs_display_elements[i].x,gs_display_elements[i].y, 15);
 				}else //Es una imagen
 				{
-					DISPLAY_GENERICO_dibuja_imagen(g_puc_nada, g_display_elements[i].xOld, g_display_elements[i].yOld, g_display_elements[i].width, g_display_elements[i].height);
-					DISPLAY_GENERICO_dibuja_imagen(g_display_elements[i].picture_or_text, g_display_elements[i].x, g_display_elements[i].y, g_display_elements[i].width, g_display_elements[i].height);
+					DISPLAY_GENERICO_dibuja_imagen(g_puc_nada, gs_display_elements[i].xOld, gs_display_elements[i].yOld, gs_display_elements[i].width, gs_display_elements[i].height);
+					DISPLAY_GENERICO_dibuja_imagen(gs_display_elements[i].picture_or_text, gs_display_elements[i].x, gs_display_elements[i].y, gs_display_elements[i].width, gs_display_elements[i].height);
 				}
 		}
 	}

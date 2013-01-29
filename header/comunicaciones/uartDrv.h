@@ -31,11 +31,11 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-int openUART(int nPort);
-void closeUART(int nPort);
-int recvUART(int nPort, unsigned char *p, int *pSize);
-int sendUART(int nPort, unsigned char *p, int *pSize);
-int nElementosIn(int nPort);
+int UART_open(int nPort);
+void UART_close(int nPort);
+int UART_recv(int nPort, unsigned char *p, int *pSize);
+int UART_send(int nPort, unsigned char *p, int *pSize);
+int UART_nElementosIn(int nPort);
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

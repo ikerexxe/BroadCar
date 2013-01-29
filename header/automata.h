@@ -31,9 +31,8 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-void BROADCAR_ACCION_sensores(void);
-void BROADCAR_ACCION_mensajes(void);
-tBoolean BROADCAR_AUT_finish(void);
+void AUTOMATA_sensores(void);
+tBoolean AUTOMATA_finish(void);
 /*********************************************************************
 **	 																**
 ** TYPEDEFS AND STRUCTURES 											**

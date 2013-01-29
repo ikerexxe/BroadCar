@@ -35,12 +35,6 @@
 #include "zigbee.h"
 /*********************************************************************
 ** 																	**
-** EXPORTED VARIABLES 												**
-** 																	**
-*********************************************************************/
-//TODO: no hay
-/*********************************************************************
-** 																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
@@ -50,10 +44,10 @@
  *
  * @return        Si el cambio se ha producido en el sensor de velocidad
 */
-tBoolean BROADCAR_TR_cambio_velocidad(void){
+tBoolean S_VELOCIDAD_cambio(void){
 	tBoolean cambio = false; /*Si ha cambiado el estado de la tecla*/
 
-	if(g_ucChangedData && g_ucChangedData < 10){
+	if(g_uc_changed_data && g_uc_changed_data < 10){
 		if(g_ul_keypad_switches == KEY_DOWN){
 			cambio = true;
 		}
@@ -64,27 +58,27 @@ tBoolean BROADCAR_TR_cambio_velocidad(void){
 /**
  * @brief  Funcion que mira el estado del sensor de velocidad
 */
-void BROADCAR_ACCION_velocidad(void){
+void S_VELOCIDAD_accion(void){
 	unsigned char * pantalla;
 
-	if((g_sc_sensores[SENSOR_VELOCIDAD].hora + 10) < g_i_hora){
+	if((g_cs_sensores[SENSOR_VELOCIDAD].hora + 10) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
 
-		g_sc_sensores[SENSOR_VELOCIDAD].tipo = VELOCIDAD;
-		g_sc_sensores[SENSOR_VELOCIDAD].hora = g_i_hora;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud = NORTE;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud_grado = 90;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud_minuto = 59;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.latitud_segundo = 58;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud = OESTE;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud_grado = 180;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud_minuto = 2;
-		g_sc_sensores[SENSOR_VELOCIDAD].posicion.longitud_segundo = 3;
-		g_sc_sensores[SENSOR_VELOCIDAD].valor = 15;
+		g_cs_sensores[SENSOR_VELOCIDAD].tipo = VELOCIDAD;
+		g_cs_sensores[SENSOR_VELOCIDAD].hora = g_i_hora;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud = NORTE;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_grado = 90;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_minuto = 59;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_segundo = 58;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud = OESTE;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_grado = 180;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_minuto = 2;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_segundo = 3;
+		g_cs_sensores[SENSOR_VELOCIDAD].valor = 15;
 
-		BROADCAR_enviar_mensaje(g_sc_sensores[SENSOR_VELOCIDAD]);
-		sprintf(pantalla, "lento %d", g_sc_sensores[SENSOR_VELOCIDAD].hora);
-		BROADCAR_escribir(pantalla);
+		ZIGBEE_enviar_mensaje(g_cs_sensores[SENSOR_VELOCIDAD]);
+		sprintf(pantalla, "lento %d", g_cs_sensores[SENSOR_VELOCIDAD].hora);
+		DISPLAY_escribir(pantalla);
 	}
 }
 /*********************************************************************

@@ -42,8 +42,8 @@
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-static BYTE g_b_fms_mv = 1; /*Estado en el que nos encontramos actualmente*/
-static BYTE g_b_fms_mv_anterior; /*Estado en el que se encontraba anteriormente*/
+static BYTE gs_b_indice_estado = 1; /*Estado en el que nos encontramos actualmente*/
+static BYTE gs_b_indice_estado_anterior; /*Estado en el que se encontraba anteriormente*/
 /*********************************************************************
 **																	**
 ** LOCAL FUNCTIONS 													**
@@ -53,7 +53,7 @@ static BYTE g_b_fms_mv_anterior; /*Estado en el que se encontraba anteriormente*
  * @brief  Funcion que ejecuta el automata
  *
 */
-void EjecutaAutomata(TS_AUTOMATA *elAutomata)
+void MOTOR_AUTOMATA_ejecutar(TS_AUTOMATA *elAutomata)
 {
 	unsigned char error[10] = "ERROR!!!!"; /*String que contiene el mensaje ERROR*/
 	TS_ESTADO **Indx;    /* Valor indice rastreador */
@@ -64,22 +64,22 @@ void EjecutaAutomata(TS_AUTOMATA *elAutomata)
 	//Ira pasando por cada uno de los estados hasta que no haya mas
 	for (Indx = elAutomata->estado; *Indx != NULL; ++Indx)
 	{
-	    if (g_b_fms_mv == (*Indx)->id)
+	    if (gs_b_indice_estado == (*Indx)->id)
 	    {
 	    	//En cada estado ejecutara las funciones que le corresponda.
-			EjecutaEstado(*Indx);
+			MOTOR_AUTOMATA_ejecuta_estado(*Indx);
 			return;
 	    }
 	}
 	//Si falla mostrará un error.
-	BROADCAR_escribir(error);
+	DISPLAY_escribir(error);
 }
 
 /**
  * @brief  Funcion que ejecuta el estado
  *
 */
-void EjecutaEstado(TS_ESTADO *elEstado)
+void MOTOR_AUTOMATA_ejecuta_estado(TS_ESTADO *elEstado)
 {
 	TS_EVEACC *Indx;   /* Indice de rastreo */
 
@@ -96,10 +96,10 @@ void EjecutaEstado(TS_ESTADO *elEstado)
 				//Ejecuta la accion correspondiente dentro del evento.
 				Indx->accion();
 			}
-			if (Indx->id != g_b_fms_mv)
+			if (Indx->id != gs_b_indice_estado)
 			{
-				g_b_fms_mv_anterior = g_b_fms_mv;
-				g_b_fms_mv = Indx->id;
+				gs_b_indice_estado_anterior = gs_b_indice_estado;
+				gs_b_indice_estado = Indx->id;
 
 				return;
 			}

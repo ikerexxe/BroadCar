@@ -62,14 +62,14 @@ MENSAJEClass insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo);
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-MENSAJEClass g_mc_mensajes[MAX_MENSAJES]; /*Mensajes que se han recibido*/
-static int g_i_numero_cabecera = 17; /*Numero de elementos que tiene la cabecera de la trama zigbee*/
-static unsigned char g_uc_caracter_vacio = 0x00; /*Byte vacio = 00000000*/
-static unsigned char g_uc_caracter_lleno = 255; /*Byte lleno = 11111111*/
-static int g_i_puerto_zigbee = 0; /*Puerto UART que se usa para la comunicacion con el modulo zigbee*/
-static int g_i_tamano = 0; /*Tamaño del mensaje*/
-static uint8_t g_ba_envio[255]; /*Mensaje a enviar en formato byte*/
-static uint8_t g_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la cabecera de la trama*/
+MENSAJEClass g_cm_mensajes[MAX_MENSAJES]; /*Mensajes que se han recibido*/
+static int gs_i_numero_cabecera = 17; /*Numero de elementos que tiene la cabecera de la trama zigbee*/
+static unsigned char gs_uc_caracter_vacio = 0x00; /*Byte vacio = 00000000*/
+static unsigned char gs_uc_caracter_lleno = 255; /*Byte lleno = 11111111*/
+static int gs_i_puerto_zigbee = 0; /*Puerto UART que se usa para la comunicacion con el modulo zigbee*/
+static int gs_i_tamano = 0; /*Tamaño del mensaje*/
+static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
+static uint8_t gs_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la cabecera de la trama*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -82,13 +82,13 @@ static uint8_t g_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la
  *
  * Inicializa el puerto UART para poder comunicarse con el modulo zigbee
 */
-void BROADCAR_inicializacion_zigbee(){
-	openUART(g_i_puerto_zigbee);
+void ZIGBEE_inicializacion(){
+	UART_open(gs_i_puerto_zigbee);
 }
 /**
  * @brief  Funcion que ejecuta el automata de los mensajes
 */
-void BROADCAR_ACCION_mensajes(void){
+void ZIGBEE_recepcion_mensajes(void){
 	unsigned char * pantalla;
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
@@ -100,37 +100,37 @@ void BROADCAR_ACCION_mensajes(void){
 			if(g_i_numero_mensaje > MAX_MENSAJES){
 				borrar_mensaje_lista();
 			}
-			g_mc_mensajes[g_i_numero_mensaje] = m_mensaje;
+			g_cm_mensajes[g_i_numero_mensaje] = m_mensaje;
 			g_i_numero_mensaje++;
 			//TODO: enviar mendiante bluetooth
 			pantalla = malloc(sizeof(unsigned char) * 20);
 			switch(m_mensaje.tipo){
 				case TRAFICO_DENSO:
 					sprintf(pantalla, "M_TR_DENSO %d", m_mensaje.id);
-					g_i_tamano = g_i_numero_cabecera + 16;
+					gs_i_tamano = gs_i_numero_cabecera + 16;
 					break;
 				case OBRAS:
 					sprintf(pantalla, "M_OBRAS %d", m_mensaje.id);
-					g_i_tamano = g_i_numero_cabecera + 16;
+					gs_i_tamano = gs_i_numero_cabecera + 16;
 					break;
 				case VEHICULO_NO_VISIBLE:
 					sprintf(pantalla, "M_NO_VIS %d", m_mensaje.id);
-					g_i_tamano = g_i_numero_cabecera + 16;
+					gs_i_tamano = gs_i_numero_cabecera + 16;
 					break;
 				case POCA_VISIBILIDAD:
 					sprintf(pantalla, "M_POCA_VIS %d", m_mensaje.id);
-					g_i_tamano = g_i_numero_cabecera + 16;
+					gs_i_tamano = gs_i_numero_cabecera + 16;
 					break;
 				case ESTADO_CARRETERA:
 					sprintf(pantalla, "M_EST_CAR %d", m_mensaje.id);
-					g_i_tamano = g_i_numero_cabecera + 17;
+					gs_i_tamano = gs_i_numero_cabecera + 17;
 					break;
 				case ACCIDENTE_CARRETERA:
 					sprintf(pantalla, "M_ACC_CAR %d", m_mensaje.id);
-					g_i_tamano = g_i_numero_cabecera + 16;
+					gs_i_tamano = gs_i_numero_cabecera + 16;
 					break;
 			}
-			BROADCAR_escribir(pantalla);
+			DISPLAY_escribir(pantalla);
 			reenviar_mensaje(m_mensaje);
 		}
 	}
@@ -143,7 +143,7 @@ void BROADCAR_ACCION_mensajes(void){
  * Recoge los datos del sensor, le da un formato adecuado para enviar
  * mediante zigbee y lo envía.
 */
-void BROADCAR_enviar_mensaje(SENSORClass sensor){
+void ZIGBEE_enviar_mensaje(SENSORClass sensor){
 	MENSAJEClass mensaje;
 
 	mensaje = insertar_tipo_mensaje(mensaje, sensor.tipo);
@@ -154,7 +154,7 @@ void BROADCAR_enviar_mensaje(SENSORClass sensor){
 	mensaje = insertar_info_mensaje(sensor, mensaje);
 
 	formatear_mensaje(mensaje);
-	sendUART(g_i_puerto_zigbee, g_ba_envio, &g_i_tamano);
+	UART_send(gs_i_puerto_zigbee, gs_ba_envio, &gs_i_tamano);
 }
 /**
  * @brief  Función que mira si se ha recibido un mensaje por zigbee.
@@ -168,7 +168,7 @@ tBoolean hay_mensaje(void){
 	int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
 	tBoolean completo = false; /*Si se ha recibido un mensaje completo*/
 
-	numero_elementos = nElementosIn(g_i_puerto_zigbee);
+	numero_elementos = UART_nElementosIn(gs_i_puerto_zigbee);
 	if(numero_elementos >= 33){
 		completo = true;
 	}
@@ -192,7 +192,7 @@ MENSAJEClass recibir_mensaje(void){
 	int checksum; /*Checksum del mensaje recibido*/
 	int contador = 0; /*Contador para trasladar los datos de temporal a recibido*/
 
-	recvUART(g_i_puerto_zigbee, temporal, &numero_recibido);
+	UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
 	for(contador = 0; contador < numero_recibido; contador++){
 		recibido[contador] = temporal[contador];
 	}
@@ -202,7 +202,7 @@ MENSAJEClass recibir_mensaje(void){
 		recibido[1] -= 255;
 	}
 	numero_recibido += recibido[2] + 1;
-	recvUART(g_i_puerto_zigbee, temporal, &numero_recibido);
+	UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
 	for(contador = 0; contador < numero_recibido; contador++){
 		recibido[contador+3] = temporal[contador];
 	}
@@ -297,9 +297,9 @@ tBoolean recibido_anteriormente(MENSAJEClass mensaje){
 	tBoolean resultado = false; /*Para saber si se ha recibido anteriormente*/
 
 	for(contador = 0; contador < g_i_numero_mensaje; contador++){
-		if(g_mc_mensajes[contador].id == mensaje.id
-				&& g_mc_mensajes[contador].tipo == mensaje.tipo
-				&& g_mc_mensajes[contador].hora == mensaje.hora){
+		if(g_cm_mensajes[contador].id == mensaje.id
+				&& g_cm_mensajes[contador].tipo == mensaje.tipo
+				&& g_cm_mensajes[contador].hora == mensaje.hora){
 			resultado = true;
 			contador = g_i_numero_mensaje;
 		}
@@ -321,7 +321,7 @@ void reenviar_mensaje(MENSAJEClass mensaje){
 	if(mensaje.ttl > 0){
 		mensaje.ttl--;
 		formatear_mensaje(mensaje);
-		sendUART(g_i_puerto_zigbee, g_ba_envio, &g_i_tamano);
+		UART_send(gs_i_puerto_zigbee, gs_ba_envio, &gs_i_tamano);
 	}
 }
 /**
@@ -336,7 +336,7 @@ void borrar_mensaje_lista(){
 	int contador = 0; /*Se usa para recorrer la lista de mensajes*/
 
 	for(contador = 1; contador < g_i_numero_mensaje; contador++){
-		g_mc_mensajes[contador - 1] = g_mc_mensajes[contador];
+		g_cm_mensajes[contador - 1] = g_cm_mensajes[contador];
 	}
 
 	g_i_numero_mensaje--;
@@ -350,7 +350,7 @@ void borrar_mensaje_lista(){
  * que sean comprensibles en la trama zigbee.
 */
 void calcular_tamano_mensaje(MENSAJEClass mensaje){
-	int unidad_tamano = g_i_tamano - 4; /*Calcular el tamaño del mensaje en un byte*/
+	int unidad_tamano = gs_i_tamano - 4; /*Calcular el tamaño del mensaje en un byte*/
 	int llevada_tamano = 0; /*Llevada para calcular el tamaño del mensaje en más de un byte*/
 
 	while(unidad_tamano > 255){
@@ -358,8 +358,8 @@ void calcular_tamano_mensaje(MENSAJEClass mensaje){
 		llevada_tamano++;
 	}
 
-	g_ba_length[0] = llevada_tamano;
-	g_ba_length[1] = unidad_tamano;
+	gs_ba_length[0] = llevada_tamano;
+	gs_ba_length[1] = unidad_tamano;
 }
 /**
  * @brief  Función para darle formato al mensaje zigbee.
@@ -375,47 +375,47 @@ void formatear_mensaje(MENSAJEClass mensaje){
 
 	calcular_tamano_mensaje(mensaje);
 
-	g_ba_envio[0] = 0x7E;
-	g_ba_envio[1] = g_ba_length[0];
-	g_ba_envio[2] = g_ba_length[1];
-	g_ba_envio[3] = 0x10;
-	g_ba_envio[4] = 0x01;
+	gs_ba_envio[0] = 0x7E;
+	gs_ba_envio[1] = gs_ba_length[0];
+	gs_ba_envio[2] = gs_ba_length[1];
+	gs_ba_envio[3] = 0x10;
+	gs_ba_envio[4] = 0x01;
 	/*Direccion de destino: broadcast*/
-	g_ba_envio[5] = g_uc_caracter_vacio;
-	g_ba_envio[6] = g_uc_caracter_vacio;
-	g_ba_envio[7] = g_uc_caracter_vacio;
-	g_ba_envio[8] = g_uc_caracter_vacio;
-	g_ba_envio[9] = g_uc_caracter_vacio;
-	g_ba_envio[10] = g_uc_caracter_vacio;
-	g_ba_envio[11] = g_uc_caracter_lleno;
-	g_ba_envio[12] = g_uc_caracter_lleno;
+	gs_ba_envio[5] = gs_uc_caracter_vacio;
+	gs_ba_envio[6] = gs_uc_caracter_vacio;
+	gs_ba_envio[7] = gs_uc_caracter_vacio;
+	gs_ba_envio[8] = gs_uc_caracter_vacio;
+	gs_ba_envio[9] = gs_uc_caracter_vacio;
+	gs_ba_envio[10] = gs_uc_caracter_vacio;
+	gs_ba_envio[11] = gs_uc_caracter_lleno;
+	gs_ba_envio[12] = gs_uc_caracter_lleno;
 	/*Red de destino*/
-	g_ba_envio[13] = g_uc_caracter_lleno;
-	g_ba_envio[14] = 0xFE;
+	gs_ba_envio[13] = gs_uc_caracter_lleno;
+	gs_ba_envio[14] = 0xFE;
 	/*Otros datos*/
-	g_ba_envio[15] = g_uc_caracter_vacio;
-	g_ba_envio[16] = g_uc_caracter_vacio;
+	gs_ba_envio[15] = gs_uc_caracter_vacio;
+	gs_ba_envio[16] = gs_uc_caracter_vacio;
 	/*Cuerpo del mensaje*/
-	g_ba_envio[17] = mensaje.tipo;
-	g_ba_envio[18] = mensaje.id;
+	gs_ba_envio[17] = mensaje.tipo;
+	gs_ba_envio[18] = mensaje.id;
 	while(mensaje.hora > 255){
 		llevada_hora++;
 		mensaje.hora -= 255;
 	}
-	g_ba_envio[19] = llevada_hora;
-	g_ba_envio[20] = mensaje.hora;
-	g_ba_envio[21] = mensaje.posicion.latitud;
-	g_ba_envio[22] = mensaje.posicion.latitud_grado;
-	g_ba_envio[23] = mensaje.posicion.latitud_minuto;
-	g_ba_envio[24] = mensaje.posicion.latitud_segundo;
-	g_ba_envio[25] = mensaje.posicion.longitud;
-	g_ba_envio[26] = mensaje.posicion.longitud_grado;
-	g_ba_envio[27] = mensaje.posicion.longitud_minuto;
-	g_ba_envio[28] = mensaje.posicion.longitud_segundo;
-	g_ba_envio[29] = mensaje.ttl;
+	gs_ba_envio[19] = llevada_hora;
+	gs_ba_envio[20] = mensaje.hora;
+	gs_ba_envio[21] = mensaje.posicion.latitud;
+	gs_ba_envio[22] = mensaje.posicion.latitud_grado;
+	gs_ba_envio[23] = mensaje.posicion.latitud_minuto;
+	gs_ba_envio[24] = mensaje.posicion.latitud_segundo;
+	gs_ba_envio[25] = mensaje.posicion.longitud;
+	gs_ba_envio[26] = mensaje.posicion.longitud_grado;
+	gs_ba_envio[27] = mensaje.posicion.longitud_minuto;
+	gs_ba_envio[28] = mensaje.posicion.longitud_segundo;
+	gs_ba_envio[29] = mensaje.ttl;
 	contador = insertar_info_envio(mensaje, 30);
 	/*Checksum*/
-	g_ba_envio[contador] = calcular_checksum(g_ba_envio);
+	gs_ba_envio[contador] = calcular_checksum(gs_ba_envio);
 }
 /**
  * @brief  Función para calcular el checksum del mensaje.
@@ -456,12 +456,12 @@ MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 			else if(sensor.valor > 32) mensaje.valor.poca_visibilidad.gravedad = 3;
 			else if(sensor.valor > 16) mensaje.valor.poca_visibilidad.gravedad = 4;
 			else mensaje.valor.poca_visibilidad.gravedad = 5;
-			g_i_tamano = g_i_numero_cabecera + 16;
+			gs_i_tamano = gs_i_numero_cabecera + 16;
 			break;
 		case PRECIPITACION:
 			mensaje.valor.poca_visibilidad.tipo = LLUVIA;
 			mensaje.valor.poca_visibilidad.gravedad = sensor.valor;
-			g_i_tamano = g_i_numero_cabecera + 16;
+			gs_i_tamano = gs_i_numero_cabecera + 16;
 			break;
 		case LIQUIDO_CARRETERA:
 			mensaje.valor.estado_carretera.tipo = ACEITE;
@@ -471,24 +471,24 @@ MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 			else if(sensor.valor > 32) mensaje.valor.estado_carretera.gravedad = 3;
 			else if(sensor.valor > 16) mensaje.valor.estado_carretera.gravedad = 4;
 			else mensaje.valor.estado_carretera.gravedad = 5;
-			g_i_tamano = g_i_numero_cabecera + 17;
+			gs_i_tamano = gs_i_numero_cabecera + 17;
 			break;
 		case TEMPERATURA:
 			mensaje.valor.estado_carretera.tipo = HIELO;
 			mensaje.valor.estado_carretera.direccion = 0;
 			mensaje.valor.estado_carretera.gravedad = 5;
-			g_i_tamano = g_i_numero_cabecera + 17;
+			gs_i_tamano = gs_i_numero_cabecera + 17;
 			break;
 		case VELOCIDAD:
 			mensaje.valor.trafico_denso.direccion = 0;
 			mensaje.valor.trafico_denso.velocidad = sensor.valor;
-			g_i_tamano = g_i_numero_cabecera + 16;
+			gs_i_tamano = gs_i_numero_cabecera + 16;
 			break;
 		case S_OBRAS:
 			mensaje.valor.obra.direccion = 0;
 			if(sensor.valor > 50) mensaje.valor.obra.carretera_cortada = 0;
 			else mensaje.valor.obra.carretera_cortada = 1;
-			g_i_tamano = g_i_numero_cabecera + 16;
+			gs_i_tamano = gs_i_numero_cabecera + 16;
 			break;
 	}
 
@@ -505,41 +505,41 @@ MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 int insertar_info_envio(MENSAJEClass mensaje, int contador){
 	switch(mensaje.tipo){
 		case TRAFICO_DENSO:
-			g_ba_envio[contador] = mensaje.valor.trafico_denso.direccion;
+			gs_ba_envio[contador] = mensaje.valor.trafico_denso.direccion;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.trafico_denso.velocidad;
+			gs_ba_envio[contador] = mensaje.valor.trafico_denso.velocidad;
 			contador++;
 			break;
 		case OBRAS:
-			g_ba_envio[contador] = mensaje.valor.obra.direccion;
+			gs_ba_envio[contador] = mensaje.valor.obra.direccion;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.obra.carretera_cortada;
+			gs_ba_envio[contador] = mensaje.valor.obra.carretera_cortada;
 			contador++;
 			break;
 		case VEHICULO_NO_VISIBLE:
-			g_ba_envio[contador] = mensaje.valor.vehiculo_no_visible.direccion;
+			gs_ba_envio[contador] = mensaje.valor.vehiculo_no_visible.direccion;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.vehiculo_no_visible.velocidad;
+			gs_ba_envio[contador] = mensaje.valor.vehiculo_no_visible.velocidad;
 			contador++;
 			break;
 		case POCA_VISIBILIDAD:
-			g_ba_envio[contador] = mensaje.valor.poca_visibilidad.tipo;
+			gs_ba_envio[contador] = mensaje.valor.poca_visibilidad.tipo;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.poca_visibilidad.gravedad;
+			gs_ba_envio[contador] = mensaje.valor.poca_visibilidad.gravedad;
 			contador++;
 			break;
 		case ESTADO_CARRETERA:
-			g_ba_envio[contador] = mensaje.valor.estado_carretera.tipo;
+			gs_ba_envio[contador] = mensaje.valor.estado_carretera.tipo;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.estado_carretera.direccion;
+			gs_ba_envio[contador] = mensaje.valor.estado_carretera.direccion;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.estado_carretera.gravedad;
+			gs_ba_envio[contador] = mensaje.valor.estado_carretera.gravedad;
 			contador++;
 			break;
 		case ACCIDENTE_CARRETERA:
-			g_ba_envio[contador] = mensaje.valor.accidente_carretera.direccion;
+			gs_ba_envio[contador] = mensaje.valor.accidente_carretera.direccion;
 			contador++;
-			g_ba_envio[contador] = mensaje.valor.accidente_carretera.carretera_cortada;
+			gs_ba_envio[contador] = mensaje.valor.accidente_carretera.carretera_cortada;
 			contador++;
 			break;
 	}

@@ -39,19 +39,12 @@
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
 void BROADCAR_inicializacion_sensores();
-void BROADCAR_inicializacion_mensajes();
 /*********************************************************************
 ** 																	**
 ** EXTERNAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-extern TS_AUTOMATA automata; /*Automata que usa la aplicacion*/
-/*********************************************************************
-** 																	**
-** GLOBAL VARIABLES 												**
-** 																	**
-**********************************************************************/
-//TODO: no hay
+extern TS_AUTOMATA g_automata; /*Automata que usa la aplicacion*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -76,11 +69,11 @@ int main(void)
 void BROADCAR_inicializacion(){
 	g_i_numero_mensaje = 0;
 	g_i_mi_id = 1;
-	BROADCAR_inicializacion_clock();
+	CLOCK_inicializacion();
 	BROADCAR_inicializacion_sensores();
-	BROADCAR_inicializacion_keypad();
-	BROADCAR_inicializacion_display();
-	BROADCAR_inicializacion_zigbee();
+	KEYPAD_inicializacion();
+	DISPLAY_inicializacion();
+	ZIGBEE_inicializacion();
 }
 /**
  * @brief  Función para elegir el paso a seguir en cada momento.
@@ -94,7 +87,7 @@ void BROADCAR_inicializacion(){
  * se muestra en pantalla.
 */
 void BROADCAR_logica(){
-	EjecutaAutomata(&automata);
+	MOTOR_AUTOMATA_ejecutar(&g_automata);
 }
 /**
  * @brief  Función que inicializa el array que contiene el valor de los sensores.
@@ -107,22 +100,22 @@ void BROADCAR_logica(){
 void BROADCAR_inicializacion_sensores(){
 	int contador_sensores = 0;
 
-	g_sc_sensores[0].tipo = LUMINOSIDAD;
-	g_sc_sensores[1].tipo = LIQUIDO_CARRETERA;
-	g_sc_sensores[2].tipo = S_OBRAS;
-	g_sc_sensores[3].tipo = VELOCIDAD;
+	g_cs_sensores[0].tipo = LUMINOSIDAD;
+	g_cs_sensores[1].tipo = LIQUIDO_CARRETERA;
+	g_cs_sensores[2].tipo = S_OBRAS;
+	g_cs_sensores[3].tipo = VELOCIDAD;
 
 	for(contador_sensores = 0; contador_sensores < NUMERO_SENSORES; contador_sensores++){
-		g_sc_sensores[contador_sensores].hora = 0;
-		g_sc_sensores[contador_sensores].posicion.latitud = 0;
-		g_sc_sensores[contador_sensores].posicion.latitud_grado = 0;
-		g_sc_sensores[contador_sensores].posicion.latitud_minuto = 0;
-		g_sc_sensores[contador_sensores].posicion.latitud_segundo = 0;
-		g_sc_sensores[contador_sensores].posicion.longitud = 0;
-		g_sc_sensores[contador_sensores].posicion.longitud_grado = 0;
-		g_sc_sensores[contador_sensores].posicion.longitud_minuto = 0;
-		g_sc_sensores[contador_sensores].posicion.longitud_segundo = 0;
-		g_sc_sensores[contador_sensores].valor = 0;
+		g_cs_sensores[contador_sensores].hora = 0;
+		g_cs_sensores[contador_sensores].posicion.latitud = 0;
+		g_cs_sensores[contador_sensores].posicion.latitud_grado = 0;
+		g_cs_sensores[contador_sensores].posicion.latitud_minuto = 0;
+		g_cs_sensores[contador_sensores].posicion.latitud_segundo = 0;
+		g_cs_sensores[contador_sensores].posicion.longitud = 0;
+		g_cs_sensores[contador_sensores].posicion.longitud_grado = 0;
+		g_cs_sensores[contador_sensores].posicion.longitud_minuto = 0;
+		g_cs_sensores[contador_sensores].posicion.longitud_segundo = 0;
+		g_cs_sensores[contador_sensores].valor = 0;
 	}
 }
 /*********************************************************************

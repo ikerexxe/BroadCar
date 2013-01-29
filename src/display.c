@@ -39,17 +39,11 @@
 #define DISPLAY_C
 /*********************************************************************
 ** 																	**
-** EXPORTED VARIABLES 												**
-** 																	**
-*********************************************************************/
-//TODO: no hay
-/*********************************************************************
-** 																	**
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-static int g_i_numero_elemento = 0; /*Identificador del ultimo texto introducido en pantalla*/
-static int g_i_altura_conversacion = 10; /*Altura en la cual se encuentra la conversacion*/
+static int gs_i_numero_elemento = 0; /*Identificador del ultimo texto introducido en pantalla*/
+static int gs_i_altura_conversacion = 10; /*Altura en la cual se encuentra la conversacion*/
 
 const unsigned char g_puc_circ[60]  =  {
         0x00, 0x00, 0x44, 0x44, 0x00, 0x00,
@@ -77,12 +71,6 @@ const unsigned char g_puc_nada[60]  =  {
     }; /*Dibujo vacío del tamaño del círculo*/
 /*********************************************************************
 ** 																	**
-** PROTOTYPES OF LOCAL FUNCTIONS 									**
-** 																	**
-*********************************************************************/
-//TODO: no hay
-/*********************************************************************
-** 																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
@@ -94,14 +82,14 @@ const unsigned char g_puc_nada[60]  =  {
  * Primero se inicializa el buffer y luego se inicializa el texto del usuario.
  * Al final, se vuelca a la pantalla real.
 */
-void BROADCAR_inicializacion_display(){
+void DISPLAY_inicializacion(){
 	unsigned char * str = malloc(sizeof(unsigned char) * 10); /*Cadena de caracteres que contiene inicia*/
 
 	FRAME_BUFFER_init();
 	strcpy(str, "inicia");
-	FRAME_BUFFER_insert_text(str, 0, g_i_altura_conversacion);
-	g_i_altura_conversacion += 10;
-	g_i_numero_elemento++;
+	FRAME_BUFFER_insert_text(str, 0, gs_i_altura_conversacion);
+	gs_i_altura_conversacion += 10;
+	gs_i_numero_elemento++;
 	FRAME_BUFFER_write_to_display();
 }
 
@@ -113,21 +101,21 @@ void BROADCAR_inicializacion_display(){
  * Inserta el ultimo mensaje recibido mediante zigbee en
  * la conversación
 */
-void BROADCAR_escribir(unsigned char * mensaje){
+void DISPLAY_escribir(unsigned char * mensaje){
 	int contador = 0; /*Contador para reubicar lo que se muestra en pantalla como si fuese una conversacion*/
 	int altura = 10; /*Altua base de la conversacion*/
 
-	if(g_i_numero_elemento < MAX_ELEMS_PANTALLA){
-		g_i_numero_elemento = FRAME_BUFFER_insert_text(mensaje, 0, g_i_altura_conversacion);
-		g_i_altura_conversacion += 10;
+	if(gs_i_numero_elemento < MAX_ELEMS_PANTALLA){
+		gs_i_numero_elemento = FRAME_BUFFER_insert_text(mensaje, 0, gs_i_altura_conversacion);
+		gs_i_altura_conversacion += 10;
 	} else{
 		contador = 0;
-		g_i_numero_elemento = FRAME_BUFFER_delete_element(contador);
-		for(contador; contador < g_i_numero_elemento; contador++){
+		gs_i_numero_elemento = FRAME_BUFFER_delete_element(contador);
+		for(contador; contador < gs_i_numero_elemento; contador++){
 			FRAME_BUFFER_actualiza_posicion_elemento(contador, 0, altura);
 			altura += 10;
 		}
-		g_i_numero_elemento = FRAME_BUFFER_insert_text(mensaje, 0, altura);
+		gs_i_numero_elemento = FRAME_BUFFER_insert_text(mensaje, 0, altura);
 	}
 
 	FRAME_BUFFER_write_to_display();

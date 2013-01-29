@@ -31,8 +31,8 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-tBoolean BROADCAR_TR_cambio_obras(void);
-void BROADCAR_ACCION_obras(void);
+tBoolean S_OBRAS_cambio(void);
+void S_OBRAS_accion(void);
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**

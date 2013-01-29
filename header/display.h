@@ -31,8 +31,8 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-void BROADCAR_inicializacion_display();
-void BROADCAR_escribir(unsigned char * mensaje);
+void DISPLAY_inicializacion();
+void DISPLAY_escribir(unsigned char * mensaje);
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**

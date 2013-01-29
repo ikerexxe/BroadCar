@@ -33,12 +33,6 @@
 #include "keypad.h"
 /*********************************************************************
 ** 																	**
-** GLOBAL VARIABLES 												**
-** 																	**
-**********************************************************************/
-//TODO: no hay
-/*********************************************************************
-** 																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
@@ -48,7 +42,7 @@
  * @return      -
  *
 */
-void BROADCAR_inicializacion_keypad(){
+void KEYPAD_inicializacion(){
 	//Activamos pines del puerto F (botón select)
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 	GPIOPinTypeGPIOInput( GPIO_PORTF_BASE, GPIO_PIN_1); /*pin 1*/
@@ -70,11 +64,11 @@ void BROADCAR_inicializacion_keypad(){
  * @return      -
  *
 */
-void BROADCAR_leer_keypad(){
+void KEYPAD_leer(){
 	unsigned long ul_pressed_data; /*Guarda el valor de la tecla pulsada*/
 	ul_pressed_data = (GPIOPinRead( GPIO_PORTE_BASE , (GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3) )|
 				    	(GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_1) << 3));
-	g_ucChangedData = g_ul_keypad_switches ^ ul_pressed_data;
+	g_uc_changed_data = g_ul_keypad_switches ^ ul_pressed_data;
 	g_ul_keypad_switches = ul_pressed_data;
 	g_ul_keypad_switches = g_ul_keypad_switches & 0x1f;
 }

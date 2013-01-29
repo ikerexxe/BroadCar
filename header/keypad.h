@@ -31,8 +31,8 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-void BROADCAR_inicializacion_keypad();
-void BROADCAR_leer_keypad();
+void KEYPAD_inicializacion();
+void KEYPAD_leer();
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**

@@ -37,35 +37,35 @@ enum tipo_estado_carretera{HIELO, ACEITE, BARRO, AGUA, DETERIORO};
 /*
  * Estructura propia existente en trafico denso
  */
-typedef struct s_TRAFICO_DENSOCls{
+typedef struct{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int velocidad;
 }TRAFICO_DENSOClass;
 /*
  * Estructura propia existente en obras
  */
-typedef struct s_OBRASCls{
+typedef struct{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int carretera_cortada;
 }OBRASClass;
 /*
  * Estructura propia existente en vehiculo no visible
  */
-typedef struct s_VEHICULO_NO_VISIBLECls{
+typedef struct{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int velocidad;
 }VEHICULO_NO_VISIBLEClass;
 /*
  * Estructura propia existente en poca visibilidad
  */
-typedef struct s_POCA_VISIBILIDADCls{
+typedef struct{
 	enum tipo_poca_visibilidad tipo;
 	int gravedad;
 }POCA_VISIBILIDADClass;
 /*
  * Estructura propia existente en estado carretera
  */
-typedef struct s_ESTADO_CARRETERACls{
+typedef struct{
 	enum tipo_estado_carretera tipo;
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int gravedad;
@@ -73,14 +73,14 @@ typedef struct s_ESTADO_CARRETERACls{
 /*
  * Estructura propia existente en accidente carretera
  */
-typedef struct s_ACCIDENTE_CARRETERACls{
+typedef struct{
 	int direccion;			//(0=Km carretera de menor a mayor / 1=Km de mayor a menor )
 	int carretera_cortada;
 }ACCIDENTE_CARRETERAClass;
 /*
  * Estructura que guarda los valores del mensaje
  */
-typedef struct s_DATO_MENSAJECls{
+typedef struct{
 	TRAFICO_DENSOClass trafico_denso;
 	OBRASClass obra;
 	VEHICULO_NO_VISIBLEClass vehiculo_no_visible;
@@ -92,7 +92,7 @@ typedef struct s_DATO_MENSAJECls{
 /*
  * Estructura que guarda las coordenadas
  */
-typedef struct s_COORDENADASCls{
+typedef struct{
 	enum hemisferio latitud;
 	int latitud_grado;
 	int latitud_minuto;
@@ -105,7 +105,7 @@ typedef struct s_COORDENADASCls{
 /*
  * Estructura que guarda los datos de un sensor
  */
-typedef struct s_SENSORCls{
+typedef struct{
 	enum tipo_sensor tipo;
 	int hora;				//TODO: el tipo se podria cambiar en un futuro
 	COORDENADASClass posicion;
@@ -114,7 +114,7 @@ typedef struct s_SENSORCls{
 /*
  * Estructura que guarda los mensajes recibidos de otros controladores
  */
-typedef struct s_MENSAJECls{
+typedef struct{
 	enum tipo_mensaje tipo;
 	int id;
 	int hora;				//TODO: el tipo se podria cambiar en un futuro
@@ -125,7 +125,7 @@ typedef struct s_MENSAJECls{
 /*
  * Estructura que guarda los datos a enviar a la interfaz grafica
  */
-typedef struct s_INTERFAZ_GRAFICACls{
+typedef struct{
 	enum tipo_mensaje tipo;
 	COORDENADASClass posicion;
 	DATO_MENSAJEClass valor;

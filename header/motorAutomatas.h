@@ -81,8 +81,8 @@ typedef struct {
 ** PROTOTYPES OF GLOBAL FUNCTIONS									**
 ** 																	**
 *********************************************************************/
-void EjecutaAutomata( TS_AUTOMATA *elAutomata);
-void EjecutaEstado  ( TS_ESTADO   *elEstado);
+void MOTOR_AUTOMATA_ejecutar( TS_AUTOMATA *elAutomata);
+void MOTOR_AUTOMATA_ejecuta_estado( TS_ESTADO   *elEstado);
 /*********************************************************************
 ** 																	**
 ** EOF 																**

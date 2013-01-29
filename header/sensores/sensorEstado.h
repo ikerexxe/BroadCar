@@ -31,8 +31,8 @@
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-tBoolean BROADCAR_TR_cambio_estado(void);
-void BROADCAR_ACCION_estado_carretera(void);
+tBoolean S_ESTADO_cambio(void);
+void S_ESTADO_accion(void);
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**
