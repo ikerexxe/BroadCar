@@ -121,7 +121,12 @@ int openUART(int nPort)
   UARTDisable(uartsBases[nPort]);
   UARTConfigSetExpClk(uartsBases[nPort], SysCtlClockGet(), BAUD_RATE, DATA_FRAME);
   UARTEnable(uartsBases[nPort]);
-  uarts[nPort].inHead = uarts[nPort].inTail = uarts[nPort].inHead = uarts[nPort].inTail = uarts[nPort].intWhileWriting = uarts[nPort].writingToBuf=0;
+  uarts[nPort].inHead = 0;
+  uarts[nPort].inTail = 0;
+  uarts[nPort].inHead = 0;
+  uarts[nPort].inTail = 0;
+  uarts[nPort].intWhileWriting = 0;
+  uarts[nPort].writingToBuf=0;
   UARTFIFOLevelSet(uartsBases[nPort], UART_FIFO_TX1_8, UART_FIFO_RX1_8);
   IntEnable(uartsInts[nPort]);
   UARTIntEnable(uartsBases[nPort], UART_INT_TX | UART_INT_RX | UART_INT_RT);

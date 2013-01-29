@@ -28,11 +28,11 @@
 #define DATA_H
 
 //Listas numeradas
-typedef enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, S_OBRAS /*TODO: puede que no corresponda*/};
-typedef enum hemisferio{NORTE, SUR, ESTE, OESTE};
-typedef enum tipo_mensaje{TRAFICO_DENSO, OBRAS, VEHICULO_NO_VISIBLE, POCA_VISIBILIDAD, ESTADO_CARRETERA, ACCIDENTE_CARRETERA};
-typedef enum tipo_poca_visibilidad{NIEVE, LLUVIA, NIEBLA};
-typedef enum tipo_estado_carretera{HIELO, ACEITE, BARRO, AGUA, DETERIORO};
+enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, S_OBRAS /*TODO: puede que no corresponda*/};
+enum hemisferio{NORTE, SUR, ESTE, OESTE};
+enum tipo_mensaje{TRAFICO_DENSO, OBRAS, VEHICULO_NO_VISIBLE, POCA_VISIBILIDAD, ESTADO_CARRETERA, ACCIDENTE_CARRETERA};
+enum tipo_poca_visibilidad{NIEVE, LLUVIA, NIEBLA};
+enum tipo_estado_carretera{HIELO, ACEITE, BARRO, AGUA, DETERIORO};
 
 /*
  * Estructura propia existente en trafico denso

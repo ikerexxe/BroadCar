@@ -38,8 +38,8 @@
 ** 																	**
 *********************************************************************/
 void BROADCAR_inicializacion_zigbee(void);
-void BROADCAR_enviar_mensaje(SENSORClass sensor);
 void BROADCAR_ACCION_mensajes(void);
+void BROADCAR_enviar_mensaje(SENSORClass sensor);
 /*********************************************************************
 **	 																**
 ** TYPEDEFS AND STRUCTURES 											**
