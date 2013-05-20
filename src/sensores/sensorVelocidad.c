@@ -61,7 +61,7 @@ tBoolean S_VELOCIDAD_cambio(void){
 void S_VELOCIDAD_accion(void){
 	unsigned char * pantalla;
 
-	if((g_cs_sensores[SENSOR_VELOCIDAD].hora + 10) < g_i_hora){
+	if((g_cs_sensores[SENSOR_VELOCIDAD].hora + 0) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
 
 		g_cs_sensores[SENSOR_VELOCIDAD].tipo = VELOCIDAD;

@@ -62,7 +62,7 @@ tBoolean S_OBRAS_cambio(void){
 void S_OBRAS_accion(void){
 	unsigned char * pantalla;
 
-	if((g_cs_sensores[SENSOR_OBRAS].hora + 10) < g_i_hora){
+	if((g_cs_sensores[SENSOR_OBRAS].hora + 0) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
 
 		g_cs_sensores[SENSOR_OBRAS].tipo = S_OBRAS;

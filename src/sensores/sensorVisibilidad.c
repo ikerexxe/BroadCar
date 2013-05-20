@@ -61,7 +61,7 @@ tBoolean S_VISIBILIDAD_cambio(void){
 void S_VISIBILIDAD_accion(void){
 	unsigned char * pantalla;
 
-	if((g_cs_sensores[SENSOR_VISIBILIDAD].hora + 10) < g_i_hora){
+	if((g_cs_sensores[SENSOR_VISIBILIDAD].hora + 0) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
 
 		g_cs_sensores[SENSOR_VISIBILIDAD].tipo = LUMINOSIDAD;
