@@ -40,6 +40,10 @@
 </defineset>
 			
       <!-- include compile path -->
+      <includepath path="./header/teclado"/>
+      <includepath path="./header/reloj"/>
+      <includepath path="./header/pantalla"/>
+      <includepath path="./header/automata"/>
       <includepath path="./header/comunicaciones"/>
       <includepath path="./header/sensores"/>
       <includepath path="./utiles/drivers"/>

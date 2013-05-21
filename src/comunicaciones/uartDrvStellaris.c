@@ -25,7 +25,7 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include "uartDrv.h"
+#include "uartDrvStellaris.h"
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
 #include "inc/hw_ints.h"

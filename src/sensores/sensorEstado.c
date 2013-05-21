@@ -30,7 +30,7 @@
 #include "hw_types.h"
 #include "sensorEstado.h"
 #include "broadcar.h"
-#include "display.h"
+#include "displayStellaris.h"
 #include "data.h"
 #include "zigbee.h"
 /*********************************************************************

@@ -30,9 +30,9 @@
 #include <stdio.h>
 #include "hw_types.h"
 #include "zigbee.h"
-#include "uartDrv.h"
+#include "uartDrvStellaris.h"
 #include "broadcar.h"
-#include "display.h"
+#include "displayStellaris.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**

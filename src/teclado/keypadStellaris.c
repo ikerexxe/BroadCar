@@ -30,7 +30,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
 #include "broadcar.h"
-#include "keypad.h"
+#include "keypadStellaris.h"
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**

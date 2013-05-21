@@ -29,7 +29,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/systick.h"
 #include "driverlib/gpio.h"
-#include "display.h"
+#include "displayStellaris.h"
 #include "motorAutomatas.h"
 /*********************************************************************
 ** 																	**
