@@ -97,11 +97,13 @@ void ZIGBEE_recepcion_mensajes(void){
 	if(b_mensaje){
 		m_mensaje = recibir_mensaje();
 		if(m_mensaje.id != NULL){
-			if(g_i_numero_mensaje > MAX_MENSAJES){
+			if(g_i_numero_mensaje < (MAX_MENSAJES / 2)){
+				g_cm_mensajes[g_i_numero_mensaje] = m_mensaje;
+				g_i_numero_mensaje++;
+			}else{
 				borrar_mensaje_lista();
+				g_cm_mensajes[(g_i_numero_mensaje - 1)] = m_mensaje;
 			}
-			g_cm_mensajes[g_i_numero_mensaje] = m_mensaje;
-			g_i_numero_mensaje++;
 			//TODO: enviar mendiante bluetooth
 			pantalla = malloc(sizeof(unsigned char) * 20);
 			switch(m_mensaje.tipo){
@@ -197,10 +199,6 @@ MENSAJEClass recibir_mensaje(void){
 		recibido[contador] = temporal[contador];
 	}
 	numero_recibido = 0;
-	while(recibido[1] > 255){
-		numero_recibido += 255;
-		recibido[1] -= 255;
-	}
 	numero_recibido += recibido[2] + 1;
 	UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
 	for(contador = 0; contador < numero_recibido; contador++){
@@ -338,8 +336,6 @@ void borrar_mensaje_lista(){
 	for(contador = 1; contador < g_i_numero_mensaje; contador++){
 		g_cm_mensajes[contador - 1] = g_cm_mensajes[contador];
 	}
-
-	g_i_numero_mensaje--;
 }
 /**
  * @brief  Función para calcular el tamaño del mensaje.
@@ -583,4 +579,3 @@ MENSAJEClass insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo){
 ** EOF 																**
 ** 																	**
 **********************************************************************/
-

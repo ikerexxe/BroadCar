@@ -68,7 +68,7 @@ int main(void)
 */
 void BROADCAR_inicializacion(){
 	g_i_numero_mensaje = 0;
-	g_i_mi_id = 1;
+	g_i_mi_id = 2;
 	CLOCK_inicializacion();
 	BROADCAR_inicializacion_sensores();
 	KEYPAD_inicializacion();
