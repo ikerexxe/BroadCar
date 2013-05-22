@@ -33,6 +33,11 @@
 #ifndef BROADCAR_H
 #define BROADCAR_H
 /*
+ * Definición de la arquitectura
+ */
+#define STELLARIS
+#define SPARTAN
+/*
  * Definición de las teclas
  */
 #define KEY_UP 0x1e     //11110

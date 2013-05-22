@@ -30,9 +30,13 @@
 #include "hw_types.h"
 #include "sensorObras.h"
 #include "broadcar.h"
-#include "displayStellaris.h"
 #include "data.h"
 #include "zigbee.h"
+#ifdef STELLARIS
+#include "displayStellaris.h"
+#else
+#include "displaySpartan.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**

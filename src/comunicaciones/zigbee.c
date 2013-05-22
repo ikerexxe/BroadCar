@@ -29,10 +29,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "hw_types.h"
-#include "zigbee.h"
-#include "uartDrvStellaris.h"
 #include "broadcar.h"
+#include "zigbee.h"
+#include "broadcar.h"
+#ifdef STELLARIS
 #include "displayStellaris.h"
+#include "uartDrvStellaris.h"
+#else
+#include "displaySpartan.h"
+#include "uartDrvSpartan.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**

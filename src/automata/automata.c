@@ -26,14 +26,20 @@
 **********************************************************************/
 #include "hw_types.h"
 #include "automata.h"
+#include "broadcar.h"
 #include "motorAutomatas.h"
-#include "keypadStellaris.h"
-#include "displayStellaris.h"
 #include "zigbee.h"
 #include "sensorVisibilidad.h"
 #include "sensorEstado.h"
 #include "sensorObras.h"
 #include "sensorVelocidad.h"
+#ifdef STELLARIS
+#include "keypadStellaris.h"
+#include "displayStellaris.h"
+#else
+#include "keypadSpartan.h"
+#include "displaySpartan.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**

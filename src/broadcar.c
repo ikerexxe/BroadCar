@@ -26,11 +26,17 @@
 **********************************************************************/
 #include "hw_types.h"
 #include "broadcar.h"
-#include "clock.h"
-#include "display.h"
-#include "keypad.h"
 #include "motorAutomatas.h"
 #include "zigbee.h"
+#ifdef STELLARIS
+#include "clockStellaris.h"
+#include "displayStellaris.h"
+#include "keypadStellaris.h"
+#else
+#include "clockSpartan.h"
+#include "displaySpartan.h"
+#include "keypadSpartan.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
