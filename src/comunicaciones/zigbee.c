@@ -38,19 +38,19 @@
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-tBoolean hay_mensaje(void);
-MENSAJEClass recibir_mensaje(void);
-MENSAJEClass tratar_mensaje(uint8_t recibido[]);
-MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]); //Cambiar nombre
-tBoolean recibido_anteriormente(MENSAJEClass mensaje);
-void reenviar_mensaje(MENSAJEClass mensaje);
-void borrar_mensaje_lista(void);
-void calcular_tamano_mensaje(MENSAJEClass mensaje);
-void formatear_mensaje(MENSAJEClass mensaje);
-int calcular_checksum(uint8_t mensaje[]);
-MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje);
-int insertar_info_envio(MENSAJEClass mensaje, int contador);
-MENSAJEClass insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo);
+tBoolean ZIGBEE_hay_mensaje(void);
+MENSAJEClass ZIGBEE_recibir_mensaje(void);
+MENSAJEClass ZIGBEE_tratar_mensaje(uint8_t recibido[]);
+MENSAJEClass ZIGBEE_extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]); //Cambiar nombre
+tBoolean ZIGBEE_recibido_anteriormente(MENSAJEClass mensaje);
+void ZIGBEE_reenviar_mensaje(MENSAJEClass mensaje);
+void ZIGBEE_borrar_mensaje_lista(void);
+void ZIGBEE_calcular_tamano_mensaje(MENSAJEClass mensaje);
+void ZIGBEE_formatear_mensaje(MENSAJEClass mensaje);
+int ZIGBEE_calcular_checksum(uint8_t mensaje[]);
+MENSAJEClass ZIGBEE_insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje);
+int ZIGBEE_insertar_info_envio(MENSAJEClass mensaje, int contador);
+MENSAJEClass ZIGBEE_insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo);
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
@@ -93,15 +93,15 @@ void ZIGBEE_recepcion_mensajes(void){
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 
-	b_mensaje = hay_mensaje();
+	b_mensaje = ZIGBEE_hay_mensaje();
 	if(b_mensaje){
-		m_mensaje = recibir_mensaje();
+		m_mensaje = ZIGBEE_recibir_mensaje();
 		if(m_mensaje.id != NULL){
 			if(g_i_numero_mensaje < (MAX_MENSAJES / 2)){
 				g_cm_mensajes[g_i_numero_mensaje] = m_mensaje;
 				g_i_numero_mensaje++;
 			}else{
-				borrar_mensaje_lista();
+				ZIGBEE_borrar_mensaje_lista();
 				g_cm_mensajes[(g_i_numero_mensaje - 1)] = m_mensaje;
 			}
 			//TODO: enviar mendiante bluetooth
@@ -133,7 +133,7 @@ void ZIGBEE_recepcion_mensajes(void){
 					break;
 			}
 			DISPLAY_escribir(pantalla);
-			reenviar_mensaje(m_mensaje);
+			ZIGBEE_reenviar_mensaje(m_mensaje);
 		}
 	}
 }
@@ -148,14 +148,14 @@ void ZIGBEE_recepcion_mensajes(void){
 void ZIGBEE_enviar_mensaje(SENSORClass sensor){
 	MENSAJEClass mensaje;
 
-	mensaje = insertar_tipo_mensaje(mensaje, sensor.tipo);
+	mensaje = ZIGBEE_insertar_tipo_mensaje(mensaje, sensor.tipo);
 	mensaje.id = g_i_mi_id;
 	mensaje.hora = sensor.hora;
 	mensaje.posicion = sensor.posicion;
 	mensaje.ttl = 3;
-	mensaje = insertar_info_mensaje(sensor, mensaje);
+	mensaje = ZIGBEE_insertar_info_mensaje(sensor, mensaje);
 
-	formatear_mensaje(mensaje);
+	ZIGBEE_formatear_mensaje(mensaje);
 	UART_send(gs_i_puerto_zigbee, gs_ba_envio, &gs_i_tamano);
 }
 /**
@@ -166,7 +166,7 @@ void ZIGBEE_enviar_mensaje(SENSORClass sensor){
  * Mira si se han recibido más de 33 bytes mediante zigbee, indicativo
  * de que se ha recibido el mensaje completo.
 */
-tBoolean hay_mensaje(void){
+tBoolean ZIGBEE_hay_mensaje(void){
 	int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
 	tBoolean completo = false; /*Si se ha recibido un mensaje completo*/
 
@@ -186,7 +186,7 @@ tBoolean hay_mensaje(void){
  * cuerpo del mensaje y reenviar la trama entera al resto de
  * controladores que se encuentren a su alcance.
 */
-MENSAJEClass recibir_mensaje(void){
+MENSAJEClass ZIGBEE_recibir_mensaje(void){
 	MENSAJEClass mensaje; /*Estructura para guardar el cuerpo del mensaje*/
 	uint8_t temporal[255]; /*Guarda el mensaje temporalmente*/
 	uint8_t recibido[255]; /*Guarda la trama completa del mensaje*/
@@ -204,10 +204,10 @@ MENSAJEClass recibir_mensaje(void){
 	for(contador = 0; contador < numero_recibido; contador++){
 		recibido[contador+3] = temporal[contador];
 	}
-	checksum = calcular_checksum(recibido);
+	checksum = ZIGBEE_calcular_checksum(recibido);
 	if(checksum == recibido[numero_recibido + 2]){
-		mensaje = tratar_mensaje(recibido);
-		if(mensaje.id == g_i_mi_id || recibido_anteriormente(mensaje)){
+		mensaje = ZIGBEE_tratar_mensaje(recibido);
+		if(mensaje.id == g_i_mi_id || ZIGBEE_recibido_anteriormente(mensaje)){
 			mensaje.id = NULL;
 		}
 	}else{
@@ -223,7 +223,7 @@ MENSAJEClass recibir_mensaje(void){
  *
  * Guarda los datos del cuerpo del mensaje.
 */
-MENSAJEClass tratar_mensaje(uint8_t recibido[]){
+MENSAJEClass ZIGBEE_tratar_mensaje(uint8_t recibido[]){
 	MENSAJEClass mensaje;
 
 	mensaje.tipo = recibido[17];
@@ -238,7 +238,7 @@ MENSAJEClass tratar_mensaje(uint8_t recibido[]){
 	mensaje.posicion.longitud_minuto = recibido[27];
 	mensaje.posicion.longitud_segundo = recibido[28];
 	mensaje.ttl = recibido[29];
-	mensaje = extraer_info_recibido(mensaje, recibido);
+	mensaje = ZIGBEE_extraer_info_recibido(mensaje, recibido);
 
 	return mensaje;
 }
@@ -250,7 +250,7 @@ MENSAJEClass tratar_mensaje(uint8_t recibido[]){
  * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
-MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]){
+MENSAJEClass ZIGBEE_extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]){
 	switch(mensaje.tipo){
 		case TRAFICO_DENSO:
 			mensaje.valor.trafico_denso.direccion = recibido[30];
@@ -290,7 +290,7 @@ MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]){
 * recibido con anterioridad. Esto ocurre cuando el id, el tipo y la
 * hora concuerdan.
 */
-tBoolean recibido_anteriormente(MENSAJEClass mensaje){
+tBoolean ZIGBEE_recibido_anteriormente(MENSAJEClass mensaje){
 	int contador; /*Contador para recorrer el array*/
 	tBoolean resultado = false; /*Para saber si se ha recibido anteriormente*/
 
@@ -314,11 +314,11 @@ tBoolean recibido_anteriormente(MENSAJEClass mensaje){
 * Permite reenviar el mensaje recibido mediante zigbee siempre y cuando
 * haya saltos disponibles.
 */
-void reenviar_mensaje(MENSAJEClass mensaje){
+void ZIGBEE_reenviar_mensaje(MENSAJEClass mensaje){
 	//Si se puede reenviamos el mensaje
 	if(mensaje.ttl > 0){
 		mensaje.ttl--;
-		formatear_mensaje(mensaje);
+		ZIGBEE_formatear_mensaje(mensaje);
 		UART_send(gs_i_puerto_zigbee, gs_ba_envio, &gs_i_tamano);
 	}
 }
@@ -330,7 +330,7 @@ void reenviar_mensaje(MENSAJEClass mensaje){
 * Permite borrar el mensaje más antiguo de la lista de mensajes para hacer
 * hueco a los nuevos mensajes.
 */
-void borrar_mensaje_lista(){
+void ZIGBEE_borrar_mensaje_lista(){
 	int contador = 0; /*Se usa para recorrer la lista de mensajes*/
 
 	for(contador = 1; contador < g_i_numero_mensaje; contador++){
@@ -345,7 +345,7 @@ void borrar_mensaje_lista(){
  * Calcula el tamaño del mensaje y asigna los valores de forma
  * que sean comprensibles en la trama zigbee.
 */
-void calcular_tamano_mensaje(MENSAJEClass mensaje){
+void ZIGBEE_calcular_tamano_mensaje(MENSAJEClass mensaje){
 	int unidad_tamano = gs_i_tamano - 4; /*Calcular el tamaño del mensaje en un byte*/
 	int llevada_tamano = 0; /*Llevada para calcular el tamaño del mensaje en más de un byte*/
 
@@ -365,11 +365,11 @@ void calcular_tamano_mensaje(MENSAJEClass mensaje){
  * Se le asigna la cabecera al mensaje y trata los datos del mensaje de
  * forma que tomen unos valores adecuados a la trama zigbee.
 */
-void formatear_mensaje(MENSAJEClass mensaje){
+void ZIGBEE_formatear_mensaje(MENSAJEClass mensaje){
 	int llevada_hora = 0; /*La llevada de la hora, toma valor en caso de que la hora sea superior a 255*/
 	int contador = 0; /*Contador para asignar los valores en la posicion adecuada de envio*/
 
-	calcular_tamano_mensaje(mensaje);
+	ZIGBEE_calcular_tamano_mensaje(mensaje);
 
 	gs_ba_envio[0] = 0x7E;
 	gs_ba_envio[1] = gs_ba_length[0];
@@ -409,9 +409,9 @@ void formatear_mensaje(MENSAJEClass mensaje){
 	gs_ba_envio[27] = mensaje.posicion.longitud_minuto;
 	gs_ba_envio[28] = mensaje.posicion.longitud_segundo;
 	gs_ba_envio[29] = mensaje.ttl;
-	contador = insertar_info_envio(mensaje, 30);
+	contador = ZIGBEE_insertar_info_envio(mensaje, 30);
 	/*Checksum*/
-	gs_ba_envio[contador] = calcular_checksum(gs_ba_envio);
+	gs_ba_envio[contador] = ZIGBEE_calcular_checksum(gs_ba_envio);
 }
 /**
  * @brief  Función para calcular el checksum del mensaje.
@@ -420,7 +420,7 @@ void formatear_mensaje(MENSAJEClass mensaje){
  *
  * Calcula el checksum del mensaje
 */
-int calcular_checksum(uint8_t mensaje[]){
+int ZIGBEE_calcular_checksum(uint8_t mensaje[]){
 	int contador; /*Contador que recorre el mensaje a enviar*/
 	int suma = 0; /*Suma de todos los parametros del mensaje*/
 	int resultado = 0; /*Resultado del checksum*/
@@ -443,7 +443,7 @@ int calcular_checksum(uint8_t mensaje[]){
  * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
-MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
+MENSAJEClass ZIGBEE_insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 	switch(sensor.tipo){
 		case LUMINOSIDAD:
 			mensaje.valor.poca_visibilidad.tipo =  NIEBLA;
@@ -498,7 +498,7 @@ MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
  * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
-int insertar_info_envio(MENSAJEClass mensaje, int contador){
+int ZIGBEE_insertar_info_envio(MENSAJEClass mensaje, int contador){
 	switch(mensaje.tipo){
 		case TRAFICO_DENSO:
 			gs_ba_envio[contador] = mensaje.valor.trafico_denso.direccion;
@@ -550,7 +550,7 @@ int insertar_info_envio(MENSAJEClass mensaje, int contador){
  * Dependiendo de que sensor recoja el dato se le asigna
  * un tipo al mensaje.
 */
-MENSAJEClass insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo){
+MENSAJEClass ZIGBEE_insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo){
 	switch(tipo){
 		case LUMINOSIDAD:
 			mensaje.tipo = POCA_VISIBILIDAD;
