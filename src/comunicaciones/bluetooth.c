@@ -43,6 +43,7 @@ void BLUETOOTH_recibir_mensaje(void);
 void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje);
 void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje);
 void BLUETOOTH_enviar_emparejamiento(void);
+void BLUETOOTH_vaciar_buffer(void);
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -80,21 +81,31 @@ void BLUETOOTH_inicializacion(){
  * 			SSP CONFIRM e8:92:a4:45:b4:02 OK
  * 		-Conexion (7+18+8=33)
  *			RING 0 e8:92:a4:45:b4:02 1 RFCOMM
- *		-Desconexion TODO: hay que darle unas vueltas
- *			????
- *			????
+ *		-Desconexion (13+7=20)
+ *			NO CARRIER 0 ERROR 0
 */
 void BLUETOOTH_recepcion_mensajes(void){
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 
-	if(g_b_conectado == false){
+	if(g_b_conectado){
+		b_mensaje = BLUETOOTH_hay_mensaje();
+		if(b_mensaje){
+			BLUETOOTH_recibir_mensaje();
+			if(gs_ba_recibido[0] == 'N'){
+				g_b_conectado = false;
+				BLUETOOTH_vaciar_buffer();
+			}
+		}
+	}else{
 		b_mensaje = BLUETOOTH_hay_mensaje();
 		if(b_mensaje){
 			BLUETOOTH_recibir_mensaje();
 			if(gs_ba_recibido[0] == 'S'){
 				BLUETOOTH_enviar_emparejamiento();
+				BLUETOOTH_vaciar_buffer();
 			}else if(gs_ba_recibido[0] == 'R'){
 				g_b_conectado = true;
+				BLUETOOTH_vaciar_buffer();
 			}
 		}
 	}
@@ -124,8 +135,14 @@ tBoolean BLUETOOTH_hay_mensaje(void){
 	tBoolean completo = false; /*Si se ha recibido un mensaje completo*/
 
 	numero_elementos = UART_nElementosIn(gs_i_puerto_zigbee);
-	if(numero_elementos >= 33){
-		completo = true;
+	if(g_b_conectado){
+		if(numero_elementos >= 20){
+			completo = true;
+		}
+	}else{
+		if(numero_elementos >= 33){
+			completo = true;
+		}
 	}
 
 	return completo;
@@ -140,7 +157,7 @@ tBoolean BLUETOOTH_hay_mensaje(void){
  * controladores que se encuentren a su alcance.
 */
 void BLUETOOTH_recibir_mensaje(void){
-	uint8_t temporal[1]; /*Guarda el mensaje temporalmente*/
+	uint8_t temporal[63]; /*Guarda el mensaje temporalmente*/
 	int numero_recibido = 1; /*Contador para trasladar los datos de temporal a recibido*/
 	int contador = 0; /*Contador para trasladar los datos de temporal a recibido*/
 
@@ -151,6 +168,8 @@ void BLUETOOTH_recibir_mensaje(void){
 		numero_recibido = 37;
 	}else if(temporal[0] == 'R'){
 		numero_recibido = 32;
+	}else if(temporal[0] == 'N'){
+		numero_recibido = 19;
 	}
 
 	UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
@@ -237,33 +256,29 @@ void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje){
 //TODO: falta por comentar
 void BLUETOOTH_enviar_emparejamiento(void){
 	uint8_t mensaje_emparejamiento[32];
-	int contador = 12;
+	int contador = 0;
 
 	//SSP CONFIRM e8:92:a4:45:b4:02 OK
-
-	mensaje_emparejamiento[0] = 'S';
-	mensaje_emparejamiento[1] = 'S';
-	mensaje_emparejamiento[2] = 'P';
-	mensaje_emparejamiento[3] = ' ';
-	mensaje_emparejamiento[4] = 'C';
-	mensaje_emparejamiento[5] = 'O';
-	mensaje_emparejamiento[6] = 'N';
-	mensaje_emparejamiento[7] = 'F';
-	mensaje_emparejamiento[8] = 'I';
-	mensaje_emparejamiento[9] = 'R';
-	mensaje_emparejamiento[10] = 'M';
-	mensaje_emparejamiento[11] = ' ';
 
 	while(contador < 29){
 		mensaje_emparejamiento[contador] = gs_ba_recibido[contador];
 		contador++;
 	}
 
+	mensaje_emparejamiento[29] = ' ';
 	mensaje_emparejamiento[30] = 'O';
 	mensaje_emparejamiento[31] = 'K';
-	contador = 31;
+	contador = 32;
 
 	UART_send(gs_i_puerto_zigbee, mensaje_emparejamiento, &contador);
+}
+//TODO: comentar
+void BLUETOOTH_vaciar_buffer(void){
+	int contador;
+
+	for(contador = 0; contador < 255; contador++){
+		gs_ba_recibido[contador] = 0;
+	}
 }
 /*********************************************************************
 ** 																	**

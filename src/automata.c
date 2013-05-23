@@ -30,6 +30,7 @@
 #include "keypad.h"
 #include "display.h"
 #include "zigbee.h"
+#include "bluetooth.h"
 #include "sensorVisibilidad.h"
 #include "sensorEstado.h"
 #include "sensorObras.h"
@@ -59,10 +60,15 @@ ESTADO(Sensores){
 };
 FIN_ESTADO(Sensores, 1, AUTOMATA_sensores)
 
-ESTADO(Mensajes){
+ESTADO(Mensajes_zigbee){
+	TRANSICION(3, cambio_finalizar_estado,NULL)
+};
+FIN_ESTADO(Mensajes_zigbee, 2, ZIGBEE_recepcion_mensajes)
+
+ESTADO(Mensajes_bluetooth){
 	TRANSICION(1, cambio_finalizar_estado,NULL)
 };
-FIN_ESTADO(Mensajes, 2, ZIGBEE_recepcion_mensajes)
+FIN_ESTADO(Mensajes_bluetooth, 3, BLUETOOTH_recepcion_mensajes)
 
 /*
  * Estados secundarios, donde se mira el estado de los sensores de:
@@ -93,7 +99,8 @@ FIN_ESTADO(Velocidad_lenta, 14, S_VELOCIDAD_accion)
  */
 AUTOMATA(g_automata){
 	&Sensores,
-	&Mensajes,
+	&Mensajes_zigbee,
+	&Mensajes_bluetooth,
 	&Niebla,
 	&Hielo,
 	&Obras,

@@ -31,6 +31,7 @@
 #include "keypad.h"
 #include "motorAutomatas.h"
 #include "zigbee.h"
+#include "bluetooth.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -74,6 +75,7 @@ void BROADCAR_inicializacion(){
 	KEYPAD_inicializacion();
 	DISPLAY_inicializacion();
 	ZIGBEE_inicializacion();
+	BLUETOOTH_inicializacion();
 }
 /**
  * @brief  Función para elegir el paso a seguir en cada momento.
