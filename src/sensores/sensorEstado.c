@@ -33,6 +33,7 @@
 #include "display.h"
 #include "data.h"
 #include "zigbee.h"
+#include "bluetooth.h"
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -61,6 +62,7 @@ tBoolean S_ESTADO_cambio(void){
 */
 void S_ESTADO_accion(void){
 	unsigned char * pantalla;
+	MENSAJEClass mensaje;
 
 	if((g_cs_sensores[SENSOR_ESTADO].hora + 0) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
@@ -77,7 +79,9 @@ void S_ESTADO_accion(void){
 		g_cs_sensores[SENSOR_ESTADO].posicion.longitud_segundo = 3;
 		g_cs_sensores[SENSOR_ESTADO].valor = 15;
 
-		ZIGBEE_enviar_mensaje(g_cs_sensores[SENSOR_ESTADO]);
+		mensaje = ZIGBEE_crear_mensaje(g_cs_sensores[SENSOR_ESTADO]);
+		ZIGBEE_enviar_mensaje(mensaje);
+		BLUETOOTH_enviar_mensaje(mensaje);
 		sprintf(pantalla, "aceite %d", g_cs_sensores[SENSOR_ESTADO].hora);
 		DISPLAY_escribir(pantalla);
 	}

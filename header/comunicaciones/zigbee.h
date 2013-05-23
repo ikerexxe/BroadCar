@@ -39,7 +39,8 @@
 *********************************************************************/
 void ZIGBEE_inicializacion(void);
 void ZIGBEE_recepcion_mensajes(void);
-void ZIGBEE_enviar_mensaje(SENSORClass sensor);
+MENSAJEClass ZIGBEE_crear_mensaje(SENSORClass sensor);
+void ZIGBEE_enviar_mensaje(MENSAJEClass mensaje);
 /*********************************************************************
 **	 																**
 ** TYPEDEFS AND STRUCTURES 											**

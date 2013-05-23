@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include "hw_types.h"
 #include "zigbee.h"
+#include "bluetooth.h"
 #include "uartDrv.h"
 #include "broadcar.h"
 #include "display.h"
@@ -104,7 +105,7 @@ void ZIGBEE_recepcion_mensajes(void){
 				ZIGBEE_borrar_mensaje_lista();
 				g_cm_mensajes[(g_i_numero_mensaje - 1)] = m_mensaje;
 			}
-			//TODO: enviar mendiante bluetooth
+			BLUETOOTH_enviar_mensaje(m_mensaje); //TODO: supongo que esta bien
 			pantalla = malloc(sizeof(unsigned char) * 20);
 			switch(m_mensaje.tipo){
 				case TRAFICO_DENSO:
@@ -138,14 +139,13 @@ void ZIGBEE_recepcion_mensajes(void){
 	}
 }
 /**
- * @brief  Función para enviar un mensaje mediante zigbee.
+ * @brief  Función para crear un mensaje.
  *
  * @return    -
  *
- * Recoge los datos del sensor, le da un formato adecuado para enviar
- * mediante zigbee y lo envía.
+ * Recoge los datos del sensor y crea el mensaje.
 */
-void ZIGBEE_enviar_mensaje(SENSORClass sensor){
+MENSAJEClass ZIGBEE_crear_mensaje(SENSORClass sensor){
 	MENSAJEClass mensaje;
 
 	mensaje = ZIGBEE_insertar_tipo_mensaje(mensaje, sensor.tipo);
@@ -155,6 +155,17 @@ void ZIGBEE_enviar_mensaje(SENSORClass sensor){
 	mensaje.ttl = 3;
 	mensaje = ZIGBEE_insertar_info_mensaje(sensor, mensaje);
 
+	return mensaje;
+}
+/**
+ * @brief  Función para enviar un mensaje mediante zigbee.
+ *
+ * @return    -
+ *
+ * Le da un formato adecuado al mensaje para enviar mediante
+ * zigbee y lo envía.
+*/
+void ZIGBEE_enviar_mensaje(MENSAJEClass mensaje){
 	ZIGBEE_formatear_mensaje(mensaje);
 	UART_send(gs_i_puerto_zigbee, gs_ba_envio, &gs_i_tamano);
 }

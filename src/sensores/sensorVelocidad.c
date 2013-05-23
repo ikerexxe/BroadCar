@@ -33,6 +33,7 @@
 #include "display.h"
 #include "data.h"
 #include "zigbee.h"
+#include "bluetooth.h"
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -60,6 +61,7 @@ tBoolean S_VELOCIDAD_cambio(void){
 */
 void S_VELOCIDAD_accion(void){
 	unsigned char * pantalla;
+	MENSAJEClass mensaje;
 
 	if((g_cs_sensores[SENSOR_VELOCIDAD].hora + 0) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
@@ -76,7 +78,9 @@ void S_VELOCIDAD_accion(void){
 		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_segundo = 3;
 		g_cs_sensores[SENSOR_VELOCIDAD].valor = 15;
 
-		ZIGBEE_enviar_mensaje(g_cs_sensores[SENSOR_VELOCIDAD]);
+		mensaje = ZIGBEE_crear_mensaje(g_cs_sensores[SENSOR_VELOCIDAD]);
+		ZIGBEE_enviar_mensaje(mensaje);
+		BLUETOOTH_enviar_mensaje(mensaje);
 		sprintf(pantalla, "lento %d", g_cs_sensores[SENSOR_VELOCIDAD].hora);
 		DISPLAY_escribir(pantalla);
 	}

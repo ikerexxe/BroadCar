@@ -33,6 +33,7 @@
 #include "display.h"
 #include "data.h"
 #include "zigbee.h"
+#include "bluetooth.h"
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -60,6 +61,7 @@ tBoolean S_VISIBILIDAD_cambio(void){
 */
 void S_VISIBILIDAD_accion(void){
 	unsigned char * pantalla;
+	MENSAJEClass mensaje;
 
 	if((g_cs_sensores[SENSOR_VISIBILIDAD].hora + 0) < g_i_hora){
 		pantalla = malloc(sizeof(unsigned char) * 20);
@@ -76,7 +78,9 @@ void S_VISIBILIDAD_accion(void){
 		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_segundo = 3;
 		g_cs_sensores[SENSOR_VISIBILIDAD].valor = 33;
 
-		ZIGBEE_enviar_mensaje(g_cs_sensores[SENSOR_VISIBILIDAD]);
+		mensaje = ZIGBEE_crear_mensaje(g_cs_sensores[SENSOR_VISIBILIDAD]);
+		ZIGBEE_enviar_mensaje(mensaje);
+		BLUETOOTH_enviar_mensaje(mensaje);
 		sprintf(pantalla, "niebla %d", g_cs_sensores[SENSOR_VISIBILIDAD].hora);
 		DISPLAY_escribir(pantalla);
 	}
