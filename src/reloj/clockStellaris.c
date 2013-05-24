@@ -25,12 +25,14 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include "clockStellaris.h"
+#include "broadcar.h"
+#ifdef STELLARIS
 #include "hw_types.h"
 #include "systick.h"
 #include "interrupt.h"
-#include "clockStellaris.h"
 #include "driverlib/sysctl.h"
-#include "broadcar.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -43,7 +45,7 @@ static unsigned long gs_ul_system_clock; /*Frecuencia del clock*/
 ** 																	**
 **********************************************************************/
 /**
- * @brief  Función para inicializar el clock.
+ * @brief  Funciï¿½n para inicializar el clock.
  *
  * @return    -
  *

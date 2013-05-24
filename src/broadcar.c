@@ -24,11 +24,12 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include "hw_types.h"
+//#include "hw_types.h"
 #include "broadcar.h"
 #include "motorAutomatas.h"
 #include "zigbee.h"
 #ifdef STELLARIS
+#include "hw_types.h"
 #include "clockStellaris.h"
 #include "displayStellaris.h"
 #include "keypadStellaris.h"
@@ -65,7 +66,7 @@ int main(void)
     }
 }
 /**
- * @brief  Función para inicialización de los periféricos.
+ * @brief  Funciï¿½n para inicializaciï¿½n de los perifï¿½ricos.
  *
  * @return    -
  *
@@ -82,21 +83,21 @@ void BROADCAR_inicializacion(){
 	ZIGBEE_inicializacion();
 }
 /**
- * @brief  Función para elegir el paso a seguir en cada momento.
+ * @brief  Funciï¿½n para elegir el paso a seguir en cada momento.
  *
  * @return    -
  *
  * Primero se lee la tecla pulsada, luego se actualiza la pantalla teniendo
- * en cuenta la tecla pulsa, si se pulsa el select se envía el mensaje y se
+ * en cuenta la tecla pulsa, si se pulsa el select se envï¿½a el mensaje y se
  * reinicializa la parte de la pantalla en la que escribe el usuario.
- * Si se ha reibido algo por la UART y está almacenado en el buffer de software
+ * Si se ha reibido algo por la UART y estï¿½ almacenado en el buffer de software
  * se muestra en pantalla.
 */
 void BROADCAR_logica(){
 	MOTOR_AUTOMATA_ejecutar(&g_automata);
 }
 /**
- * @brief  Función que inicializa el array que contiene el valor de los sensores.
+ * @brief  Funciï¿½n que inicializa el array que contiene el valor de los sensores.
  *
  * @return    -
  *

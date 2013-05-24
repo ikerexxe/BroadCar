@@ -24,14 +24,14 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include "broadcar.h"
+#include "motorAutomatas.h"
+#ifdef STELLARIS
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/systick.h"
 #include "driverlib/gpio.h"
-#include "broadcar.h"
-#include "motorAutomatas.h"
-#ifdef STELLARIS
 #include "displayStellaris.h"
 #else
 #include "displaySpartan.h"
@@ -76,7 +76,7 @@ void MOTOR_AUTOMATA_ejecutar(TS_AUTOMATA *elAutomata)
 			return;
 	    }
 	}
-	//Si falla mostrará un error.
+	//Si falla mostrarï¿½ un error.
 	DISPLAY_escribir(error);
 }
 

@@ -28,11 +28,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "hw_types.h"
 #include "broadcar.h"
 #include "zigbee.h"
 #include "broadcar.h"
 #ifdef STELLARIS
+#include "hw_types.h"
 #include "displayStellaris.h"
 #include "uartDrvStellaris.h"
 #else
@@ -73,16 +73,16 @@ static int gs_i_numero_cabecera = 17; /*Numero de elementos que tiene la cabecer
 static unsigned char gs_uc_caracter_vacio = 0x00; /*Byte vacio = 00000000*/
 static unsigned char gs_uc_caracter_lleno = 255; /*Byte lleno = 11111111*/
 static int gs_i_puerto_zigbee = 1; /*Puerto UART que se usa para la comunicacion con el modulo zigbee*/
-static int gs_i_tamano = 0; /*Tamaño del mensaje*/
+static int gs_i_tamano = 0; /*Tamaï¿½o del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
-static uint8_t gs_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la cabecera de la trama*/
+static uint8_t gs_ba_length[2]; /*Tamaï¿½o del mensaje que se usa para enviar en la cabecera de la trama*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
 /**
- * @brief  Función para inicializar el puerto UART.
+ * @brief  Funciï¿½n para inicializar el puerto UART.
  *
  * @return    -
  *
@@ -144,12 +144,12 @@ void ZIGBEE_recepcion_mensajes(void){
 	}
 }
 /**
- * @brief  Función para enviar un mensaje mediante zigbee.
+ * @brief  Funciï¿½n para enviar un mensaje mediante zigbee.
  *
  * @return    -
  *
  * Recoge los datos del sensor, le da un formato adecuado para enviar
- * mediante zigbee y lo envía.
+ * mediante zigbee y lo envï¿½a.
 */
 void ZIGBEE_enviar_mensaje(SENSORClass sensor){
 	MENSAJEClass mensaje;
@@ -165,11 +165,11 @@ void ZIGBEE_enviar_mensaje(SENSORClass sensor){
 	UART_send(gs_i_puerto_zigbee, gs_ba_envio, &gs_i_tamano);
 }
 /**
- * @brief  Función que mira si se ha recibido un mensaje por zigbee.
+ * @brief  Funciï¿½n que mira si se ha recibido un mensaje por zigbee.
  *
  * @return    Si se ha recibido un mensaje.
  *
- * Mira si se han recibido más de 33 bytes mediante zigbee, indicativo
+ * Mira si se han recibido mï¿½s de 33 bytes mediante zigbee, indicativo
  * de que se ha recibido el mensaje completo.
 */
 tBoolean hay_mensaje(void){
@@ -184,7 +184,7 @@ tBoolean hay_mensaje(void){
 	return completo;
 }
 /**
- * @brief  Función que recibe el mensaje de zigbee.
+ * @brief  Funciï¿½n que recibe el mensaje de zigbee.
  *
  * @return    El cuerpo del mensaje.
  *
@@ -223,7 +223,7 @@ MENSAJEClass recibir_mensaje(void){
 	return mensaje;
 }
 /**
- * @brief  Función que trata el mensaje recibido por zigbee.
+ * @brief  Funciï¿½n que trata el mensaje recibido por zigbee.
  *
  * @return    El cuerpo del mensaje.
  *
@@ -249,11 +249,11 @@ MENSAJEClass tratar_mensaje(uint8_t recibido[]){
 	return mensaje;
 }
 /**
- * @brief  Función para guardar el valor que se recibe.
+ * @brief  Funciï¿½n para guardar el valor que se recibe.
  *
  * @return    -
  *
- * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
+ * Dependiendo del tipo de mensaje que sea habrï¿½ que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
 MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]){
@@ -288,11 +288,11 @@ MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]){
 	return mensaje;
 }
 /**
-* @brief Función que mira si el mensaje ya se ha recibido.
+* @brief Funciï¿½n que mira si el mensaje ya se ha recibido.
 *
 * @return Si se ha recibido con anterioridad
 *
-* Se recorre la lista de mensajes y se mira si el mensaje se había
+* Se recorre la lista de mensajes y se mira si el mensaje se habï¿½a
 * recibido con anterioridad. Esto ocurre cuando el id, el tipo y la
 * hora concuerdan.
 */
@@ -312,7 +312,7 @@ tBoolean recibido_anteriormente(MENSAJEClass mensaje){
 	return resultado;
 }
 /**
-* @brief Función para se usa para reenviar el mensaje que se ha recibido
+* @brief Funciï¿½n para se usa para reenviar el mensaje que se ha recibido
 * mediante zigbee.
 *
 * @return -
@@ -329,11 +329,11 @@ void reenviar_mensaje(MENSAJEClass mensaje){
 	}
 }
 /**
-* @brief Función para se usa para borrar el primer mensaje de la lista.
+* @brief Funciï¿½n para se usa para borrar el primer mensaje de la lista.
 *
 * @return -
 *
-* Permite borrar el mensaje más antiguo de la lista de mensajes para hacer
+* Permite borrar el mensaje mï¿½s antiguo de la lista de mensajes para hacer
 * hueco a los nuevos mensajes.
 */
 void borrar_mensaje_lista(){
@@ -344,16 +344,16 @@ void borrar_mensaje_lista(){
 	}
 }
 /**
- * @brief  Función para calcular el tamaño del mensaje.
+ * @brief  Funciï¿½n para calcular el tamaï¿½o del mensaje.
  *
  * @return    -
  *
- * Calcula el tamaño del mensaje y asigna los valores de forma
+ * Calcula el tamaï¿½o del mensaje y asigna los valores de forma
  * que sean comprensibles en la trama zigbee.
 */
 void calcular_tamano_mensaje(MENSAJEClass mensaje){
-	int unidad_tamano = gs_i_tamano - 4; /*Calcular el tamaño del mensaje en un byte*/
-	int llevada_tamano = 0; /*Llevada para calcular el tamaño del mensaje en más de un byte*/
+	int unidad_tamano = gs_i_tamano - 4; /*Calcular el tamaï¿½o del mensaje en un byte*/
+	int llevada_tamano = 0; /*Llevada para calcular el tamaï¿½o del mensaje en mï¿½s de un byte*/
 
 	while(unidad_tamano > 255){
 		unidad_tamano -= 255;
@@ -364,7 +364,7 @@ void calcular_tamano_mensaje(MENSAJEClass mensaje){
 	gs_ba_length[1] = unidad_tamano;
 }
 /**
- * @brief  Función para darle formato al mensaje zigbee.
+ * @brief  Funciï¿½n para darle formato al mensaje zigbee.
  *
  * @return    -
  *
@@ -420,7 +420,7 @@ void formatear_mensaje(MENSAJEClass mensaje){
 	gs_ba_envio[contador] = calcular_checksum(gs_ba_envio);
 }
 /**
- * @brief  Función para calcular el checksum del mensaje.
+ * @brief  Funciï¿½n para calcular el checksum del mensaje.
  *
  * @return    -
  *
@@ -430,7 +430,7 @@ int calcular_checksum(uint8_t mensaje[]){
 	int contador; /*Contador que recorre el mensaje a enviar*/
 	int suma = 0; /*Suma de todos los parametros del mensaje*/
 	int resultado = 0; /*Resultado del checksum*/
-	int tamano_mensaje = mensaje[2] + 3; /*Tamaño del mensaje a excepcion de los tres primeros elementos de la cabecera*/
+	int tamano_mensaje = mensaje[2] + 3; /*Tamaï¿½o del mensaje a excepcion de los tres primeros elementos de la cabecera*/
 
 	for(contador = 3; contador < tamano_mensaje; contador++){
 		suma += mensaje[contador];
@@ -442,11 +442,11 @@ int calcular_checksum(uint8_t mensaje[]){
 	return resultado;
 }
 /**
- * @brief  Función para cargar el valor que se ha recogido del sensor.
+ * @brief  Funciï¿½n para cargar el valor que se ha recogido del sensor.
  *
  * @return    -
  *
- * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
+ * Dependiendo del tipo de mensaje que sea habrï¿½ que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
 MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
@@ -497,11 +497,11 @@ MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje){
 	return mensaje;
 }
 /**
- * @brief  Función para cargar el valor que tiene el mensaje.
+ * @brief  Funciï¿½n para cargar el valor que tiene el mensaje.
  *
  * @return    -
  *
- * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
+ * Dependiendo del tipo de mensaje que sea habrï¿½ que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
 int insertar_info_envio(MENSAJEClass mensaje, int contador){
@@ -549,7 +549,7 @@ int insertar_info_envio(MENSAJEClass mensaje, int contador){
 	return contador;
 }
 /**
- * @brief  Función para ponerle el tipo al mensaje.
+ * @brief  Funciï¿½n para ponerle el tipo al mensaje.
  *
  * @return    -
  *

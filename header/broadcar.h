@@ -36,7 +36,7 @@
  * Definición de la arquitectura
  */
 #define STELLARIS
-#define SPARTAN
+//#define SPARTAN
 /*
  * Definición de las teclas
  */

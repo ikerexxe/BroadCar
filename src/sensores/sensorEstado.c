@@ -27,7 +27,7 @@
 **********************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "hw_types.h"
+
 #include "sensorEstado.h"
 #include "broadcar.h"
 #include "data.h"

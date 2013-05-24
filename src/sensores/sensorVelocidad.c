@@ -27,12 +27,13 @@
 **********************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "hw_types.h"
+
 #include "sensorVelocidad.h"
 #include "broadcar.h"
 #include "data.h"
 #include "zigbee.h"
 #ifdef STELLARIS
+#include "hw_types.h"
 #include "displayStellaris.h"
 #else
 #include "displaySpartan.h"

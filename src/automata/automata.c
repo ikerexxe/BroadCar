@@ -24,7 +24,6 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include "hw_types.h"
 #include "automata.h"
 #include "broadcar.h"
 #include "motorAutomatas.h"
@@ -34,6 +33,7 @@
 #include "sensorObras.h"
 #include "sensorVelocidad.h"
 #ifdef STELLARIS
+#include "hw_types.h"
 #include "keypadStellaris.h"
 #include "displayStellaris.h"
 #else
@@ -95,7 +95,7 @@ ESTADO(Velocidad_lenta){
 FIN_ESTADO(Velocidad_lenta, 14, S_VELOCIDAD_accion)
 
 /*
- * Máquina de estados
+ * Mï¿½quina de estados
  */
 AUTOMATA(g_automata){
 	&Sensores,
