@@ -26,7 +26,6 @@
 *********************************************************************/
 #ifndef AUTOMATAPRINCIPAL_H
 #define AUTOMATAPRINCIPAL_H
-
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
@@ -39,7 +38,7 @@
 ** 																	**
 *********************************************************************/
 void AUTOMATA_sensores(void);
-tBoolean AUTOMATA_finish(void);
+boolean AUTOMATA_finish(void);
 /*********************************************************************
 **	 																**
 ** TYPEDEFS AND STRUCTURES 											**

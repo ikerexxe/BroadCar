@@ -45,8 +45,8 @@
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-tBoolean cambio_no_finalizar_estado(void);
-tBoolean cambio_finalizar_estado(void);
+boolean cambio_no_finalizar_estado(void);
+boolean cambio_finalizar_estado(void);
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
@@ -95,7 +95,7 @@ ESTADO(Velocidad_lenta){
 FIN_ESTADO(Velocidad_lenta, 14, S_VELOCIDAD_accion)
 
 /*
- * M�quina de estados
+ * Maquina de estados
  */
 AUTOMATA(g_automata){
 	&Sensores,
@@ -114,7 +114,7 @@ FIN_AUTOMATA(g_automata, 101, AUTOMATA_finish)
 /**
  * @brief  Funcion que siempre permite el franqueo de la transicion
 */
-tBoolean cambio_finalizar_estado(void){
+boolean cambio_finalizar_estado(void){
 	int i = 0;
 
 	for(i = 0; i < 5000; i++){
@@ -126,7 +126,7 @@ tBoolean cambio_finalizar_estado(void){
 /**
  * @brief  Funcion que no permite el franqueo de la transicion
 */
-tBoolean cambio_no_finalizar_estado(void){
+boolean cambio_no_finalizar_estado(void){
 	int i = 0;
 
 	for(i = 0; i < 5000; i++){
@@ -145,7 +145,7 @@ void AUTOMATA_sensores(void){
 /**
  * @brief  Funcion que decide si acabar el programa del automata
 */
-tBoolean AUTOMATA_finish(void){
+boolean AUTOMATA_finish(void){
 	return false;
 }
 /*********************************************************************

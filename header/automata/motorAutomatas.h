@@ -45,7 +45,7 @@
 *********************************************************************/
 //Definicion del tipo Accion y Evento
 typedef void (*TPNF_ACC)(void);
-typedef tBoolean (*TPNF_EVE)(void);
+typedef boolean (*TPNF_EVE)(void);
 
 //Definicion del tipo de dato que representa una transicion
 typedef struct{

@@ -86,6 +86,22 @@
  * Definiciï¿½n de BYTE
  */
 typedef char BYTE;
+/*
+ * Definición de Boolean
+ */
+typedef unsigned char boolean;
+/*
+ * Definición de true
+ */
+#ifndef true
+#define true 1
+#endif
+/*
+ * Definición de false
+ */
+#ifndef false
+#define false 0
+#endif
 /*****************************************************************************
 ** 																			**
 ** GLOBAL VARIABLES 														**
