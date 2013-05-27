@@ -35,8 +35,8 @@
 /*
  * Definiciï¿½n de la arquitectura
  */
-#define STELLARIS
-//#define SPARTAN
+//#define STELLARIS
+#define SPARTAN
 /*
  * Definiciï¿½n de las teclas
  */
@@ -87,17 +87,17 @@
  */
 typedef char BYTE;
 /*
- * Definición de Boolean
+ * Definiciï¿½n de Boolean
  */
 typedef unsigned char boolean;
 /*
- * Definición de true
+ * Definiciï¿½n de true
  */
 #ifndef true
 #define true 1
 #endif
 /*
- * Definición de false
+ * Definiciï¿½n de false
  */
 #ifndef false
 #define false 0

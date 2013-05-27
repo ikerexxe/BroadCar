@@ -5,7 +5,7 @@
  *      Author: Daniel
  */
 
-#include "uartDrv.h"
+#include "uartDrvSpartan.h"
 
 #include "xuartlite.h"
 #include "xuartlite_l.h"

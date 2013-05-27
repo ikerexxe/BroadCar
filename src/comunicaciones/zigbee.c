@@ -44,11 +44,11 @@
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-tBoolean hay_mensaje(void);
+boolean hay_mensaje(void);
 MENSAJEClass recibir_mensaje(void);
 MENSAJEClass tratar_mensaje(uint8_t recibido[]);
 MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]); //Cambiar nombre
-tBoolean recibido_anteriormente(MENSAJEClass mensaje);
+boolean recibido_anteriormente(MENSAJEClass mensaje);
 void reenviar_mensaje(MENSAJEClass mensaje);
 void borrar_mensaje_lista(void);
 void calcular_tamano_mensaje(MENSAJEClass mensaje);
@@ -97,7 +97,7 @@ void ZIGBEE_inicializacion(){
 void ZIGBEE_recepcion_mensajes(void){
 	unsigned char * pantalla;
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
-	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
+	boolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 
 	b_mensaje = hay_mensaje();
 	if(b_mensaje){
@@ -172,9 +172,9 @@ void ZIGBEE_enviar_mensaje(SENSORClass sensor){
  * Mira si se han recibido m�s de 33 bytes mediante zigbee, indicativo
  * de que se ha recibido el mensaje completo.
 */
-tBoolean hay_mensaje(void){
+boolean hay_mensaje(void){
 	int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
-	tBoolean completo = false; /*Si se ha recibido un mensaje completo*/
+	boolean completo = false; /*Si se ha recibido un mensaje completo*/
 
 	numero_elementos = UART_nElementosIn(gs_i_puerto_zigbee);
 	if(numero_elementos >= 33){
@@ -296,9 +296,9 @@ MENSAJEClass extraer_info_recibido(MENSAJEClass mensaje, uint8_t recibido[]){
 * recibido con anterioridad. Esto ocurre cuando el id, el tipo y la
 * hora concuerdan.
 */
-tBoolean recibido_anteriormente(MENSAJEClass mensaje){
+boolean recibido_anteriormente(MENSAJEClass mensaje){
 	int contador; /*Contador para recorrer el array*/
-	tBoolean resultado = false; /*Para saber si se ha recibido anteriormente*/
+	boolean resultado = false; /*Para saber si se ha recibido anteriormente*/
 
 	for(contador = 0; contador < g_i_numero_mensaje; contador++){
 		if(g_cm_mensajes[contador].id == mensaje.id
