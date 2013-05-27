@@ -50,7 +50,7 @@ void BLUETOOTH_vaciar_buffer(void);
 ** 																	**
 **********************************************************************/
 tBoolean g_b_conectado = false;
-static int gs_i_puerto_zigbee = 0; /*Puerto UART que se usa para la comunicacion con el modulo bluetooth*/
+static int gs_i_puerto_zigbee = 1; /*Puerto UART que se usa para la comunicacion con el modulo bluetooth*/
 static int gs_i_tamano = 0; /*Tamaño del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_recibido[255]; /*Mensaje recibido en formato byte*/
@@ -86,6 +86,7 @@ void BLUETOOTH_inicializacion(){
 */
 void BLUETOOTH_recepcion_mensajes(void){
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
+	unsigned char * pantalla;
 
 	if(g_b_conectado){
 		b_mensaje = BLUETOOTH_hay_mensaje();
@@ -94,6 +95,9 @@ void BLUETOOTH_recepcion_mensajes(void){
 			if(gs_ba_recibido[0] == 'N'){
 				g_b_conectado = false;
 				BLUETOOTH_vaciar_buffer();
+				pantalla = malloc(sizeof(unsigned char) * 20);
+				sprintf(pantalla, "DESCONECTADO");
+				DISPLAY_escribir(pantalla);
 			}
 		}
 	}else{
@@ -103,14 +107,19 @@ void BLUETOOTH_recepcion_mensajes(void){
 			if(gs_ba_recibido[0] == 'S'){
 				BLUETOOTH_enviar_emparejamiento();
 				BLUETOOTH_vaciar_buffer();
+				pantalla = malloc(sizeof(unsigned char) * 20);
+				sprintf(pantalla, "EMPAREJADO");
+				DISPLAY_escribir(pantalla);
 			}else if(gs_ba_recibido[0] == 'R'){
 				g_b_conectado = true;
 				BLUETOOTH_vaciar_buffer();
+				pantalla = malloc(sizeof(unsigned char) * 20);
+				sprintf(pantalla, "CONECTADO");
+				DISPLAY_escribir(pantalla);
 			}
 		}
 	}
 }
-//TODO: crear otra para las alertas de nuestros sensores
 /**
  * @brief  Función para enviar una alerta mediante bluetooth.
  *
@@ -157,11 +166,20 @@ tBoolean BLUETOOTH_hay_mensaje(void){
  * controladores que se encuentren a su alcance.
 */
 void BLUETOOTH_recibir_mensaje(void){
-	uint8_t temporal[63]; /*Guarda el mensaje temporalmente*/
+	uint8_t temporal[255]; /*Guarda el mensaje temporalmente*/
 	int numero_recibido = 1; /*Contador para trasladar los datos de temporal a recibido*/
 	int contador = 0; /*Contador para trasladar los datos de temporal a recibido*/
 
+	for(contador = 0; contador < 255; contador++){
+		temporal[contador] = 0;
+	}
+	contador = 0;
 	UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
+	while(temporal[0] == 0 && contador < 172){
+		UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
+		contador++;
+	}
+
 	gs_ba_recibido[0] = temporal[0];
 
 	if(temporal[0] == 'S'){
@@ -209,6 +227,7 @@ void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje){
 	gs_ba_envio[17] = gs_uc_caracter_barra;
 	/*Valor*/
 	BLUETOOTH_insertar_info_envio(mensaje);
+	//TODO: hay que añadir $ al final
 }
 /**
  * @brief  Función para cargar el valor que tiene el mensaje.
