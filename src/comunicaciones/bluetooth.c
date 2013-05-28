@@ -88,9 +88,9 @@ void BLUETOOTH_recepcion_mensajes(void){
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 	unsigned char * pantalla;
 
-	if(g_b_conectado){
-		b_mensaje = BLUETOOTH_hay_mensaje();
-		if(b_mensaje){
+	b_mensaje = BLUETOOTH_hay_mensaje();
+	if(b_mensaje){
+		if(g_b_conectado){
 			BLUETOOTH_recibir_mensaje();
 			if(gs_ba_recibido[0] == 'N'){
 				g_b_conectado = false;
@@ -99,10 +99,7 @@ void BLUETOOTH_recepcion_mensajes(void){
 				sprintf(pantalla, "DESCONECTADO");
 				DISPLAY_escribir(pantalla);
 			}
-		}
-	}else{
-		b_mensaje = BLUETOOTH_hay_mensaje();
-		if(b_mensaje){
+		}else{
 			BLUETOOTH_recibir_mensaje();
 			if(gs_ba_recibido[0] == 'S'){
 				BLUETOOTH_enviar_emparejamiento();
@@ -145,7 +142,7 @@ tBoolean BLUETOOTH_hay_mensaje(void){
 
 	numero_elementos = UART_nElementosIn(gs_i_puerto_bluetooth);
 	if(g_b_conectado){
-		if(numero_elementos >= 20){
+		if(numero_elementos >= 18){
 			completo = true;
 		}
 	}else{
@@ -175,9 +172,9 @@ void BLUETOOTH_recibir_mensaje(void){
 	}
 	contador = 0;
 	UART_recv(gs_i_puerto_bluetooth, temporal, &numero_recibido);
-	while(temporal[0] == 0 && contador < 172){
+
+	while(!(temporal[0] == 'S' || temporal[0] == 'R' || temporal[0] == 'N')){
 		UART_recv(gs_i_puerto_bluetooth, temporal, &numero_recibido);
-		contador++;
 	}
 
 	gs_ba_recibido[0] = temporal[0];
