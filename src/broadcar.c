@@ -24,7 +24,6 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-//#include "hw_types.h"
 #include "broadcar.h"
 #include "motorAutomatas.h"
 #include "zigbee.h"
@@ -52,29 +51,6 @@
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
 void BROADCAR_inicializacion_sensores();
-
-//TODO: todas estas variables sobran aqui, se definen en el lugar en el que se usen
-int DIP_Read;
-int led;
-int contador;
-int TimerExpired;
-int cont_data=1;
-int contador_letra;
-int indice_uart;
-int uart_recibido;
-int led_data[256];
-int indice_uart;
-int longitud;
-int linea,indice,uart_recibido,recibido;
-int contador;
-unsigned char *a;
-char *cont_aux;
-char *texto_aux;
-int datos;
-unsigned char buffer_uart[256];
-XIntc InterruptController;  /* The instance of the Interrupt Controller */
-XUartLite uart_UartLite;			/* The instance of the UART */
-
 /*********************************************************************
 ** 																	**
 ** EXTERNAL VARIABLES 												**

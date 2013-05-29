@@ -49,14 +49,13 @@
 **********************************************************************/
 XUartLite uart_UartLite;			/* The instance of the UART */
 XIntc InterruptController;  /* The instance of the Interrupt Controller */
-//TODO: todas estas variables hay que hacerlas globales a este fichero solo
-extern int led_data[256];
-extern int cont_data;
-extern int indice_uart;
-extern unsigned char *a;
-extern int uart_recibido;
 volatile int uart_recv;
-extern int contador_letra;
+int led_data[256]; //TODO: no seria mejor llamarle uart_transmit o algo parecido?
+int cont_data=1;
+int indice_uart;
+unsigned char *a; //TODO: no seria mas correcto llamarlo de otra forma?
+int uart_recibido;
+int contador_letra;
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**

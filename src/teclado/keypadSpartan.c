@@ -34,8 +34,8 @@
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-//TODO: todas estas variables hay que hacerlas globales a este fichero solo
-extern int DIP_Read;
+//TODO: donde se usa esta variable?
+int DIP_Read;
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**

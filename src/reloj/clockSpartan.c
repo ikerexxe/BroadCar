@@ -51,10 +51,9 @@
 *********************************************************************/
 XIntc InterruptController;  /* The instance of the Interrupt Controller */
 XTmrCtr TimerCounterInst;   /* The instance of the Timer Counter */
-//TODO: todas estas variables hay que hacerlas globales a este fichero solo
-extern int led;
-extern int contador;
-extern int TimerExpired;
+int led; //TODO: vamos a seguir usando el led?
+int contador; //TODO: para que se usa esta variable?
+int TimerExpired;
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
