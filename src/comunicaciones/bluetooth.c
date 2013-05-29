@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
-** project : ChatLM3S8962	 										**
-** filename : zigbee.c 												**
+** project : BroadCar		 										**
+** filename : bluetooth.c 											**
 ** version : 1 														**
 ** date : 2013-01-22	 											**
 ** 																	**
@@ -15,9 +15,9 @@
 **VERSION HISTORY:													**
 **----------------													**
 **Version : 1														**
-** date : 2013-01-22	 											**
+** date : 2013-05-22	 											**
 **Revised by : iker pedrosa											**
-**Description : Originial version.									**
+**Description : Original version.									**
 *********************************************************************/
 #define ZIGBEE_C
 /*********************************************************************
@@ -41,9 +41,11 @@
 tBoolean BLUETOOTH_hay_mensaje(void);
 void BLUETOOTH_recibir_mensaje(void);
 void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje);
-void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje);
+void BLUETOOTH_calcular_llevada(int dato, int *contador_trama);
+void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje, int *contador_trama);
 void BLUETOOTH_enviar_emparejamiento(void);
-void BLUETOOTH_vaciar_buffer(void);
+void BLUETOOTH_vaciar_buffer_entrada(void);
+void BLUETOOTH_vaciar_buffer_salida(void);
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -56,6 +58,7 @@ static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_recibido[255]; /*Mensaje recibido en formato byte*/
 static unsigned char gs_uc_caracter_barra = 0x2F;
 static unsigned char gs_uc_caracter_punto = 0x2E;
+static unsigned char gs_i_cero_ascii = 48; /*Caracter cero en ASCII*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -86,7 +89,7 @@ void BLUETOOTH_inicializacion(){
 */
 void BLUETOOTH_recepcion_mensajes(void){
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
-	unsigned char * pantalla;
+	unsigned char * pantalla; /*Donde se guarda lo que se va a escribir en pantalla*/
 
 	b_mensaje = BLUETOOTH_hay_mensaje();
 	if(b_mensaje){
@@ -94,7 +97,7 @@ void BLUETOOTH_recepcion_mensajes(void){
 			BLUETOOTH_recibir_mensaje();
 			if(gs_ba_recibido[0] == 'N'){
 				g_b_conectado = false;
-				BLUETOOTH_vaciar_buffer();
+				BLUETOOTH_vaciar_buffer_entrada();
 				pantalla = malloc(sizeof(unsigned char) * 20);
 				sprintf(pantalla, "DESCONECTADO");
 				DISPLAY_escribir(pantalla);
@@ -103,13 +106,13 @@ void BLUETOOTH_recepcion_mensajes(void){
 			BLUETOOTH_recibir_mensaje();
 			if(gs_ba_recibido[0] == 'S'){
 				BLUETOOTH_enviar_emparejamiento();
-				BLUETOOTH_vaciar_buffer();
+				BLUETOOTH_vaciar_buffer_entrada();
 				pantalla = malloc(sizeof(unsigned char) * 20);
 				sprintf(pantalla, "EMPAREJADO");
 				DISPLAY_escribir(pantalla);
 			}else if(gs_ba_recibido[0] == 'R'){
 				g_b_conectado = true;
-				BLUETOOTH_vaciar_buffer();
+				BLUETOOTH_vaciar_buffer_entrada();
 				pantalla = malloc(sizeof(unsigned char) * 20);
 				sprintf(pantalla, "CONECTADO");
 				DISPLAY_escribir(pantalla);
@@ -122,9 +125,11 @@ void BLUETOOTH_recepcion_mensajes(void){
  *
  * @return    -
  *
- * TODO: a comentar
+ * Vacia el buffer de salida, formatea el mensaje a enviar y
+ * lo envía mediante bluetooth
 */
 void BLUETOOTH_enviar_mensaje(MENSAJEClass mensaje){
+	BLUETOOTH_vaciar_buffer_salida();
 	BLUETOOTH_formatear_mensaje(mensaje);
 	UART_send(gs_i_puerto_bluetooth, gs_ba_envio, &gs_i_tamano);
 }
@@ -201,30 +206,84 @@ void BLUETOOTH_recibir_mensaje(void){
  * enviado por bluetooth.
 */
 void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje){
+	int contador_trama = 4; /*Usado para copiar los datos en una posicion del buffer*/
+
 	/*Tipo*/
-	gs_ba_envio[0] = mensaje.tipo;
+	gs_ba_envio[0] = mensaje.tipo + gs_i_cero_ascii;
 	gs_ba_envio[1] = gs_uc_caracter_barra;
 	/*Latitud*/
-	gs_ba_envio[2] = mensaje.posicion.latitud;
+	gs_ba_envio[2] = mensaje.posicion.latitud + gs_i_cero_ascii;
 	gs_ba_envio[3] = gs_uc_caracter_punto;
-	gs_ba_envio[4] = mensaje.posicion.latitud_grado;
-	gs_ba_envio[5] = gs_uc_caracter_punto;
-	gs_ba_envio[6] = mensaje.posicion.latitud_minuto;
-	gs_ba_envio[7] = gs_uc_caracter_punto;
-	gs_ba_envio[8] = mensaje.posicion.latitud_segundo;
-	gs_ba_envio[9] = gs_uc_caracter_barra;
+	BLUETOOTH_calcular_llevada(mensaje.posicion.latitud_grado, &contador_trama);
+	gs_ba_envio[contador_trama] = gs_uc_caracter_punto;
+	contador_trama++;
+	BLUETOOTH_calcular_llevada(mensaje.posicion.latitud_minuto, &contador_trama);
+	gs_ba_envio[contador_trama] = gs_uc_caracter_punto;
+	contador_trama++;
+	BLUETOOTH_calcular_llevada(mensaje.posicion.latitud_segundo, &contador_trama);
+	gs_ba_envio[contador_trama] = gs_uc_caracter_barra;
+	contador_trama++;
 	/*Longitud*/
-	gs_ba_envio[10] = mensaje.posicion.longitud;
-	gs_ba_envio[11] = gs_uc_caracter_punto;
-	gs_ba_envio[12] = mensaje.posicion.longitud_grado;
-	gs_ba_envio[13] = gs_uc_caracter_punto;
-	gs_ba_envio[14] = mensaje.posicion.longitud_minuto;
-	gs_ba_envio[15] = gs_uc_caracter_punto;
-	gs_ba_envio[16] = mensaje.posicion.longitud_segundo;
-	gs_ba_envio[17] = gs_uc_caracter_barra;
+	gs_ba_envio[contador_trama] = mensaje.posicion.longitud + 50;
+	contador_trama++;
+	gs_ba_envio[contador_trama] = gs_uc_caracter_punto;
+	contador_trama++;
+	BLUETOOTH_calcular_llevada(mensaje.posicion.longitud_grado, &contador_trama);
+	gs_ba_envio[contador_trama] = gs_uc_caracter_punto;
+	contador_trama++;
+	BLUETOOTH_calcular_llevada(mensaje.posicion.longitud_minuto, &contador_trama);
+	gs_ba_envio[contador_trama] = gs_uc_caracter_punto;
+	contador_trama++;
+	BLUETOOTH_calcular_llevada(mensaje.posicion.longitud_segundo, &contador_trama);
+	gs_ba_envio[contador_trama] = gs_uc_caracter_barra;
+	contador_trama++;
 	/*Valor*/
-	BLUETOOTH_insertar_info_envio(mensaje);
-	//TODO: hay que añadir $ al final
+	BLUETOOTH_insertar_info_envio(mensaje, &contador_trama);
+	/*Fin de trama (dolar)*/
+	gs_ba_envio[contador_trama] = 36;
+	contador_trama++;
+
+	gs_i_tamano = contador_trama;
+}
+/**
+ * @brief  Función para calcular la llevada de los datos a
+ * enviar mediante bluetooth.
+ *
+ * @return    -
+ *
+ * Se calcula la llevada de ciertos datos (latitud, longitud,
+ * etc.) porque se envían utilizando la codificacion ASCII.
+*/
+void BLUETOOTH_calcular_llevada(int dato, int *contador_trama){
+	int llevada_centena = 0; /*Llevada de la centena*/
+	int llevada_decena = 0; /*Llevada de la decena*/
+
+	if(dato < 10){
+		gs_ba_envio[(*contador_trama)] = dato + gs_i_cero_ascii;
+		(*contador_trama)++;
+	}else if(dato < 100){
+		while(dato >= 10){
+			llevada_decena++;
+			dato -= 10;
+		}
+		gs_ba_envio[(*contador_trama)] = llevada_decena + gs_i_cero_ascii;
+		(*contador_trama)++;
+		gs_ba_envio[(*contador_trama)] = dato + gs_i_cero_ascii;
+		(*contador_trama)++;
+	}else{
+		llevada_centena++;
+		dato -= 100;
+		while(dato >= 10){
+			llevada_decena++;
+			dato -= 10;
+		}
+		gs_ba_envio[(*contador_trama)] = llevada_centena + gs_i_cero_ascii;
+		(*contador_trama)++;
+		gs_ba_envio[(*contador_trama)] = llevada_decena + gs_i_cero_ascii;
+		(*contador_trama)++;
+		gs_ba_envio[(*contador_trama)] = dato + gs_i_cero_ascii;
+		(*contador_trama)++;
+	}
 }
 /**
  * @brief  Función para cargar el valor que tiene el mensaje.
@@ -234,45 +293,74 @@ void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje){
  * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
-void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje){
+void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje, int *contador_trama){
 	switch(mensaje.tipo){
 		case TRAFICO_DENSO:
-			gs_ba_envio[18] = mensaje.valor.trafico_denso.direccion;
-			gs_ba_envio[19] = mensaje.valor.trafico_denso.velocidad;
-			gs_i_tamano = 19;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.trafico_denso.direccion + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			BLUETOOTH_calcular_llevada(mensaje.valor.trafico_denso.velocidad, contador_trama);
 			break;
 		case OBRAS:
-			gs_ba_envio[18] = mensaje.valor.obra.direccion;
-			gs_ba_envio[19] = mensaje.valor.obra.carretera_cortada;
-			gs_i_tamano = 19;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.obra.direccion + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.obra.carretera_cortada + gs_i_cero_ascii;
+			(*contador_trama)++;
 			break;
 		case VEHICULO_NO_VISIBLE:
-			gs_ba_envio[18] = mensaje.valor.vehiculo_no_visible.direccion;
-			gs_ba_envio[19] = mensaje.valor.vehiculo_no_visible.velocidad;
-			gs_i_tamano = 19;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.vehiculo_no_visible.direccion + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.vehiculo_no_visible.velocidad;
+			(*contador_trama)++;
 			break;
 		case POCA_VISIBILIDAD:
-			gs_ba_envio[18] = mensaje.valor.poca_visibilidad.tipo;
-			gs_ba_envio[19] = mensaje.valor.poca_visibilidad.gravedad;
-			gs_i_tamano = 19;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.poca_visibilidad.tipo + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.poca_visibilidad.gravedad + gs_i_cero_ascii;
+			(*contador_trama)++;
 			break;
 		case ESTADO_CARRETERA:
-			gs_ba_envio[18] = mensaje.valor.estado_carretera.tipo;
-			gs_ba_envio[19] = mensaje.valor.estado_carretera.direccion;
-			gs_ba_envio[20] = mensaje.valor.estado_carretera.gravedad;
-			gs_i_tamano = 20;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.estado_carretera.tipo + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.estado_carretera.direccion + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.estado_carretera.gravedad + gs_i_cero_ascii;
+			(*contador_trama)++;
 			break;
 		case ACCIDENTE_CARRETERA:
-			gs_ba_envio[18] = mensaje.valor.accidente_carretera.direccion;
-			gs_ba_envio[19] = mensaje.valor.accidente_carretera.carretera_cortada;
-			gs_i_tamano = 19;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.accidente_carretera.direccion + gs_i_cero_ascii;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = gs_uc_caracter_barra;
+			(*contador_trama)++;
+			gs_ba_envio[(*contador_trama)] = mensaje.valor.accidente_carretera.carretera_cortada + gs_i_cero_ascii;
+			(*contador_trama)++;
 			break;
 	}
 }
-//TODO: falta por comentar
+/**
+ * @brief  Función para enviar el mensaje de emparejamiento
+ * de bluetooth.
+ *
+ * @return    -
+ *
+ * Se envía la respuesta al comando de emparejamiento enviado
+ * por la aplicacion Android para que los dos dispositivos puedan
+ * comunicarse entre ellos.
+*/
 void BLUETOOTH_enviar_emparejamiento(void){
-	uint8_t mensaje_emparejamiento[32];
-	int contador = 0;
+	uint8_t mensaje_emparejamiento[32]; /*Buffer donde se guarda el mensaje a enviar*/
+	int contador = 0; /*Contador usado para copiar los datos principales*/
 
 	//SSP CONFIRM e8:92:a4:45:b4:02 OK
 
@@ -288,12 +376,32 @@ void BLUETOOTH_enviar_emparejamiento(void){
 
 	UART_send(gs_i_puerto_bluetooth, mensaje_emparejamiento, &contador);
 }
-//TODO: comentar
-void BLUETOOTH_vaciar_buffer(void){
-	int contador;
+/**
+ * @brief  Función para vaciar el buffer de recepcion.
+ *
+ * @return    -
+ *
+ * Vacia el buffer de recepcion de datos.
+*/
+void BLUETOOTH_vaciar_buffer_entrada(void){
+	int contador; /*Contador usado para vaciar el buffer*/
 
 	for(contador = 0; contador < 255; contador++){
 		gs_ba_recibido[contador] = 0;
+	}
+}
+/**
+ * @brief  Función para vaciar el buffer de envio.
+ *
+ * @return    -
+ *
+ * Vacia el buffer de envio de datos.
+*/
+void BLUETOOTH_vaciar_buffer_salida(void){
+	int contador; /*Contador usado para vaciar el buffer*/
+
+	for(contador = 0; contador < 255; contador++){
+		gs_ba_envio[contador] = 0;
 	}
 }
 /*********************************************************************
