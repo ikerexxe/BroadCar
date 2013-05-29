@@ -68,7 +68,6 @@ int linea,indice,uart_recibido,recibido;
 int contador;
 unsigned char *a;
 char *cont_aux;
-char *texto_aux;
 int datos;
 unsigned char buffer_uart[256];
 XIntc InterruptController;  /* The instance of the Interrupt Controller */

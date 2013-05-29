@@ -5,6 +5,8 @@
  *      Author: Daniel
  */
 
+#include "string.h"
+#include "stdio.h"
 #include "displaySpartan.h"
 #include "xparameters.h"
 #include "xtmrctr_l.h"
@@ -20,20 +22,21 @@ extern int linea,indice,uart_recibido,recibido;
 extern int contador;
 extern unsigned char *a;
 extern char *cont_aux;
-extern char *texto_aux;
+static unsigned char texto_aux[20];
 extern int datos;
 extern u8 buffer_uart[256];
 
 void DISPLAY_escribir(unsigned char * mensaje)
 {
+	int i;
 	indice_uart=0;
 	longitud=strlen(mensaje);
 	linea++;
 	if(linea<3)
 	{
-		pasar_a_string(contador);
-		strcat(mensaje,cont_aux);
-		longitud=strlen(mensaje);
+		//pasar_a_string(contador);
+		//strcat(mensaje,cont_aux);
+		//longitud=strlen(mensaje);
 		escribir(linea, mensaje);
 	}
 
@@ -58,14 +61,24 @@ void DISPLAY_escribir(unsigned char * mensaje)
 		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x1); //escribir con flanco de bajada del enable
 
 		linea=2;
-		pasar_a_string(contador);
-		strcat(mensaje,cont_aux);
+		//pasar_a_string(contador);
+		//strcat(mensaje,cont_aux);
 		longitud=strlen(texto_aux);
 		escribir(1, texto_aux);
 		longitud=strlen(mensaje);
 		escribir(2, mensaje);
 	}
-	strcpy(texto_aux,mensaje);
+
+	for(i=0;i<20;i++)
+	{
+		texto_aux[i]=0;
+	}
+
+	for(i=0;i<longitud;i++)
+	{
+		texto_aux[i]=*(mensaje+i);
+	}
+	//strcpy(texto_aux,mensaje);
 
 
 	for(indice = 0 ; indice < longitud ; indice++)

@@ -78,7 +78,7 @@ void interrupcion_uart_send(void *CallBackRef, unsigned int EventData)
 	// Recibir un byte de la UART
 	//XUartLite_Recv(UartLitePtr, &led_data, 1);
 	//led_data[0]++;
-	if(cont_data<contador_letra)
+	if(cont_data<contador_letra-1)
 	{
 		XUartLite_Send(&uart_UartLite, led_data+cont_data, 1);
 		cont_data++;
