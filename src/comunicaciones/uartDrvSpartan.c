@@ -53,9 +53,10 @@ volatile int uart_recv;
 int buffer_enviar[256];
 int cont_data=1;
 int indice_buffer_entrada;
-unsigned char *buffer_recibir;
+unsigned char buffer_recibir[256];
 int uart_recibido;
 int contador_letra;
+int contador_recibir;
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -156,15 +157,24 @@ void interrupcion_uart_recv(void *CallbackRef, unsigned int EventData)
 int UART_recv(int nPort, unsigned char *p, int *pSize)
 {
 	int n;
-	int i;
-	n = *pSize;
-	for(i=0;i<n;i++)
-	{
-		p[i]=*(buffer_recibir+i);
-	}
-	for(i=0;i<n;i++)
-	{
-		*(buffer_recibir+i)=0;
+
+	if(contador_recibir < 3){
+		n = *pSize;
+		for(;contador_recibir<n;contador_recibir++)
+		{
+			p[contador_recibir]=*(buffer_recibir+contador_recibir);
+		}
+	}else{
+		n = (*pSize) + contador_recibir;
+		for(;contador_recibir<n;contador_recibir++)
+		{
+			p[contador_recibir-3]=*(buffer_recibir+contador_recibir);
+		}
+		for(contador_recibir=0;contador_recibir<n;contador_recibir++)
+		{
+			*(buffer_recibir+contador_recibir)=0;
+		}
+		contador_recibir = 0;
 	}
 	indice_buffer_entrada=0;
 	return 1;
@@ -187,7 +197,7 @@ void UART_close(int nPort){
 }
 //TODO: a comentar lo que hace esta funcion e implementarla
 int UART_nElementosIn(int nPort){
-	return strlen(buffer_recibir);
+	return indice_buffer_entrada-1;
 }
 /*********************************************************************
 ** 																	**
