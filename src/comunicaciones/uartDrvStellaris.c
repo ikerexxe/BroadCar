@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
-** project : ChatLM3S8962	 										**
-** filename : uartDrv.c 											**
+** project : BroadCar		 										**
+** filename : uartDrvStellaris.c 									**
 ** version : 1 														**
 ** date : 2012-12-05	 											**
 ** 																	**
@@ -19,7 +19,7 @@
 **Revised by : iker pedrosa											**
 **Description : Original version.									**
 *********************************************************************/
-#define UARTDRV_C
+#define UARTDRVSTELLARIS_C
 /*********************************************************************
 **																	**
 ** MODULES USED 													**

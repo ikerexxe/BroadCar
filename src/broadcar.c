@@ -53,6 +53,7 @@ void BROADCAR_inicializacion();
 void BROADCAR_logica();
 void BROADCAR_inicializacion_sensores();
 
+//TODO: todas estas variables sobran aqui, se definen en el lugar en el que se usen
 int DIP_Read;
 int led;
 int contador;
@@ -95,7 +96,7 @@ int main(void)
     }
 }
 /**
- * @brief  Funci�n para inicializaci�n de los perif�ricos.
+ * @brief  Funcion para inicializaci�n de los perif�ricos.
  *
  * @return    -
  *
@@ -113,7 +114,7 @@ void BROADCAR_inicializacion(){
 
 }
 /**
- * @brief  Funci�n para elegir el paso a seguir en cada momento.
+ * @brief  Funcion para elegir el paso a seguir en cada momento.
  *
  * @return    -
  *
@@ -127,7 +128,7 @@ void BROADCAR_logica(){
 	MOTOR_AUTOMATA_ejecutar(&g_automata);
 }
 /**
- * @brief  Funci�n que inicializa el array que contiene el valor de los sensores.
+ * @brief  Funcion que inicializa el array que contiene el valor de los sensores.
  *
  * @return    -
  *

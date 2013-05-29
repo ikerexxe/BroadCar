@@ -1,32 +1,55 @@
-/*
- * uartDrvSpartan.c
- *
- *  Created on: 24/05/2013
- *      Author: Daniel
- */
-
+/*********************************************************************
+** 																	**
+** project : BroadCar		 										**
+** filename : uartDrvSpartan.c										**
+** version : 1 														**
+** date : 2012-05-24	 											**
+** 																	**
+**********************************************************************
+** 																	**
+** Copyright (c) 2012,		 										**
+** All rights reserved. 											**
+** 																	**
+**********************************************************************
+**																	**
+**VERSION HISTORY:													**
+**----------------													**
+**Version : 1														**
+**Date : 2013-05-24													**
+**Revised by : daniel collado										**
+**Description : Original version.									**
+*********************************************************************/
+/*********************************************************************
+**																	**
+** MODULES USED 													**
+** 																	**
+**********************************************************************/
 #include "uartDrvSpartan.h"
-
 #include "xuartlite.h"
 #include "xuartlite_l.h"
 #include "xparameters.h"
-
-
 #include "xintc.h"
 #include "xil_exception.h"
-
 #include "stdio.h"
 #include "xstatus.h"
 #include "stdlib.h"
 #include "string.h"
 #include "xbasic_types.h"
-
 #include "xintc_l.h"       //LibrerÃ­a del Controlador de interrupciones
-
+/*********************************************************************
+** 																	**
+** DEFINITIONS AND MACROS 											**
+** 																	**
+**********************************************************************/
+#define UARTDRVSPARTAN_C
+/*********************************************************************
+** 																	**
+** GLOBAL VARIABLES 												**
+** 																	**
+**********************************************************************/
 XUartLite uart_UartLite;			/* The instance of the UART */
-
 XIntc InterruptController;  /* The instance of the Interrupt Controller */
-
+//TODO: todas estas variables hay que hacerlas globales a este fichero solo
 extern int led_data[256];
 extern int cont_data;
 extern int indice_uart;
@@ -34,7 +57,19 @@ extern unsigned char *a;
 extern int uart_recibido;
 volatile int uart_recv;
 extern int contador_letra;
-
+/*********************************************************************
+** 																	**
+** PROTOTYPES OF LOCAL FUNCTIONS 									**
+** 																	**
+*********************************************************************/
+void interrupcion_uart_send(void *CallBackRef, unsigned int EventData);
+void interrupcion_uart_recv(void *CallBackRef, unsigned int EventData);
+/*********************************************************************
+** 																	**
+** LOCAL FUNCTIONS 													**
+** 																	**
+**********************************************************************/
+//TODO: a comentar lo que hace esta funcion
 void UART_open(int nPort)
 {
 	XIntc_Initialize(&InterruptController, XPAR_MICROBLAZE_0_INTC_DEVICE_ID);
@@ -71,7 +106,7 @@ void UART_open(int nPort)
 	// Habilitamos la interrupciï¿½n 2 del controlador de interrupciones
 //	XIntc_Enable(&InterruptController, XPAR_INTC_0_UARTLITE_2_VEC_ID);
 }
-
+//TODO: a comentar lo que hace esta funcion y ademas añadirle el DISPLAY por delante del nombre de la funcion
 void interrupcion_uart_send(void *CallBackRef, unsigned int EventData)
 {
 	XUartLite *UartLitePtr = (XUartLite *)CallBackRef;
@@ -90,7 +125,7 @@ void interrupcion_uart_send(void *CallBackRef, unsigned int EventData)
 
 	//button_pressed = 1;
 }
-
+//TODO: a comentar lo que hace esta funcion y ademas añadirle el DISPLAY por delante del nombre de la funcion
 void interrupcion_uart_recv(void *CallbackRef, unsigned int EventData)
 {
 	XUartLite *uart_UartLite = (XUartLite *)CallbackRef;
@@ -117,7 +152,7 @@ void interrupcion_uart_recv(void *CallbackRef, unsigned int EventData)
 
    	XUartLite_EnableInterrupt(uart_UartLite);
 }
-
+//TODO: a comentar lo que hace esta funcion
 int UART_recv(int nPort, unsigned char *p, int *pSize)
 {
 	int n;
@@ -129,7 +164,7 @@ int UART_recv(int nPort, unsigned char *p, int *pSize)
 	}
 	return 1;
 }
-
+//TODO: a comentar lo que hace esta funcion
 int UART_send(int nPort, unsigned char *p, int *pSize)
 {
 	int i;
@@ -141,4 +176,16 @@ int UART_send(int nPort, unsigned char *p, int *pSize)
 	XUartLite_Send(&uart_UartLite, p, 1);
 	return 1;
 }
+//TODO: a comentar lo que hace esta funcion e implementarla
+void UART_close(int nPort){
 
+}
+//TODO: a comentar lo que hace esta funcion e implementarla
+int UART_nElementosIn(int nPort){
+
+}
+/*********************************************************************
+** 																	**
+** EOF 																**
+** 																	**
+**********************************************************************/

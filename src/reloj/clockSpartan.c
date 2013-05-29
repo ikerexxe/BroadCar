@@ -1,12 +1,31 @@
-/*
- * clockSpartan.c
- *
- *  Created on: 27/05/2013
- *      Author: Daniel
- */
-
+/*********************************************************************
+** 																	**
+** project : BroadCar		 										**
+** filename : clockSpartan.c										**
+** version : 1 														**
+** date : 2013-05-27	 											**
+** 																	**
+**********************************************************************
+** 																	**
+** Copyright (c) 2012,		 										**
+** All rights reserved. 											**
+** 																	**
+**********************************************************************
+**																	**
+**VERSION HISTORY:													**
+**----------------													**
+**Version : 1														**
+**Date : 2013-05-27													**
+**Revised by : daniel collado										**
+**Description : Original version.									**
+*********************************************************************/
+#define CLOCKSPARTAN_C
+/*********************************************************************
+**																	**
+** MODULES USED 													**
+** 																	**
+**********************************************************************/
 #include "clockSpartan.h"
-
 #include "xparameters.h"
 #include "xil_exception.h"
 #include "xtmrctr_l.h"   //Libreria del timer
@@ -15,35 +34,51 @@
 #include "xgpio.h"
 #include "xgpio_l.h"
 #include "broadcar.h"
-
+/*********************************************************************
+** 																	**
+** DEFINITIONS AND MACROS 											**
+** 																	**
+**********************************************************************/
 #define TMRCTR_DEVICE_ID	XPAR_TMRCTR_0_DEVICE_ID
 #define INTC_DEVICE_ID		XPAR_INTC_0_DEVICE_ID
 #define TMRCTR_INTERRUPT_ID	XPAR_INTC_0_TMRCTR_0_VEC_ID
 #define TIMER_CNTR_0	 0
-
 #define RESET_VALUE	 0xFE035FAA
-
+/*********************************************************************
+** 																	**
+** GLOBAL VARIABLES 												**
+** 																	**
+*********************************************************************/
 XIntc InterruptController;  /* The instance of the Interrupt Controller */
-
 XTmrCtr TimerCounterInst;   /* The instance of the Timer Counter */
-
+//TODO: todas estas variables hay que hacerlas globales a este fichero solo
 extern int led;
 extern int contador;
 extern int TimerExpired;
-
-
+/*********************************************************************
+** 																	**
+** PROTOTYPES OF LOCAL FUNCTIONS 									**
+** 																	**
+*********************************************************************/
 int TmrCtrIntrExample(XIntc* IntcInstancePtr,
 			XTmrCtr* TmrCtrInstancePtr,
 			u16 DeviceId,
 			u16 IntrId,
 			u8 TmrCtrNumber);
-
+//TODO: por que static?
 static int TmrCtrSetupIntrSystem(XIntc* IntcInstancePtr,
 				XTmrCtr* TmrCtrInstancePtr,
 				u16 DeviceId,
 				u16 IntrId,
 				u8 TmrCtrNumber);
-
+void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber);
+void TmrCtrDisableIntr(XIntc* IntcInstancePtr, u16 IntrId);
+/*********************************************************************
+** 																	**
+** LOCAL FUNCTIONS 													**
+** 																	**
+**********************************************************************/
+//TODO: a comentar lo que hace esta funcion
 void CLOCK_inicializacion()
 {
 	TmrCtrIntrExample(&InterruptController,
@@ -52,11 +87,6 @@ void CLOCK_inicializacion()
 					  TMRCTR_INTERRUPT_ID,
 					  TIMER_CNTR_0);
 }
-
-void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber);
-
-void TmrCtrDisableIntr(XIntc* IntcInstancePtr, u16 IntrId);
-
 /*****************************************************************************/
 /**
 * This function does a minimal test on the timer counter device and driver as a
@@ -335,3 +365,8 @@ void TmrCtrDisableIntr(XIntc* IntcInstancePtr, u16 IntrId)
 
 	return;
 }
+/*********************************************************************
+** 																	**
+** EOF 																**
+** 																	**
+**********************************************************************/

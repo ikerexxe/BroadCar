@@ -1,7 +1,7 @@
 /*****************************************************************************
 **											  								**
 ** project :  ChatLM3S8962					 							  	**
-** filename : uartDrv.h							  					    	**
+** filename : uartDrvStellaris.h				  					    	**
 ** version : 1 									  							**
 ** date :  	2012-10-08		 		 									    **
 ** 											  								**
@@ -24,8 +24,8 @@
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef UARTDRV_H
-#define UARTDRV_H
+#ifndef UARTDRVSTELLARIS_H
+#define UARTDRVSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**

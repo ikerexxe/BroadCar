@@ -1,6 +1,6 @@
 /*****************************************************************************
 **											  								**
-** project :  ChatLM3S8962					 							  	**
+** project :  BroadCar						 							  	**
 ** filename : clock.h  						  					    		**
 ** version : 1 									  							**
 ** date :  	2012-10-08		 		 									    **
@@ -24,8 +24,8 @@
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef CLOCK_H
-#define CLOCK_H
+#ifndef CLOCKSTELLARIS_H
+#define CLOCKSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
@@ -37,17 +37,11 @@ void CLOCK_inicializacion();
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef CLOCK_C
-#define PUB_CLOCK extern
+#ifndef CLOCKSTELLARIS_C
+#define PUB_CLOCKSTELLARIS extern
 #else
-#define PUB_CLOCK
+#define PUB_CLOCKSTELLARIS
 #endif
-/*****************************************************************************
-** 																			**
-** GLOBAL VARIABLES 														**
-** 																			**
-*****************************************************************************/
-
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**
