@@ -51,9 +51,8 @@
 *********************************************************************/
 XIntc InterruptController;  /* The instance of the Interrupt Controller */
 XTmrCtr TimerCounterInst;   /* The instance of the Timer Counter */
-int led; //TODO: vamos a seguir usando el led?
-int contador; //TODO: para que se usa esta variable?
-int TimerExpired;
+int led;
+int TimerExpired; //TODO: se sigue usando?
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -224,7 +223,6 @@ void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 	 * the main thread of execution can see the timer expired
 	 */
 	g_i_hora++;
-	contador++;
 	TimerExpired++;
 	if(led==1)
 	{

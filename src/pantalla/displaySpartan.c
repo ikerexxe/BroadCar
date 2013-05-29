@@ -42,15 +42,10 @@
 ** 																	**
 **********************************************************************/
 XTmrCtr DelayTimer1;
-extern int indice_uart; //TODO: por que esta variable se encuentra aqui y se inicializa aqui?
 int longitud;
 int linea,indice,uart_recibido,recibido;
-int contador; //TODO: no seria mas correcto ponerle otro nombre para saber lo que cuenta?
-extern unsigned char *a; //TODO: por que esta variable se encuentra aqui si solo es global a uartDrvSpartan?
-char *cont_aux; //TODO: no seria mas correcto ponerle otro nombre para saber lo que cuenta?
 static unsigned char texto_aux[20];
-int datos; //TODO: no seria mas correcto ponerle otro nombre para saber que son esos datos?
-unsigned char buffer_uart[256]; //TODO: esta variable es propia de la uart? con ese nombre da a entender eso
+int datos_pantalla;
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -58,7 +53,6 @@ unsigned char buffer_uart[256]; //TODO: esta variable es propia de la uart? con 
 *********************************************************************/
 void elegir_linea(int line);
 void escribir(int linea, unsigned char *text);
-void pasar_a_string(int cont);
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -68,7 +62,6 @@ void pasar_a_string(int cont);
 void DISPLAY_escribir(unsigned char * mensaje)
 {
 	int i;
-	indice_uart=0;
 	longitud=strlen(mensaje);
 	linea++;
 	if(linea<3)
@@ -100,8 +93,7 @@ void DISPLAY_escribir(unsigned char * mensaje)
 		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x1); //escribir con flanco de bajada del enable
 
 		linea=2;
-		//pasar_a_string(contador);
-		//strcat(mensaje,cont_aux);
+
 		longitud=strlen(texto_aux);
 		escribir(1, texto_aux);
 		longitud=strlen(mensaje);
@@ -123,8 +115,6 @@ void DISPLAY_escribir(unsigned char * mensaje)
 	for(indice = 0 ; indice < longitud ; indice++)
 	{
 		*(mensaje+indice)=0;
-		*(a+indice)=0;
-		buffer_uart[indice]=0;
 	}
 	recibido=0;
 
@@ -233,46 +223,7 @@ void elegir_linea(int line)
 	}
 	XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, inicio_linea); //escribir con flanco de bajada del enable
 }
-//TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
-void pasar_a_string(int cont)
-{
-	int temporal=10,index=0,orden=1;
-	int digito = 0;
-	int cant_digitos=0;
-	temporal=cont;
 
-	while(temporal>0)
-	{
-		temporal /= 10;
-		cant_digitos++;
-	}
-
-	cant_digitos--;
-	orden=cant_digitos;
-	temporal=cont;
-	digito = temporal % 10;
-	*(cont_aux + cant_digitos) = digito+0x30;
-
-	cant_digitos--;
-
-	temporal /= 10;
-	digito = temporal % 10;
-	*(cont_aux + cant_digitos) = digito+0x30;
-
-	cant_digitos--;
-
-	temporal /= 10;
-	digito = temporal % 10;
-	*(cont_aux + cant_digitos) = digito+0x30;
-
-	cant_digitos--;
-
-	temporal /= 10;
-	digito = temporal % 10;
-	*(cont_aux + cant_digitos) = digito+0x30;
-
-	orden=1;
-}
 //TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
 void escribir(int linea, unsigned char *text)
 {
@@ -286,7 +237,7 @@ void escribir(int linea, unsigned char *text)
 	}
 	for(indice = 0 ; indice < longitud ; indice++)
 	{
-		datos=*(text+indice);
+		datos_pantalla=*(text+indice);
 		// esperar 120us para escribir un 1
 		XTmrCtr_SetResetValue(&DelayTimer1, 1,50667);// esperar 120us
 		XTmrCtr_Start(&DelayTimer1, 1);
@@ -294,7 +245,7 @@ void escribir(int linea, unsigned char *text)
 		{
 
 		}
-		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x500|datos); //return home
+		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x500|datos_pantalla); //return home
 
 		XTmrCtr_SetResetValue(&DelayTimer1, 1,34);// esperar 1us
 		XTmrCtr_Start(&DelayTimer1, 1);
@@ -302,7 +253,7 @@ void escribir(int linea, unsigned char *text)
 		{
 
 		}
-		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x100|datos); //escribir con flanco de bajada del enable
+		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x100|datos_pantalla); //escribir con flanco de bajada del enable
 	}
 }
 /*********************************************************************

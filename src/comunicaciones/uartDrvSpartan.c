@@ -50,10 +50,10 @@
 XUartLite uart_UartLite;			/* The instance of the UART */
 XIntc InterruptController;  /* The instance of the Interrupt Controller */
 volatile int uart_recv;
-int led_data[256]; //TODO: no seria mejor llamarle uart_transmit o algo parecido?
+int buffer_enviar[256];
 int cont_data=1;
-int indice_uart;
-unsigned char *a; //TODO: no seria mas correcto llamarlo de otra forma?
+int indice_buffer_entrada;
+unsigned char *buffer_recibir;
 int uart_recibido;
 int contador_letra;
 /*********************************************************************
@@ -105,7 +105,7 @@ void UART_open(int nPort)
 	// Habilitamos la interrupciï¿½n 2 del controlador de interrupciones
 //	XIntc_Enable(&InterruptController, XPAR_INTC_0_UARTLITE_2_VEC_ID);
 }
-//TODO: a comentar lo que hace esta funcion y ademas añadirle el DISPLAY por delante del nombre de la funcion
+//TODO: a comentar lo que hace esta funcion y ademas aï¿½adirle el DISPLAY por delante del nombre de la funcion
 void interrupcion_uart_send(void *CallBackRef, unsigned int EventData)
 {
 	XUartLite *UartLitePtr = (XUartLite *)CallBackRef;
@@ -114,7 +114,7 @@ void interrupcion_uart_send(void *CallBackRef, unsigned int EventData)
 	//led_data[0]++;
 	if(cont_data<contador_letra-1)
 	{
-		XUartLite_Send(&uart_UartLite, led_data+cont_data, 1);
+		XUartLite_Send(&uart_UartLite, buffer_enviar+cont_data, 1);
 		cont_data++;
 	}
 	else
@@ -124,7 +124,7 @@ void interrupcion_uart_send(void *CallBackRef, unsigned int EventData)
 
 	//button_pressed = 1;
 }
-//TODO: a comentar lo que hace esta funcion y ademas añadirle el DISPLAY por delante del nombre de la funcion
+//TODO: a comentar lo que hace esta funcion y ademas aï¿½adirle el DISPLAY por delante del nombre de la funcion
 void interrupcion_uart_recv(void *CallbackRef, unsigned int EventData)
 {
 	XUartLite *uart_UartLite = (XUartLite *)CallbackRef;
@@ -135,7 +135,8 @@ void interrupcion_uart_recv(void *CallbackRef, unsigned int EventData)
 
 	//buffer_uart = XUartLite_Recv(uart_UartLite,buffer_ptr,1);
 	/*buffer_uart[indice_uart]*/
-	*(a+indice_uart) = (u8)XUartLite_RecvByte(XPAR_USB_UART_BASEADDR);
+	*(buffer_recibir+indice_buffer_entrada) = (u8)XUartLite_RecvByte(XPAR_USB_UART_BASEADDR);
+	indice_buffer_entrada++;
 	/*if(*(a+indice_uart)==0x20)
 	{
 		uart_recibido=1;
@@ -159,8 +160,13 @@ int UART_recv(int nPort, unsigned char *p, int *pSize)
 	n = *pSize;
 	for(i=0;i<n;i++)
 	{
-		p[i]=*(a+i);
+		p[i]=*(buffer_recibir+i);
 	}
+	for(i=0;i<n;i++)
+	{
+		*(buffer_recibir+i)=0;
+	}
+	indice_buffer_entrada=0;
 	return 1;
 }
 //TODO: a comentar lo que hace esta funcion
@@ -170,7 +176,7 @@ int UART_send(int nPort, unsigned char *p, int *pSize)
 	contador_letra = (*pSize)-1;
 	for(i=0;i<contador_letra;i++)
 	{
-		led_data[i]=p[i];
+		buffer_enviar[i]=p[i];
 	}
 	XUartLite_Send(&uart_UartLite, p, 1);
 	return 1;
@@ -181,7 +187,7 @@ void UART_close(int nPort){
 }
 //TODO: a comentar lo que hace esta funcion e implementarla
 int UART_nElementosIn(int nPort){
-
+	return strlen(buffer_recibir);
 }
 /*********************************************************************
 ** 																	**
