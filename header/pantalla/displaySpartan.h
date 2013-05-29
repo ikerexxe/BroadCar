@@ -11,7 +11,7 @@
 void elegir_linea(int line);
 void escribir(int linea, unsigned char *text);
 void pasar_a_string(int cont);
-void inicializar_LCD(void);
+void DISPLAY_inicializacion(void);
 void DISPLAY_escribir(unsigned char * mensaje);
 
 

@@ -14,10 +14,12 @@
 #include "xintc.h"
 #include "xgpio.h"
 #include "xgpio_l.h"
+#include "broadcar.h"
 
 #define TMRCTR_DEVICE_ID	XPAR_TMRCTR_0_DEVICE_ID
 #define INTC_DEVICE_ID		XPAR_INTC_0_DEVICE_ID
 #define TMRCTR_INTERRUPT_ID	XPAR_INTC_0_TMRCTR_0_VEC_ID
+#define TIMER_CNTR_0	 0
 
 #define RESET_VALUE	 0xFE035FAA
 
@@ -41,6 +43,15 @@ static int TmrCtrSetupIntrSystem(XIntc* IntcInstancePtr,
 				u16 DeviceId,
 				u16 IntrId,
 				u8 TmrCtrNumber);
+
+void CLOCK_inicializacion()
+{
+	TmrCtrIntrExample(&InterruptController,
+					  &TimerCounterInst,
+					  TMRCTR_DEVICE_ID,
+					  TMRCTR_INTERRUPT_ID,
+					  TIMER_CNTR_0);
+}
 
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber);
 
@@ -183,8 +194,19 @@ void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 	 * of the timer counter that expired, increment a shared variable so
 	 * the main thread of execution can see the timer expired
 	 */
+	g_i_hora++;
 	contador++;
 	TimerExpired++;
+	if(led==1)
+	{
+		led=0;
+		XGpio_WriteReg(XPAR_LEDS_4BITS_BASEADDR, 0, led);
+	}
+	else
+	{
+		led=1;
+		XGpio_WriteReg(XPAR_LEDS_4BITS_BASEADDR, 0, led);
+	}
 	/*if (XTmrCtr_IsExpired(InstancePtr, TmrCtrNumber)) {
 		TimerExpired++;*/
 

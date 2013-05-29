@@ -79,7 +79,7 @@ void DISPLAY_escribir(unsigned char * mensaje)
 uart_recibido=0;
 }
 
-void inicializar_LCD(void)
+void DISPLAY_inicializacion(void)
 {
 	XTmrCtr_Initialize(&DelayTimer1, 1);
 	XTmrCtr_SetOptions(&DelayTimer1,1,XTC_DOWN_COUNT_OPTION);

@@ -37,6 +37,12 @@
 #include "clockSpartan.h"
 #include "displaySpartan.h"
 #include "keypadSpartan.h"
+#include "xintc.h"
+#include "xintc_l.h"
+#include "xil_exception.h"
+#include "xuartlite.h"
+#include "xuartlite_l.h"
+#include "xparameters.h"
 #endif
 /*********************************************************************
 ** 																	**
@@ -46,6 +52,28 @@
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
 void BROADCAR_inicializacion_sensores();
+
+int DIP_Read;
+int led;
+int contador;
+int TimerExpired;
+int cont_data=1;
+int contador_letra;
+int indice_uart;
+int uart_recibido;
+int led_data[256];
+int indice_uart;
+int longitud;
+int linea,indice,uart_recibido,recibido;
+int contador;
+unsigned char *a;
+char *cont_aux;
+char *texto_aux;
+int datos;
+unsigned char buffer_uart[256];
+XIntc InterruptController;  /* The instance of the Interrupt Controller */
+XUartLite uart_UartLite;			/* The instance of the UART */
+
 /*********************************************************************
 ** 																	**
 ** EXTERNAL VARIABLES 												**
@@ -60,6 +88,7 @@ extern TS_AUTOMATA g_automata; /*Automata que usa la aplicacion*/
 int main(void)
 {
 	BROADCAR_inicializacion();
+
 
     while(1){
     	BROADCAR_logica();
@@ -81,6 +110,7 @@ void BROADCAR_inicializacion(){
 	KEYPAD_inicializacion();
 	DISPLAY_inicializacion();
 	ZIGBEE_inicializacion();
+
 }
 /**
  * @brief  Funci�n para elegir el paso a seguir en cada momento.

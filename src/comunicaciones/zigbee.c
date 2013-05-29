@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "broadcar.h"
 #include "zigbee.h"
 #include "broadcar.h"
@@ -38,6 +39,9 @@
 #else
 #include "displaySpartan.h"
 #include "uartDrvSpartan.h"
+#include "xintc.h"
+#include "xintc_l.h"
+#include "xil_exception.h"
 #endif
 /*********************************************************************
 ** 																	**
@@ -76,6 +80,9 @@ static int gs_i_puerto_zigbee = 1; /*Puerto UART que se usa para la comunicacion
 static int gs_i_tamano = 0; /*Tama�o del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_length[2]; /*Tama�o del mensaje que se usa para enviar en la cabecera de la trama*/
+extern unsigned char *a;
+
+XIntc InterruptController;  /* The instance of the Interrupt Controller */
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -176,7 +183,7 @@ boolean hay_mensaje(void){
 	int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
 	boolean completo = false; /*Si se ha recibido un mensaje completo*/
 
-	numero_elementos = UART_nElementosIn(gs_i_puerto_zigbee);
+	numero_elementos = strlen(a);//UART_nElementosIn(gs_i_puerto_zigbee);
 	if(numero_elementos >= 33){
 		completo = true;
 	}
