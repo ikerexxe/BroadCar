@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
-** project : ChatLM3S8962	 										**
-** filename : clock.c 												**
+** project : BroadCar		 										**
+** filename : clockStellaris.c										**
 ** version : 1 														**
 ** date : 2012-10-08	 											**
 ** 																	**
@@ -19,7 +19,7 @@
 **Revised by : iker pedrosa											**
 **Description : Modified version for the chat.						**
 *********************************************************************/
-#define CLOCK_C
+#define CLOCKSTELLARIS_C
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
@@ -27,12 +27,10 @@
 **********************************************************************/
 #include "clockStellaris.h"
 #include "broadcar.h"
-#ifdef STELLARIS
 #include "hw_types.h"
 #include "systick.h"
 #include "interrupt.h"
 #include "driverlib/sysctl.h"
-#endif
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**

@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
 ** project : BroadCar		 										**
-** filename : display.c												**
+** filename : displayStellaris.c									**
 ** version : 1 														**
 ** date : 2012-10-08	 											**
 ** 																	**
@@ -36,7 +36,7 @@
 ** DEFINITIONS AND MACROS 											**
 ** 																	**
 **********************************************************************/
-#define DISPLAY_C
+#define DISPLAYSTELLARIS_C
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**

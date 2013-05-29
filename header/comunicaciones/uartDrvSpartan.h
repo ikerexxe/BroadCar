@@ -1,27 +1,44 @@
-/*
- * uartDrv.h
- *
- *  Created on: 24/05/2013
- *      Author: Daniel
- */
-
-#ifndef UARTDRV_H_
-#define UARTDRV_H_
-
-
-void interrupcion_uart_send(void *CallBackRef, unsigned int EventData);
-void interrupcion_uart_recv(void *CallBackRef, unsigned int EventData);
-
-
-/*#include "xintc.h"
-#include "xparameters.h"
-#include "xintc.h"
-#include "xil_exception.h"
-#include "stdio.h"
-#include "xstatus.h"*/
+/*****************************************************************************
+**											  								**
+** project :  BroadCar						 							  	**
+** filename : uartDrvSpartan.h  				  					    	**
+** version : 1 									  							**
+** date :  	2013-05-24		 		 									    **
+** 											  								**
+******************************************************************************
+** 											  								**
+**                      											  		**
+**  								  					                    **
+** 											  								**
+******************************************************************************
+**										        							**
+**VERSION HISTORY:									  						**
+**----------------									  						**
+**Version : 1										  						**
+**Date : 2013-05-24									 					    **
+**Revised by : daniel collado                  	  							**
+**Description : Original version.											**
+*****************************************************************************/
+/*****************************************************************************
+** 																			**
+** DEFINITIONS AND MACROS 													**
+** 																			**
+******************************************************************************/
+#ifndef UARTDRVSPARTAN_H
+#define UARTDRVSPARTAN_H
+/*****************************************************************************
+** 																			**
+** PROTOTYPES OF GLOBAL FUNCTIONS											**
+** 																			**
+******************************************************************************/
 void UART_open(int nPort);
-
+void UART_close(int nPort);
 int UART_recv(int nPort, unsigned char *p, int *pSize);
 int UART_send(int nPort, unsigned char *p, int *pSize);
-
-#endif /* UARTDRV_H_ */
+int UART_nElementosIn(int nPort);
+/*****************************************************************************
+** 																			**
+** EOF 																		**
+** 																			**
+******************************************************************************/
+#endif

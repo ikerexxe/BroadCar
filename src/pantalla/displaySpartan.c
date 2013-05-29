@@ -1,31 +1,70 @@
-/*
- * displaySpartan.c
- *
- *  Created on: 27/05/2013
- *      Author: Daniel
- */
-
-#include "string.h"
-#include "stdio.h"
+/*********************************************************************
+** 																	**
+** project : BroadCar		 										**
+** filename : displaySpartan.c										**
+** version : 1 														**
+** date : 2012-05-27	 											**
+** 																	**
+**********************************************************************
+** 																	**
+** Copyright (c) 2012,		 										**
+** All rights reserved. 											**
+** 																	**
+**********************************************************************
+**																	**
+**VERSION HISTORY:													**
+**----------------													**
+**Version : 1														**
+**Date : 2013-05-27													**
+**Revised by : daniel collado										**
+**Description : Original version.									**
+*********************************************************************/
+/*********************************************************************
+**																	**
+** MODULES USED 													**
+** 																	**
+**********************************************************************/
 #include "displaySpartan.h"
 #include "xparameters.h"
 #include "xtmrctr_l.h"
 #include "xtmrctr.h"
 #include "xgpio.h"
 #include "xgpio_l.h"
-
+/*********************************************************************
+** 																	**
+** DEFINITIONS AND MACROS 											**
+** 																	**
+**********************************************************************/
+#define DISPLAYSPARTAN_C
+/*********************************************************************
+** 																	**
+** GLOBAL VARIABLES 												**
+** 																	**
+**********************************************************************/
 XTmrCtr DelayTimer1;
-
-extern int indice_uart;
-extern int longitud;
-extern int linea,indice,uart_recibido,recibido;
-extern int contador;
-extern unsigned char *a;
-extern char *cont_aux;
+extern int indice_uart; //TODO: por que esta variable se encuentra aqui y se inicializa aqui?
+int longitud;
+int linea,indice,uart_recibido,recibido;
+int contador; //TODO: no seria mas correcto ponerle otro nombre para saber lo que cuenta?
+extern unsigned char *a; //TODO: por que esta variable se encuentra aqui si solo es global a uartDrvSpartan?
+char *cont_aux; //TODO: no seria mas correcto ponerle otro nombre para saber lo que cuenta?
 static unsigned char texto_aux[20];
-extern int datos;
-extern u8 buffer_uart[256];
-
+int datos; //TODO: no seria mas correcto ponerle otro nombre para saber que son esos datos?
+unsigned char buffer_uart[256]; //TODO: esta variable es propia de la uart? con ese nombre da a entender eso
+/*********************************************************************
+** 																	**
+** PROTOTYPES OF LOCAL FUNCTIONS 									**
+** 																	**
+*********************************************************************/
+void elegir_linea(int line);
+void escribir(int linea, unsigned char *text);
+void pasar_a_string(int cont);
+/*********************************************************************
+** 																	**
+** LOCAL FUNCTIONS 													**
+** 																	**
+**********************************************************************/
+//TODO: a comentar lo que hace esta funcion
 void DISPLAY_escribir(unsigned char * mensaje)
 {
 	int i;
@@ -91,7 +130,7 @@ void DISPLAY_escribir(unsigned char * mensaje)
 
 uart_recibido=0;
 }
-
+//TODO: a comentar lo que hace esta funcion
 void DISPLAY_inicializacion(void)
 {
 	XTmrCtr_Initialize(&DelayTimer1, 1);
@@ -165,7 +204,7 @@ void DISPLAY_inicializacion(void)
 	}
 	XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x1); //escribir con flanco de bajada del enable
 }
-
+//TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
 void elegir_linea(int line)
 {
 	int inicio_linea;
@@ -194,7 +233,7 @@ void elegir_linea(int line)
 	}
 	XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, inicio_linea); //escribir con flanco de bajada del enable
 }
-
+//TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
 void pasar_a_string(int cont)
 {
 	int temporal=10,index=0,orden=1;
@@ -234,7 +273,7 @@ void pasar_a_string(int cont)
 
 	orden=1;
 }
-
+//TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
 void escribir(int linea, unsigned char *text)
 {
 	if(linea==1)
@@ -266,3 +305,8 @@ void escribir(int linea, unsigned char *text)
 		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x100|datos); //escribir con flanco de bajada del enable
 	}
 }
+/*********************************************************************
+** 																	**
+** EOF 																**
+** 																	**
+**********************************************************************/

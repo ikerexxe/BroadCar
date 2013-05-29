@@ -1,7 +1,7 @@
 /*****************************************************************************
 **											  								**
 ** project :  BroadCar		 												**
-** filename : keypad.h  						  					    	**
+** filename : keypadStellaris.h					  					    	**
 ** version : 1 									  							**
 ** date :  	2012-10-08		 		 									    **
 ** 											  								**
@@ -24,8 +24,8 @@
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef KEYPAD_H
-#define KEYPAD_H
+#ifndef KEYPADSTELLARIS_H
+#define KEYPADSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
@@ -38,10 +38,10 @@ void KEYPAD_leer();
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef KEYPAD_C
-#define PUB_KEYPAD extern
+#ifndef KEYPADSTELLARIS_C
+#define PUB_KEYPADSTELLARIS extern
 #else
-#define PUB_KEYPAD
+#define PUB_KEYPADSTELLARIS
 #endif
 /*****************************************************************************
 ** 																			**

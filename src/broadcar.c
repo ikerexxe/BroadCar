@@ -24,7 +24,6 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-//#include "hw_types.h"
 #include "broadcar.h"
 #include "motorAutomatas.h"
 #include "zigbee.h"
@@ -52,27 +51,6 @@
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
 void BROADCAR_inicializacion_sensores();
-
-int DIP_Read;
-int led;
-int contador;
-int TimerExpired;
-int cont_data=1;
-int contador_letra;
-int indice_uart;
-int uart_recibido;
-int led_data[256];
-int indice_uart;
-int longitud;
-int linea,indice,uart_recibido,recibido;
-int contador;
-unsigned char *a;
-char *cont_aux;
-int datos;
-unsigned char buffer_uart[256];
-XIntc InterruptController;  /* The instance of the Interrupt Controller */
-XUartLite uart_UartLite;			/* The instance of the UART */
-
 /*********************************************************************
 ** 																	**
 ** EXTERNAL VARIABLES 												**
@@ -94,7 +72,7 @@ int main(void)
     }
 }
 /**
- * @brief  Funci�n para inicializaci�n de los perif�ricos.
+ * @brief  Funcion para inicializaci�n de los perif�ricos.
  *
  * @return    -
  *
@@ -112,7 +90,7 @@ void BROADCAR_inicializacion(){
 
 }
 /**
- * @brief  Funci�n para elegir el paso a seguir en cada momento.
+ * @brief  Funcion para elegir el paso a seguir en cada momento.
  *
  * @return    -
  *
@@ -126,7 +104,7 @@ void BROADCAR_logica(){
 	MOTOR_AUTOMATA_ejecutar(&g_automata);
 }
 /**
- * @brief  Funci�n que inicializa el array que contiene el valor de los sensores.
+ * @brief  Funcion que inicializa el array que contiene el valor de los sensores.
  *
  * @return    -
  *

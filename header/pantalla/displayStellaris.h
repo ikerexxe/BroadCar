@@ -1,7 +1,7 @@
 /*****************************************************************************
 **											  								**
-** project :  ChatLM3S8962					 							  	**
-** filename : display.h  						  					    	**
+** project :  BroadCar						 							  	**
+** filename : displayStellaris.h  				  					    	**
 ** version : 1 									  							**
 ** date :  	2012-10-08		 		 									    **
 ** 											  								**
@@ -24,8 +24,8 @@
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef DISPLAYSTELLARIS_H
+#define DISPLAYSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
@@ -38,10 +38,10 @@ void DISPLAY_escribir(unsigned char * mensaje);
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef DISPLAY_C
-#define PUB_DISPLAY extern
+#ifndef DISPLAYSTELLARIS_C
+#define PUB_DISPLAYSTELLARIS extern
 #else
-#define PUB_DISPLAY
+#define PUB_DISPLAYSTELLARIS
 #endif
 /*****************************************************************************
 ** 																			**
