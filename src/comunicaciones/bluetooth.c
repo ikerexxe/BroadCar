@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "hw_types.h"
 #include "bluetooth.h"
 #include "uartDrv.h"
@@ -40,6 +41,9 @@
 *********************************************************************/
 tBoolean BLUETOOTH_hay_mensaje(void);
 void BLUETOOTH_recibir_mensaje(void);
+tBoolean BLUETOOTH_es_mensaje_emparejamiento();
+tBoolean BLUETOOTH_es_mensaje_conexion();
+tBoolean BLUETOOTH_es_mensaje_desconexion();
 void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje);
 void BLUETOOTH_calcular_llevada(int dato, int *contador_trama);
 void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje, int *contador_trama);
@@ -95,7 +99,7 @@ void BLUETOOTH_recepcion_mensajes(void){
 	if(b_mensaje){
 		if(g_b_conectado){
 			BLUETOOTH_recibir_mensaje();
-			if(gs_ba_recibido[0] == 'N'){
+			if(BLUETOOTH_es_mensaje_desconexion()){
 				g_b_conectado = false;
 				BLUETOOTH_vaciar_buffer_entrada();
 				pantalla = malloc(sizeof(unsigned char) * 20);
@@ -104,13 +108,13 @@ void BLUETOOTH_recepcion_mensajes(void){
 			}
 		}else{
 			BLUETOOTH_recibir_mensaje();
-			if(gs_ba_recibido[0] == 'S'){
+			if(BLUETOOTH_es_mensaje_emparejamiento()){
 				BLUETOOTH_enviar_emparejamiento();
 				BLUETOOTH_vaciar_buffer_entrada();
 				pantalla = malloc(sizeof(unsigned char) * 20);
 				sprintf(pantalla, "EMPAREJADO");
 				DISPLAY_escribir(pantalla);
-			}else if(gs_ba_recibido[0] == 'R'){
+			}else if(BLUETOOTH_es_mensaje_conexion()){
 				g_b_conectado = true;
 				BLUETOOTH_vaciar_buffer_entrada();
 				pantalla = malloc(sizeof(unsigned char) * 20);
@@ -132,6 +136,61 @@ void BLUETOOTH_enviar_mensaje(MENSAJEClass mensaje){
 	BLUETOOTH_vaciar_buffer_salida();
 	BLUETOOTH_formatear_mensaje(mensaje);
 	UART_send(gs_i_puerto_bluetooth, gs_ba_envio, &gs_i_tamano);
+}
+/**
+ * @brief  Funcion que verifica si es un mensaje de emparejamiento.
+ *
+ * @return    -
+ *
+ * Se verifica que el mensaje recibido por bluetooth es de
+ * emparejamiento: SSP CONFIRM **:**:**:**:**:** ****** ?
+ * Donde los asteriscos significan datos que cambian cada
+ * vez que se envia el mensaje
+*/
+tBoolean BLUETOOTH_es_mensaje_emparejamiento(){
+	tBoolean resultado = false;
+
+	if(!strncmp(gs_ba_recibido, "SSP CONFIRM", 11)){
+		resultado = true;
+	}
+
+	return resultado;
+}
+/**
+ * @brief  Funcion que verifica si es un mensaje de conexion.
+ *
+ * @return    -
+ *
+ * Se verifica que el mensaje recibido por bluetooth es de
+ * conexion: RING 0 **:**:**:**:**:** 1 RFCOMM
+ * Donde los asteriscos significan datos que cambian cada
+ * vez que se envia el mensaje
+*/
+tBoolean BLUETOOTH_es_mensaje_conexion(){
+	tBoolean resultado = false;
+
+	if(!strncmp(gs_ba_recibido, "RING 0 ", 7)){
+		resultado = true;
+	}
+
+	return resultado;
+}
+/**
+ * @brief  Funcion que verifica si es un mensaje de desconexion.
+ *
+ * @return    -
+ *
+ * Se verifica que el mensaje recibido por bluetooth es de
+ * desconexion: NO CARRIER 0 ERROR 0
+*/
+tBoolean BLUETOOTH_es_mensaje_desconexion(){
+	tBoolean resultado = false;
+
+	if(!strncmp(gs_ba_recibido, "NO CARRIER 0 ERROR 0", 20)){
+		resultado = true;
+	}
+
+	return resultado;
 }
 /**
  * @brief  Función que mira si se ha recibido un mensaje por bluetooth.
@@ -369,10 +428,12 @@ void BLUETOOTH_enviar_emparejamiento(void){
 		contador++;
 	}
 
-	mensaje_emparejamiento[29] = ' ';
-	mensaje_emparejamiento[30] = 'O';
-	mensaje_emparejamiento[31] = 'K';
-	contador = 32;
+	mensaje_emparejamiento[contador] = ' ';
+	contador++;
+	mensaje_emparejamiento[contador] = 'O';
+	contador++;
+	mensaje_emparejamiento[contador] = 'K';
+	contador++;
 
 	UART_send(gs_i_puerto_bluetooth, mensaje_emparejamiento, &contador);
 }
