@@ -28,7 +28,8 @@
 #define UARTCONFIG_H
 
 #define BUFF_SIZE 256
-#define BAUD_RATE 9600
+#define BAUD_RATE_0 9600
+#define BAUD_RATE_1 115200
 #define DATA_FRAME (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE)
 /*****************************************************************************
 ** 																			**

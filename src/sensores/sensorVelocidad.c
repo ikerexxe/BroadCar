@@ -69,13 +69,13 @@ void S_VELOCIDAD_accion(void){
 		g_cs_sensores[SENSOR_VELOCIDAD].tipo = VELOCIDAD;
 		g_cs_sensores[SENSOR_VELOCIDAD].hora = g_i_hora;
 		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud = NORTE;
-		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_grado = 90;
-		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_minuto = 59;
-		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_segundo = 58;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_grado = 43;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_minuto = 3;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.latitud_segundo = 46;
 		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud = OESTE;
-		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_grado = 180;
-		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_minuto = 2;
-		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_segundo = 3;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_grado = 2;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_minuto = 30;
+		g_cs_sensores[SENSOR_VELOCIDAD].posicion.longitud_segundo = 23;
 		g_cs_sensores[SENSOR_VELOCIDAD].valor = 15;
 
 		mensaje = ZIGBEE_crear_mensaje(g_cs_sensores[SENSOR_VELOCIDAD]);

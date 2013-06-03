@@ -69,13 +69,13 @@ void S_VISIBILIDAD_accion(void){
 		g_cs_sensores[SENSOR_VISIBILIDAD].tipo = LUMINOSIDAD;
 		g_cs_sensores[SENSOR_VISIBILIDAD].hora = g_i_hora;
 		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud = NORTE;
-		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud_grado = 90;
-		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud_minuto = 59;
-		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud_segundo = 58;
+		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud_grado = 43;
+		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud_minuto = 3;
+		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.latitud_segundo = 46;
 		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud = OESTE;
-		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_grado = 180;
-		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_minuto = 2;
-		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_segundo = 3;
+		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_grado = 2;
+		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_minuto = 30;
+		g_cs_sensores[SENSOR_VISIBILIDAD].posicion.longitud_segundo = 23;
 		g_cs_sensores[SENSOR_VISIBILIDAD].valor = 33;
 
 		mensaje = ZIGBEE_crear_mensaje(g_cs_sensores[SENSOR_VISIBILIDAD]);

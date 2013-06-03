@@ -113,7 +113,15 @@ int UART_open(int nPort)
 {
 	initUartPins(nPort);
 	UARTDisable(gs_ul_uarts_bases[nPort]);
-	UARTConfigSetExpClk(gs_ul_uarts_bases[nPort], SysCtlClockGet(), BAUD_RATE, DATA_FRAME);
+	switch(nPort)
+	{
+		case 0: UARTConfigSetExpClk(gs_ul_uarts_bases[nPort], SysCtlClockGet(), BAUD_RATE_0, DATA_FRAME);
+				break;
+		case 1: UARTConfigSetExpClk(gs_ul_uarts_bases[nPort], SysCtlClockGet(), BAUD_RATE_1, DATA_FRAME);
+				break;
+		default:
+				break;
+	}
 	UARTEnable(gs_ul_uarts_bases[nPort]);
 	gs_cu_uarts[nPort].inHead = 0;
 	gs_cu_uarts[nPort].inTail = 0;
