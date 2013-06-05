@@ -283,7 +283,7 @@ void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje){
 	gs_ba_envio[contador_trama] = gs_uc_caracter_barra;
 	contador_trama++;
 	/*Longitud*/
-	gs_ba_envio[contador_trama] = mensaje.posicion.longitud + 50;
+	gs_ba_envio[contador_trama] = mensaje.posicion.longitud + gs_i_cero_ascii;
 	contador_trama++;
 	gs_ba_envio[contador_trama] = gs_uc_caracter_punto;
 	contador_trama++;
