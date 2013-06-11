@@ -29,9 +29,12 @@
 #include "clock.h"
 #include "display.h"
 #include "keypad.h"
-#include "motorAutomatas.h"
 #include "zigbee.h"
 #include "bluetooth.h"
+#include "sensorEstado.h"
+#include "sensorObras.h"
+#include "sensorVelocidad.h"
+#include "sensorVisibilidad.h"
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -40,12 +43,6 @@
 void BROADCAR_inicializacion();
 void BROADCAR_logica();
 void BROADCAR_inicializacion_sensores();
-/*********************************************************************
-** 																	**
-** EXTERNAL VARIABLES 												**
-** 																	**
-**********************************************************************/
-extern TS_AUTOMATA g_automata; /*Automata que usa la aplicacion*/
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -78,18 +75,30 @@ void BROADCAR_inicializacion(){
 	BLUETOOTH_inicializacion();
 }
 /**
- * @brief  Función para elegir el paso a seguir en cada momento.
+ * @brief  Función donde se ejecuta la logica principal del programa.
  *
  * @return    -
  *
- * Primero se lee la tecla pulsada, luego se actualiza la pantalla teniendo
- * en cuenta la tecla pulsa, si se pulsa el select se envía el mensaje y se
- * reinicializa la parte de la pantalla en la que escribe el usuario.
- * Si se ha reibido algo por la UART y está almacenado en el buffer de software
- * se muestra en pantalla.
+ * Primero se lee la tecla pulsada, luego se mira cual ha sido la tecla pulsada
+ * y se actua en consecuencia, es decir, se muestra en pantalla la alerta y se envia
+ * por zigbee y bluetooth. Finalmente se mira si se ha recibido algun mensaje de
+ * otro controlador o del movil.
 */
 void BROADCAR_logica(){
-	MOTOR_AUTOMATA_ejecutar(&g_automata);
+	KEYPAD_leer();
+
+	if(S_ESTADO_cambio()){
+		S_ESTADO_accion();
+	}else if(S_OBRAS_cambio()){
+		S_OBRAS_accion();
+	}else if(S_VELOCIDAD_cambio()){
+		S_VELOCIDAD_accion();
+	}else if(S_VISIBILIDAD_cambio()){
+		S_VISIBILIDAD_accion();
+	}
+
+	ZIGBEE_recepcion_mensajes();
+	BLUETOOTH_recepcion_mensajes();
 }
 /**
  * @brief  Función que inicializa el array que contiene el valor de los sensores.
