@@ -54,12 +54,6 @@ int ZIGBEE_insertar_info_envio(MENSAJEClass mensaje, int contador);
 MENSAJEClass ZIGBEE_insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo);
 /*********************************************************************
 ** 																	**
-** EXPORTED VARIABLES 												**
-** 																	**
-*********************************************************************/
-//TODO: no hay
-/*********************************************************************
-** 																	**
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
@@ -90,7 +84,7 @@ void ZIGBEE_inicializacion(){
  * @brief  Funcion que ejecuta el automata de los mensajes
 */
 void ZIGBEE_recepcion_mensajes(void){
-	unsigned char * pantalla;
+	unsigned char * pantalla; /*Mensaje a mostrar en pantalla*/
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
 	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 
@@ -204,6 +198,7 @@ MENSAJEClass ZIGBEE_recibir_mensaje(void){
 	int numero_recibido = 3; /*Numero de bytes a coger del buffer intermedio*/
 	int checksum; /*Checksum del mensaje recibido*/
 	int contador = 0; /*Contador para trasladar los datos de temporal a recibido*/
+	unsigned char * pantalla; /*Mensaje a mostrar en pantalla*/
 
 	UART_recv(gs_i_puerto_zigbee, temporal, &numero_recibido);
 	for(contador = 0; contador < numero_recibido; contador++){
@@ -222,7 +217,9 @@ MENSAJEClass ZIGBEE_recibir_mensaje(void){
 			mensaje.id = NULL;
 		}
 	}else{
-		//TODO: ERROR!!!!!
+		pantalla = malloc(sizeof(unsigned char) * 20);
+		sprintf(pantalla, "MENSAJE ERRONEO");
+		DISPLAY_escribir(pantalla);
 	}
 
 	return mensaje;

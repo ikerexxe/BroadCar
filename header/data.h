@@ -28,7 +28,7 @@
 #define DATA_H
 
 //Listas numeradas
-enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, S_OBRAS /*TODO: puede que no corresponda*/};
+enum tipo_sensor{LUMINOSIDAD, PRECIPITACION, LIQUIDO_CARRETERA, TEMPERATURA, VELOCIDAD, S_OBRAS};
 enum hemisferio{NORTE, SUR, ESTE, OESTE};
 enum tipo_mensaje{TRAFICO_DENSO, OBRAS, VEHICULO_NO_VISIBLE, POCA_VISIBILIDAD, ESTADO_CARRETERA, ACCIDENTE_CARRETERA};
 enum tipo_poca_visibilidad{NIEVE, LLUVIA, NIEBLA};
@@ -107,7 +107,7 @@ typedef struct{
  */
 typedef struct{
 	enum tipo_sensor tipo;
-	int hora;				//TODO: el tipo se podria cambiar en un futuro
+	int hora;
 	COORDENADASClass posicion;
 	float valor;
 }SENSORClass;
@@ -117,7 +117,7 @@ typedef struct{
 typedef struct{
 	enum tipo_mensaje tipo;
 	int id;
-	int hora;				//TODO: el tipo se podria cambiar en un futuro
+	int hora;
 	COORDENADASClass posicion;
 	int ttl;				//numero de veces que se puede reenviar
 	DATO_MENSAJEClass valor;
