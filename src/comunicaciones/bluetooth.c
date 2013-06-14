@@ -56,7 +56,7 @@ void BLUETOOTH_vaciar_buffer_salida(void);
 ** 																	**
 **********************************************************************/
 tBoolean g_b_conectado = false;
-static int gs_i_puerto_bluetooth = 1; /*Puerto UART que se usa para la comunicacion con el modulo bluetooth*/
+static int gs_i_puerto_bluetooth = 0; /*Puerto UART que se usa para la comunicacion con el modulo bluetooth*/
 static int gs_i_tamano = 0; /*Tamaño del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_recibido[255]; /*Mensaje recibido en formato byte*/
@@ -169,7 +169,7 @@ tBoolean BLUETOOTH_es_mensaje_emparejamiento(){
 tBoolean BLUETOOTH_es_mensaje_conexion(){
 	tBoolean resultado = false;
 
-	if(!strncmp(gs_ba_recibido, "RING 0 ", 7)){
+	if(!strncmp(gs_ba_recibido, "RING", 4)){
 		resultado = true;
 	}
 

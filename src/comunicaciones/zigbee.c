@@ -61,7 +61,7 @@ MENSAJEClass g_cm_mensajes[MAX_MENSAJES]; /*Mensajes que se han recibido*/
 static int gs_i_numero_cabecera = 17; /*Numero de elementos que tiene la cabecera de la trama zigbee*/
 static unsigned char gs_uc_caracter_vacio = 0x00; /*Byte vacio = 00000000*/
 static unsigned char gs_uc_caracter_lleno = 255; /*Byte lleno = 11111111*/
-static int gs_i_puerto_zigbee = 0; /*Puerto UART que se usa para la comunicacion con el modulo zigbee*/
+static int gs_i_puerto_zigbee = 1; /*Puerto UART que se usa para la comunicacion con el modulo zigbee*/
 static int gs_i_tamano = 0; /*Tamaño del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_length[2]; /*Tamaño del mensaje que se usa para enviar en la cabecera de la trama*/
