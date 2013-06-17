@@ -61,12 +61,14 @@ int calcular_checksum(uint8_t mensaje[]);
 MENSAJEClass insertar_info_mensaje(SENSORClass sensor, MENSAJEClass mensaje);
 int insertar_info_envio(MENSAJEClass mensaje, int contador);
 MENSAJEClass insertar_tipo_mensaje(MENSAJEClass mensaje, int tipo);
+int num_plot;
 /*********************************************************************
 ** 																	**
 ** EXPORTED VARIABLES 												**
 ** 																	**
 *********************************************************************/
 //TODO: no hay
+extern int longitud_trama;
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -80,6 +82,7 @@ static int gs_i_puerto_zigbee = 1; /*Puerto UART que se usa para la comunicacion
 static int gs_i_tamano = 0; /*Tama�o del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_length[2]; /*Tama�o del mensaje que se usa para enviar en la cabecera de la trama*/
+static unsigned char pantalla[15];
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -94,17 +97,20 @@ static uint8_t gs_ba_length[2]; /*Tama�o del mensaje que se usa para enviar en
 */
 void ZIGBEE_inicializacion(){
 	UART_open(gs_i_puerto_zigbee);
+	num_plot = 0;
 }
 /**
  * @brief  Funcion que ejecuta el automata de los mensajes
 */
 void ZIGBEE_recepcion_mensajes(void){
-	unsigned char * pantalla;
+	//unsigned char * pantalla;
 	MENSAJEClass m_mensaje; /*Cuerpo del mensaje que se recibe por zigbee*/
 	boolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
+	int i;
 
 	b_mensaje = hay_mensaje();
 	if(b_mensaje){
+		num_plot++;
 		m_mensaje = recibir_mensaje();
 		if(m_mensaje.id != NULL){
 			if(g_i_numero_mensaje < (MAX_MENSAJES / 2)){
@@ -115,7 +121,7 @@ void ZIGBEE_recepcion_mensajes(void){
 				g_cm_mensajes[(g_i_numero_mensaje - 1)] = m_mensaje;
 			}
 			//TODO: enviar mendiante bluetooth
-			pantalla = malloc(sizeof(unsigned char) * 20);
+			//pantalla = malloc(sizeof(unsigned char) * 20);
 			switch(m_mensaje.tipo){
 				case TRAFICO_DENSO:
 					sprintf(pantalla, "M_TR_DENSO %d", m_mensaje.id);
@@ -143,7 +149,9 @@ void ZIGBEE_recepcion_mensajes(void){
 					break;
 			}
 			DISPLAY_escribir(pantalla);
+			for (i=0;i<15;i++) pantalla[i]=0;
 			reenviar_mensaje(m_mensaje);
+			//for (i=0;i<34;i++) m_mensaje.id[i]='X';
 		}
 	}
 }
@@ -177,12 +185,13 @@ void ZIGBEE_enviar_mensaje(SENSORClass sensor){
  * de que se ha recibido el mensaje completo.
 */
 boolean hay_mensaje(void){
-	int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
+	static int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
 	boolean completo = false; /*Si se ha recibido un mensaje completo*/
 
 	numero_elementos = UART_nElementosIn(gs_i_puerto_zigbee);
-	if(numero_elementos >= 33){
+	if(numero_elementos >= longitud_trama){
 		completo = true;
+		//longitud_trama=0;
 	}
 
 	return completo;
@@ -217,6 +226,7 @@ MENSAJEClass recibir_mensaje(void){
 	checksum = calcular_checksum(recibido);
 	if(checksum == recibido[numero_recibido + 2]){
 		mensaje = tratar_mensaje(recibido);
+		recibido_anteriormente(mensaje);
 		if(mensaje.id == g_i_mi_id || recibido_anteriormente(mensaje)){
 			mensaje.id = NULL;
 		}

@@ -26,6 +26,8 @@
 ** 																	**
 **********************************************************************/
 #include "clockSpartan.h"
+#include "broadcar.h"
+#ifdef SPARTAN
 #include "xparameters.h"
 #include "xil_exception.h"
 #include "xtmrctr_l.h"   //Libreria del timer
@@ -76,7 +78,13 @@ void TmrCtrDisableIntr(XIntc* IntcInstancePtr, u16 IntrId);
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
-//TODO: a comentar lo que hace esta funcion
+/**
+ * @brief  Inicializacion del Timer.
+ *
+ * @return    -
+ *
+ * Se inicializa el Timer que aumentara un contador a cada segundo.
+*/
 void CLOCK_inicializacion()
 {
 	TmrCtrIntrExample(&InterruptController,
@@ -362,6 +370,7 @@ void TmrCtrDisableIntr(XIntc* IntcInstancePtr, u16 IntrId)
 
 	return;
 }
+#endif
 /*********************************************************************
 ** 																	**
 ** EOF 																**

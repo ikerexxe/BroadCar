@@ -25,11 +25,14 @@
 ** 																	**
 **********************************************************************/
 #include "displaySpartan.h"
+#include "broadcar.h"
+#ifdef SPARTAN
 #include "xparameters.h"
 #include "xtmrctr_l.h"
 #include "xtmrctr.h"
 #include "xgpio.h"
 #include "xgpio_l.h"
+
 /*********************************************************************
 ** 																	**
 ** DEFINITIONS AND MACROS 											**
@@ -58,7 +61,13 @@ void escribir(int linea, unsigned char *text);
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
-//TODO: a comentar lo que hace esta funcion
+/**
+ * @brief  Funcion que escribe en pantalla.
+ *
+ * @return    -
+ *
+ * Funcion que escribe en pantalla la informacion recibida por zigbee.
+*/
 void DISPLAY_escribir(unsigned char * mensaje)
 {
 	int i;
@@ -120,7 +129,13 @@ void DISPLAY_escribir(unsigned char * mensaje)
 
 uart_recibido=0;
 }
-//TODO: a comentar lo que hace esta funcion
+/**
+ * @brief  Funcion que inicializa la pantalla.
+ *
+ * @return    -
+ *
+ * Se inicializa la pantalla y coloca el cursor al inicio de la primera fila.
+*/
 void DISPLAY_inicializacion(void)
 {
 	XTmrCtr_Initialize(&DelayTimer1, 1);
@@ -194,7 +209,13 @@ void DISPLAY_inicializacion(void)
 	}
 	XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x1); //escribir con flanco de bajada del enable
 }
-//TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
+/**
+ * @brief  Se elige la linea de la pantalla en la que escribir.
+ *
+ * @return    -
+ *
+ * Se elige la linea en la que escribir, ya sea la primera o la segunda.
+*/
 void elegir_linea(int line)
 {
 	int inicio_linea;
@@ -224,7 +245,13 @@ void elegir_linea(int line)
 	XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, inicio_linea); //escribir con flanco de bajada del enable
 }
 
-//TODO: a comentar lo que hace esta funcion y ademas a�adirle el DISPLAY por delante del nombre de la funcion
+/**
+ * @brief  Escribe en un buffer.
+ *
+ * @return    -
+ *
+ * Una vez elegida la linea se escribe en un buffer cuyo contenido se volcara en la pantalla.
+*/
 void escribir(int linea, unsigned char *text)
 {
 	if(linea==1)
@@ -256,6 +283,7 @@ void escribir(int linea, unsigned char *text)
 		XGpio_WriteReg(XPAR_PANTALLA_BASEADDR, 0, 0x100|datos_pantalla); //escribir con flanco de bajada del enable
 	}
 }
+#endif
 /*********************************************************************
 ** 																	**
 ** EOF 																**

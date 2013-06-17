@@ -117,9 +117,9 @@ FIN_AUTOMATA(g_automata, 101, AUTOMATA_finish)
 boolean cambio_finalizar_estado(void){
 	int i = 0;
 
-	for(i = 0; i < 5000; i++){
+	/*for(i = 0; i < 5000; i++){
 
-	}
+	}*/
 
 	return true;
 }

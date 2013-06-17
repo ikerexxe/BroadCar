@@ -36,6 +36,7 @@
 #include "clockSpartan.h"
 #include "displaySpartan.h"
 #include "keypadSpartan.h"
+#include "uartDrvSpartan.h"
 #include "xintc.h"
 #include "xintc_l.h"
 #include "xil_exception.h"
@@ -57,6 +58,7 @@ void BROADCAR_inicializacion_sensores();
 ** 																	**
 **********************************************************************/
 extern TS_AUTOMATA g_automata; /*Automata que usa la aplicacion*/
+extern XUartLite uart_UartLite;
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -81,13 +83,16 @@ int main(void)
 */
 void BROADCAR_inicializacion(){
 	g_i_numero_mensaje = 0;
-	g_i_mi_id = 2;
+	g_i_mi_id = 1;
 	CLOCK_inicializacion();
 	BROADCAR_inicializacion_sensores();
 	KEYPAD_inicializacion();
 	DISPLAY_inicializacion();
 	ZIGBEE_inicializacion();
-
+	//while(1)
+	//{
+		XUartLite_Send(&uart_UartLite, "2344\n", 5);
+	//}
 }
 /**
  * @brief  Funcion para elegir el paso a seguir en cada momento.
@@ -101,6 +106,7 @@ void BROADCAR_inicializacion(){
  * se muestra en pantalla.
 */
 void BROADCAR_logica(){
+	//UART_recibir();
 	MOTOR_AUTOMATA_ejecutar(&g_automata);
 }
 /**

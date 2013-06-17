@@ -25,20 +25,33 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include "broadcar.h"
+#ifdef SPARTAN
 #include "xparameters.h"
 #include "xgpio.h"
 #include "xgpio_l.h"
-#include "broadcar.h"
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
 ** 																	**
 **********************************************************************/
-//TODO: a comentar lo que hace esta funcion
+/**
+ * @brief  Inicializacion de los botones.
+ *
+ * @return    -
+ *
+ * Esta funcion no se usa dado que los botones se definen en hardware.
+*/
 void KEYPAD_inicializacion(){
 
 }
-//TODO: a comentar lo que hace esta funcion
+/**
+ * @brief  Lectura de los botones.
+ *
+ * @return    -
+ *
+ * Se lee el estado de los botones.
+*/
 void KEYPAD_leer()
 {
 	unsigned long ul_pressed_data; /*Guarda el valor de la tecla pulsada*/
@@ -48,6 +61,7 @@ void KEYPAD_leer()
 	g_ul_keypad_switches = ul_pressed_data;
 	g_ul_keypad_switches = g_ul_keypad_switches;// & 0x1f;
 }
+#endif
 /*********************************************************************
 ** 																	**
 ** EOF 																**

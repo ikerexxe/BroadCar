@@ -35,6 +35,7 @@ void UART_open(int nPort);
 void UART_close(int nPort);
 int UART_recv(int nPort, unsigned char *p, int *pSize);
 int UART_send(int nPort, unsigned char *p, int *pSize);
+int UART_recibir(void);
 int UART_nElementosIn(int nPort);
 /*****************************************************************************
 ** 																			**
