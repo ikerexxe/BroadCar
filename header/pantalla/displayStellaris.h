@@ -1,7 +1,7 @@
 /*****************************************************************************
 **											  								**
-** project :  BroadCar		 												**
-** filename : keypad.h  						  					    	**
+** project :  BroadCar						 							  	**
+** filename : displayStellaris.h  				  					    	**
 ** version : 1 									  							**
 ** date :  	2012-10-08		 		 									    **
 ** 											  								**
@@ -14,8 +14,8 @@
 **										        							**
 **VERSION HISTORY:									  						**
 **----------------									  						**
-**Version : 3										  						**
-**Date : 2013-01-17									 					    **
+**Version : 2										  						**
+**Date : 2012-12-05									 					    **
 **Revised by : iker pedrosa                    	  							**
 **Description : Modified version for broadcar application.					**
 *****************************************************************************/
@@ -24,24 +24,24 @@
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef KEYPAD_H
-#define KEYPAD_H
+#ifndef DISPLAYSTELLARIS_H
+#define DISPLAYSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-void KEYPAD_inicializacion();
-void KEYPAD_leer();
+void DISPLAY_inicializacion();
+void DISPLAY_escribir(unsigned char * mensaje);
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef KEYPAD_C
-#define PUB_KEYPAD extern
+#ifndef DISPLAYSTELLARIS_C
+#define PUB_DISPLAYSTELLARIS extern
 #else
-#define PUB_KEYPAD
+#define PUB_DISPLAYSTELLARIS
 #endif
 /*****************************************************************************
 ** 																			**

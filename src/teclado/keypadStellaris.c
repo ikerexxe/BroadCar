@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
 ** project : BroadCar		 										**
-** filename : keypad.c 												**
+** filename : keypadStellaris.c										**
 ** version : 1 														**
 ** date : 2012-10-08	 											**
 ** 																	**
@@ -19,7 +19,7 @@
 **Revised by : iker pedrosa											**
 **Description : Modified version for broadcar application.			**
 *********************************************************************/
-#define KEYPAD_C
+#define KEYPADSTELLARIS_C
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
@@ -30,7 +30,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
 #include "broadcar.h"
-#include "keypad.h"
+#include "keypadStellaris.h"
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**

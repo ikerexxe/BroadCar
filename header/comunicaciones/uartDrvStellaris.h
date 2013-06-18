@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
-** project :  BroadCar						 							  	**
-** filename : sensorVelocidad.h					  					    	**
+** project :  ChatLM3S8962					 							  	**
+** filename : uartDrvStellaris.h				  					    	**
 ** version : 1 									  							**
-** date :  	2013-01-22		 		 									    **
+** date :  	2012-10-08		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -15,40 +15,27 @@
 **VERSION HISTORY:									  						**
 **----------------									  						**
 **Version : 1										  						**
-**Date : 2013-01-22									 					    **
+**Date : 2012-12-16									 					    **
 **Revised by : iker pedrosa                    	  							**
-**Description : Original version.							  				**
+**Description : Modified version for the chat.				  				**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef SENSORVELOCIDAD_H
-#define SENSORVELOCIDAD_H
-/*****************************************************************************
-**																			**
-** MODULES USED 															**
-** 																			**
-******************************************************************************/
-#include "broadcar.h"
+#ifndef UARTDRVSTELLARIS_H
+#define UARTDRVSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-boolean S_VELOCIDAD_cambio(void);
-void S_VELOCIDAD_accion(void);
-/*****************************************************************************
-**	 																		**
-** TYPEDEFS AND STRUCTURES 													**
-** 																			**
-*****************************************************************************/
-#ifndef SENSORVELOCIDAD_C
-#define PUB_SENSORVELOCIDAD extern
-#else
-#define PUB_SENSORVELOCIDAD
-#endif
+int UART_open(int nPort);
+void UART_close(int nPort);
+int UART_recv(int nPort, unsigned char *p, int *pSize);
+int UART_send(int nPort, unsigned char *p, int *pSize);
+int UART_nElementosIn(int nPort);
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

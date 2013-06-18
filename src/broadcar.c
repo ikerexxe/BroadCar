@@ -24,17 +24,31 @@
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
-#include "hw_types.h"
 #include "broadcar.h"
-#include "clock.h"
-#include "display.h"
-#include "keypad.h"
-#include "zigbee.h"
+//#include "sensorEstado.h"
+//#include "sensorObras.h"
+//#include "sensorVelocidad.h"
+//#include "sensorVisibilidad.h"
 #include "bluetooth.h"
-#include "sensorEstado.h"
-#include "sensorObras.h"
-#include "sensorVelocidad.h"
-#include "sensorVisibilidad.h"
+#include "motorAutomatas.h"
+#include "zigbee.h"
+#ifdef STELLARIS
+#include "hw_types.h"
+#include "clockStellaris.h"
+#include "displayStellaris.h"
+#include "keypadStellaris.h"
+#else
+#include "clockSpartan.h"
+#include "displaySpartan.h"
+#include "keypadSpartan.h"
+#include "uartDrvSpartan.h"
+#include "xintc.h"
+#include "xintc_l.h"
+#include "xil_exception.h"
+#include "xuartlite.h"
+#include "xuartlite_l.h"
+#include "xparameters.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -57,7 +71,7 @@ int main(void)
     }
 }
 /**
- * @brief  Función para inicialización de los periféricos.
+ * @brief  Funcion para inicializacion de los perifericos.
  *
  * @return    -
  *
@@ -66,7 +80,7 @@ int main(void)
 */
 void BROADCAR_inicializacion(){
 	g_i_numero_mensaje = 0;
-	g_i_mi_id = 2;
+	g_i_mi_id = 1;
 	CLOCK_inicializacion();
 	BROADCAR_inicializacion_sensores();
 	KEYPAD_inicializacion();
@@ -101,7 +115,7 @@ void BROADCAR_logica(){
 	BLUETOOTH_recepcion_mensajes();
 }
 /**
- * @brief  Función que inicializa el array que contiene el valor de los sensores.
+ * @brief  Funcion que inicializa el array que contiene el valor de los sensores.
  *
  * @return    -
  *

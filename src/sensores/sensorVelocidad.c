@@ -27,13 +27,16 @@
 **********************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "hw_types.h"
 #include "sensorVelocidad.h"
 #include "broadcar.h"
-#include "display.h"
 #include "data.h"
 #include "zigbee.h"
 #include "bluetooth.h"
+#ifdef STELLARIS
+#include "displayStellaris.h"
+#else
+#include "displaySpartan.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -45,8 +48,8 @@
  *
  * @return        Si el cambio se ha producido en el sensor de velocidad
 */
-tBoolean S_VELOCIDAD_cambio(void){
-	tBoolean cambio = false; /*Si ha cambiado el estado de la tecla*/
+boolean S_VELOCIDAD_cambio(void){
+	boolean cambio = false; /*Si ha cambiado el estado de la tecla*/
 
 	if(g_uc_changed_data && g_uc_changed_data < 10){
 		if(g_ul_keypad_switches == KEY_DOWN){

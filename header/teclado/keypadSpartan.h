@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
-** project :  BroadCar						 							  	**
-** filename : sensorVelocidad.h					  					    	**
+** project :  BroadCar		 												**
+** filename : keypadSpartan.h  					  					    	**
 ** version : 1 									  							**
-** date :  	2013-01-22		 		 									    **
+** date :  	2013-05-27		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -15,39 +15,33 @@
 **VERSION HISTORY:									  						**
 **----------------									  						**
 **Version : 1										  						**
-**Date : 2013-01-22									 					    **
-**Revised by : iker pedrosa                    	  							**
-**Description : Original version.							  				**
+**Date : 2013-05-27									 					    **
+**Revised by : daniel collado                  	  							**
+**Description : Original version.											**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef SENSORVELOCIDAD_H
-#define SENSORVELOCIDAD_H
-/*****************************************************************************
-**																			**
-** MODULES USED 															**
-** 																			**
-******************************************************************************/
-#include "broadcar.h"
+#ifndef KEYPADSPARTAN_H
+#define KEYPADSPARTAN_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-boolean S_VELOCIDAD_cambio(void);
-void S_VELOCIDAD_accion(void);
+void KEYPAD_inicializacion();
+void KEYPAD_leer();
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef SENSORVELOCIDAD_C
-#define PUB_SENSORVELOCIDAD extern
+#ifndef KEYPADSPARTAN_C
+#define PUB_KEYPADSPARTAN extern
 #else
-#define PUB_SENSORVELOCIDAD
+#define PUB_KEYPADSPARTAN
 #endif
 /*****************************************************************************
 ** 																			**

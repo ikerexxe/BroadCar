@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
 ** project :  BroadCar						 							  	**
-** filename : sensorVelocidad.h					  					    	**
+** filename : displaySpartan.h  				  					    	**
 ** version : 1 									  							**
-** date :  	2013-01-22		 		 									    **
+** date :  	2013-05-27		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -15,39 +15,33 @@
 **VERSION HISTORY:									  						**
 **----------------									  						**
 **Version : 1										  						**
-**Date : 2013-01-22									 					    **
-**Revised by : iker pedrosa                    	  							**
-**Description : Original version.							  				**
+**Date : 2013-05-27									 					    **
+**Revised by : daniel collado                  	  							**
+**Description : Original version.											**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef SENSORVELOCIDAD_H
-#define SENSORVELOCIDAD_H
-/*****************************************************************************
-**																			**
-** MODULES USED 															**
-** 																			**
-******************************************************************************/
-#include "broadcar.h"
+#ifndef DISPLAYSPARTAN_H_
+#define DISPLAYSPARTAN_H_
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-boolean S_VELOCIDAD_cambio(void);
-void S_VELOCIDAD_accion(void);
+void DISPLAY_inicializacion(void);
+void DISPLAY_escribir(unsigned char * mensaje);
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef SENSORVELOCIDAD_C
-#define PUB_SENSORVELOCIDAD extern
+#ifndef DISPLAYSPARTAN_C
+#define PUB_DISPLAYSPARTAN extern
 #else
-#define PUB_SENSORVELOCIDAD
+#define PUB_DISPLAYSPARTAN
 #endif
 /*****************************************************************************
 ** 																			**

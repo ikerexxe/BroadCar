@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
-** project :  ChatLM3S8962					 							  	**
-** filename : display.h  						  					    	**
+** project :  BroadCar						 							  	**
+** filename : uartDrvSpartan.h  				  					    	**
 ** version : 1 									  							**
-** date :  	2012-10-08		 		 									    **
+** date :  	2013-05-24		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -14,35 +14,29 @@
 **										        							**
 **VERSION HISTORY:									  						**
 **----------------									  						**
-**Version : 2										  						**
-**Date : 2012-12-05									 					    **
-**Revised by : iker pedrosa                    	  							**
-**Description : Modified version for broadcar application.					**
+**Version : 1										  						**
+**Date : 2013-05-24									 					    **
+**Revised by : daniel collado                  	  							**
+**Description : Original version.											**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef UARTDRVSPARTAN_H
+#define UARTDRVSPARTAN_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-void DISPLAY_inicializacion();
-void DISPLAY_escribir(unsigned char * mensaje);
-/*****************************************************************************
-**	 																		**
-** TYPEDEFS AND STRUCTURES 													**
-** 																			**
-*****************************************************************************/
-#ifndef DISPLAY_C
-#define PUB_DISPLAY extern
-#else
-#define PUB_DISPLAY
-#endif
+void UART_open(int nPort);
+void UART_close(int nPort);
+int UART_recv(int nPort, unsigned char *p, int *pSize);
+int UART_send(int nPort, unsigned char *p, int *pSize);
+int UART_recibir(void);
+int UART_nElementosIn(int nPort);
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

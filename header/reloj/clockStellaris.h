@@ -1,9 +1,9 @@
 /*****************************************************************************
 **											  								**
 ** project :  BroadCar						 							  	**
-** filename : sensorVelocidad.h					  					    	**
+** filename : clock.h  						  					    		**
 ** version : 1 									  							**
-** date :  	2013-01-22		 		 									    **
+** date :  	2012-10-08		 		 									    **
 ** 											  								**
 ******************************************************************************
 ** 											  								**
@@ -14,40 +14,33 @@
 **										        							**
 **VERSION HISTORY:									  						**
 **----------------									  						**
-**Version : 1										  						**
-**Date : 2013-01-22									 					    **
+**Version : 2										  						**
+**Date : 2012-12-05									 					    **
 **Revised by : iker pedrosa                    	  							**
-**Description : Original version.							  				**
+**Description : Modified version for the chat.				  				**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef SENSORVELOCIDAD_H
-#define SENSORVELOCIDAD_H
-/*****************************************************************************
-**																			**
-** MODULES USED 															**
-** 																			**
-******************************************************************************/
-#include "broadcar.h"
+#ifndef CLOCKSTELLARIS_H
+#define CLOCKSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-boolean S_VELOCIDAD_cambio(void);
-void S_VELOCIDAD_accion(void);
+void CLOCK_inicializacion();
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef SENSORVELOCIDAD_C
-#define PUB_SENSORVELOCIDAD extern
+#ifndef CLOCKSTELLARIS_C
+#define PUB_CLOCKSTELLARIS extern
 #else
-#define PUB_SENSORVELOCIDAD
+#define PUB_CLOCKSTELLARIS
 #endif
 /*****************************************************************************
 ** 																			**

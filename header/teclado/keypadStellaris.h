@@ -1,7 +1,7 @@
 /*****************************************************************************
 **											  								**
-** project :  ChatLM3S8962					 							  	**
-** filename : clock.h  						  					    		**
+** project :  BroadCar		 												**
+** filename : keypadStellaris.h					  					    	**
 ** version : 1 									  							**
 ** date :  	2012-10-08		 		 									    **
 ** 											  								**
@@ -14,40 +14,35 @@
 **										        							**
 **VERSION HISTORY:									  						**
 **----------------									  						**
-**Version : 2										  						**
-**Date : 2012-12-05									 					    **
+**Version : 3										  						**
+**Date : 2013-01-17									 					    **
 **Revised by : iker pedrosa                    	  							**
-**Description : Modified version for the chat.				  				**
+**Description : Modified version for broadcar application.					**
 *****************************************************************************/
 /*****************************************************************************
 ** 																			**
 ** DEFINITIONS AND MACROS 													**
 ** 																			**
 ******************************************************************************/
-#ifndef CLOCK_H
-#define CLOCK_H
+#ifndef KEYPADSTELLARIS_H
+#define KEYPADSTELLARIS_H
 /*****************************************************************************
 ** 																			**
 ** PROTOTYPES OF GLOBAL FUNCTIONS											**
 ** 																			**
 ******************************************************************************/
-void CLOCK_inicializacion();
+void KEYPAD_inicializacion();
+void KEYPAD_leer();
 /*****************************************************************************
 **	 																		**
 ** TYPEDEFS AND STRUCTURES 													**
 ** 																			**
 *****************************************************************************/
-#ifndef CLOCK_C
-#define PUB_CLOCK extern
+#ifndef KEYPADSTELLARIS_C
+#define PUB_KEYPADSTELLARIS extern
 #else
-#define PUB_CLOCK
+#define PUB_KEYPADSTELLARIS
 #endif
-/*****************************************************************************
-** 																			**
-** GLOBAL VARIABLES 														**
-** 																			**
-*****************************************************************************/
-
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

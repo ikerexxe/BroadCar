@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
-** project : ChatLM3S8962	 										**
-** filename : clock.c 												**
+** project : BroadCar		 										**
+** filename : clockStellaris.c										**
 ** version : 1 														**
 ** date : 2012-10-08	 											**
 ** 																	**
@@ -19,18 +19,18 @@
 **Revised by : iker pedrosa											**
 **Description : Modified version for the chat.						**
 *********************************************************************/
-#define CLOCK_C
+#define CLOCKSTELLARIS_C
 /*********************************************************************
 **																	**
 ** MODULES USED 													**
 ** 																	**
 **********************************************************************/
+#include "clockStellaris.h"
+#include "broadcar.h"
 #include "hw_types.h"
 #include "systick.h"
 #include "interrupt.h"
-#include "clock.h"
 #include "driverlib/sysctl.h"
-#include "broadcar.h"
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
@@ -43,7 +43,7 @@ static unsigned long gs_ul_system_clock; /*Frecuencia del clock*/
 ** 																	**
 **********************************************************************/
 /**
- * @brief  Función para inicializar el clock.
+ * @brief  Funcion para inicializar el clock.
  *
  * @return    -
  *

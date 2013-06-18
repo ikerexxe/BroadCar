@@ -1,7 +1,7 @@
 /*****************************************************************************
 **											  								**
 ** project :  BroadCar						 							  	**
-** filename : chat.h	  						  					    	**
+** filename : broadcar.h						  					    	**
 ** version : 1 									  							**
 ** date :  	2013-01-17		 		 									    **
 ** 											  								**
@@ -17,7 +17,7 @@
 **Version : 1										  						**
 **Date : 2013-01-17									 					    **
 **Revised by : iker pedrosa                    	  							**
-**Description : Modified version for the chat.				  				**
+**Description : Original version.							  				**
 *****************************************************************************/
 /*****************************************************************************
 **																			**
@@ -33,15 +33,27 @@
 #ifndef BROADCAR_H
 #define BROADCAR_H
 /*
- * Definición de las teclas
+ * Definicion de la arquitectura
  */
+//#define STELLARIS
+#define SPARTAN
+/*
+ * Definicion de las teclas
+ */
+#ifdef STELLARIS
 #define KEY_UP 0x1e     //11110
 #define KEY_DOWN 0x1d   //11101
 #define KEY_LEFT 0x1b   //11011
 #define KEY_RIGHT 0x17  //10111
 #define KEY_SELECT 15 //01111
+#else
+#define KEY_UP 0x1     //11110
+#define KEY_DOWN 0x2   //11101
+#define KEY_LEFT 0x4   //11011
+#define KEY_RIGHT 0x8  //10111
+#endif
 /*
- * Definición del numero maximo de caracteres por linea
+ * Definicion del numero maximo de caracteres por linea
  */
 #define MAX_ELEMS_LINEA 16
 /*
@@ -60,7 +72,7 @@
 #define SENSOR_OBRAS 2
 #define SENSOR_VELOCIDAD 3
 /*
- * Definición de NULL
+ * Definicion de NULL
  */
 #ifndef NULL
 #define NULL 0
@@ -71,9 +83,25 @@
 ** 																			**
 *****************************************************************************/
 /*
- * Definición de BYTE
+ * Definicion de BYTE
  */
 typedef char BYTE;
+/*
+ * Definiciï¿½n de Boolean
+ */
+typedef unsigned char boolean;
+/*
+ * Definiciï¿½n de true
+ */
+#ifndef true
+#define true 1
+#endif
+/*
+ * Definiciï¿½n de false
+ */
+#ifndef false
+#define false 0
+#endif
 /*****************************************************************************
 ** 																			**
 ** GLOBAL VARIABLES 														**
@@ -83,8 +111,8 @@ SENSORClass g_cs_sensores[NUMERO_SENSORES]; /*Valores de todos los sensores del 
 int g_i_hora; /*Hora del sistema*/
 int g_i_numero_mensaje; /*Indice dle numero de mensajes que se han recibido*/
 int g_i_mi_id; /*Identificador del vehiculo*/
-unsigned long g_ul_keypad_switches; /*Valor leído en los botones*/
-unsigned char g_uc_changed_data; /*Si ha cambiado la tecla que se está pulsando*/
+unsigned long g_ul_keypad_switches; /*Valor leido en los botones*/
+unsigned char g_uc_changed_data; /*Si ha cambiado la tecla que se esta pulsando*/
 /*****************************************************************************
 ** 																			**
 ** EOF 																		**

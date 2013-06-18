@@ -1,7 +1,7 @@
 /*********************************************************************
 ** 																	**
 ** project : BroadCar		 										**
-** filename : display.c												**
+** filename : displayStellaris.c									**
 ** version : 1 														**
 ** date : 2012-10-08	 											**
 ** 																	**
@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "rit128x96x4.h"
-#include "display.h"
+#include "displayStellaris.h"
 #include "displayGenerico.h"
 #include "framebuffer.h"
 #include "hw_types.h"
@@ -36,7 +36,7 @@
 ** DEFINITIONS AND MACROS 											**
 ** 																	**
 **********************************************************************/
-#define DISPLAY_C
+#define DISPLAYSTELLARIS_C
 /*********************************************************************
 ** 																	**
 ** GLOBAL VARIABLES 												**
