@@ -59,6 +59,7 @@ void BROADCAR_inicializacion_sensores();
 **********************************************************************/
 extern TS_AUTOMATA g_automata; /*Automata que usa la aplicacion*/
 extern XUartLite uart_UartLite;
+extern unsigned char letra;
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -91,7 +92,8 @@ void BROADCAR_inicializacion(){
 	ZIGBEE_inicializacion();
 	//while(1)
 	//{
-		XUartLite_Send(&uart_UartLite, "2344\n", 5);
+	XUartLite_Send(&uart_UartLite_1, letra, 1);
+		//XUartLite_Send(&uart_UartLite, "2344\n", 5);
 	//}
 }
 /**

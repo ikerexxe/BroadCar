@@ -72,6 +72,7 @@ int flag=0;
 int i=0;
 int indice_entrada=0;
 int longitud_trama=33;
+unsigned char letra=0x30;
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
@@ -79,6 +80,9 @@ int longitud_trama=33;
 *********************************************************************/
 void interrupcion_uart_send(void *CallBackRef, unsigned int EventData);
 void interrupcion_uart_recv(void *CallBackRef, unsigned int EventData);
+
+void interrupcion_uart_send_bluetooth(void *CallBackRef, unsigned int EventData);
+void interrupcion_uart_recv_bluetooth(void *CallBackRef, unsigned int EventData);
 /*********************************************************************
 ** 																	**
 ** LOCAL FUNCTIONS 													**
@@ -97,21 +101,26 @@ void UART_open(int nPort)
 
 	XIntc_Initialize(&InterruptController, XPAR_MICROBLAZE_0_INTC_DEVICE_ID);
 	// Inicializar UART
-	//XUartLite_Initialize(&uart_UartLite, XPAR_UARTLITE_2_DEVICE_ID);
-	XUartLite_Initialize(&uart_UartLite, XPAR_UARTLITE_1_DEVICE_ID);
+	XUartLite_Initialize(&uart_UartLite, XPAR_UARTLITE_2_DEVICE_ID);
+	XUartLite_Initialize(&uart_UartLite_1, XPAR_UARTLITE_0_DEVICE_ID);
 
 	// Conectar el Interrupt Handler al controlador de interrupciones
 	XIntc_Connect(&InterruptController, XPAR_INTC_0_UARTLITE_2_VEC_ID,(XInterruptHandler)XUartLite_InterruptHandler, (void *)&uart_UartLite);
+	XIntc_Connect(&InterruptController, XPAR_INTC_0_UARTLITE_0_VEC_ID,(XInterruptHandler)XUartLite_InterruptHandler, (void *)&uart_UartLite_1);
 
 	// Habilitamos la interrupci�n 2 del controlador de interrupciones
 	XIntc_Enable(&InterruptController, XPAR_INTC_0_UARTLITE_2_VEC_ID);
+	XIntc_Enable(&InterruptController, XPAR_INTC_0_UARTLITE_0_VEC_ID);
 
 	// Asignar la funci�n de interrupci�n de recepci�n
 	XUartLite_SetRecvHandler(&uart_UartLite, interrupcion_uart_recv, &uart_UartLite);
+	XUartLite_SetRecvHandler(&uart_UartLite_1, interrupcion_uart_recv_bluetooth, &uart_UartLite_1);
 	// Asignar la funci�n de interrupci�n de env�o
 	XUartLite_SetSendHandler(&uart_UartLite, interrupcion_uart_send, &uart_UartLite);
+	XUartLite_SetSendHandler(&uart_UartLite_1, interrupcion_uart_send_bluetooth, &uart_UartLite_1);
 	// Habilitar interrupciones en la UART
 	XUartLite_EnableInterrupt(&uart_UartLite);
+	XUartLite_EnableInterrupt(&uart_UartLite_1);
 }
 /**
  * @brief  Rutina de interrupcion.
@@ -177,6 +186,38 @@ void interrupcion_uart_recv(void *CallbackRef, unsigned int EventData)
     	//led_data = buffer_ptr[0];
 
    	XUartLite_EnableInterrupt(uart_UartLite);
+}
+
+void interrupcion_uart_recv_bluetooth(void *CallbackRef, unsigned int EventData)
+{
+	XUartLite *uart_UartLite_1 = (XUartLite *)CallbackRef;
+	unsigned char buffer;
+	//Receive the interrupt
+
+	buffer=(u8)XUartLite_RecvByte(XPAR_AXI_UARTLITE_0_BASEADDR);
+	//*(buffer_recibir+indice_buffer_entrada) = (u8)XUartLite_RecvByte(XPAR_USB_UART_BASEADDR);
+	//indice_buffer_entrada++;
+
+   	XUartLite_EnableInterrupt(uart_UartLite_1);
+}
+
+void interrupcion_uart_send_bluetooth(void *CallBackRef, unsigned int EventData)
+{
+	//XUartLite *UartLitePtr = (XUartLite *)CallBackRef;
+	// Recibir un byte de la UART
+	//XUartLite_Recv(UartLitePtr, &led_data, 1);
+	//led_data[0]++;
+	if(cont_data<10)
+	{
+		XUartLite_Send(&uart_UartLite_1, letra+cont_data, 1);
+		cont_data++;
+	}
+	/*else
+	{
+		cont_data=1;
+	}*/
+
+	//button_pressed = 1;
 }
 
 int UART_recibir(void)
