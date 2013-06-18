@@ -6,6 +6,11 @@ Debug/*
 *.elf.xcodeproj/*
 
 #################
+## VHDL
+#################
+lscript.ld
+
+#################
 ## Eclipse
 #################
 *.pydevproject
