@@ -150,7 +150,7 @@ void ZIGBEE_recepcion_mensajes(void){
 	}
 }
 /**
- * @brief  Función para crear un mensaje.
+ * @brief  Funciï¿½n para crear un mensaje.
  *
  * @return    -
  *
@@ -169,12 +169,12 @@ MENSAJEClass ZIGBEE_crear_mensaje(SENSORClass sensor){
 	return mensaje;
 }
 /**
- * @brief  Función para enviar un mensaje mediante zigbee.
+ * @brief  Funciï¿½n para enviar un mensaje mediante zigbee.
  *
  * @return    -
  *
  * Le da un formato adecuado al mensaje para enviar mediante
- * zigbee y lo envía.
+ * zigbee y lo envï¿½a.
 */
 void ZIGBEE_enviar_mensaje(MENSAJEClass mensaje){
 	ZIGBEE_formatear_mensaje(mensaje);
@@ -231,7 +231,7 @@ MENSAJEClass ZIGBEE_recibir_mensaje(void){
 	checksum = ZIGBEE_calcular_checksum(recibido);
 	if(checksum == recibido[numero_recibido + 2]){
 		mensaje = ZIGBEE_tratar_mensaje(recibido);
-		recibido_anteriormente(mensaje);
+		//ZIGBEE_recibido_anteriormente(mensaje);
 		if(mensaje.id == g_i_mi_id || ZIGBEE_recibido_anteriormente(mensaje)){
 			mensaje.id = NULL;
 		}
@@ -373,8 +373,8 @@ void ZIGBEE_borrar_mensaje_lista(){
  * que sean comprensibles en la trama zigbee.
 */
 void ZIGBEE_calcular_tamano_mensaje(MENSAJEClass mensaje){
-	int unidad_tamano = gs_i_tamano - 4; /*Calcular el tamaño del mensaje en un byte*/
-	int llevada_tamano = 0; /*Llevada para calcular el tamaño del mensaje en más de un byte*/
+	int unidad_tamano = gs_i_tamano - 4; /*Calcular el tamaï¿½o del mensaje en un byte*/
+	int llevada_tamano = 0; /*Llevada para calcular el tamaï¿½o del mensaje en mï¿½s de un byte*/
 
 	while(unidad_tamano > 255){
 		unidad_tamano -= 255;

@@ -29,21 +29,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "hw_types.h"
 #include "bluetooth.h"
-#include "uartDrv.h"
 #include "broadcar.h"
-#include "display.h"
+#ifdef STELLARIS
+#include "hw_types.h"
+#include "uartDrvStellaris.h"
+#include "displayGenerico.h"
+#include "displayStellaris.h"
+#else
+#include "displaySpartan.h"
+#include "uartDrvSpartan.h"
+#endif
 /*********************************************************************
 ** 																	**
 ** PROTOTYPES OF LOCAL FUNCTIONS 									**
 ** 																	**
 *********************************************************************/
-tBoolean BLUETOOTH_hay_mensaje(void);
+boolean BLUETOOTH_hay_mensaje(void);
 void BLUETOOTH_recibir_mensaje(void);
-tBoolean BLUETOOTH_es_mensaje_emparejamiento();
-tBoolean BLUETOOTH_es_mensaje_conexion();
-tBoolean BLUETOOTH_es_mensaje_desconexion();
+boolean BLUETOOTH_es_mensaje_emparejamiento();
+boolean BLUETOOTH_es_mensaje_conexion();
+boolean BLUETOOTH_es_mensaje_desconexion();
 void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje);
 void BLUETOOTH_calcular_llevada(int dato, int *contador_trama);
 void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje, int *contador_trama);
@@ -52,12 +58,18 @@ void BLUETOOTH_vaciar_buffer_entrada(void);
 void BLUETOOTH_vaciar_buffer_salida(void);
 /*********************************************************************
 ** 																	**
+** EXPORTED VARIABLES 												**
+** 																	**
+*********************************************************************/
+extern int longitud_trama_bluetooth; /*Longitud del mensaje que se recibe por bluetooth*/
+/*********************************************************************
+** 																	**
 ** GLOBAL VARIABLES 												**
 ** 																	**
 **********************************************************************/
-tBoolean g_b_conectado = false;
+boolean g_b_conectado = false;
 static int gs_i_puerto_bluetooth = 0; /*Puerto UART que se usa para la comunicacion con el modulo bluetooth*/
-static int gs_i_tamano = 0; /*Tamaño del mensaje*/
+static int gs_i_tamano = 0; /*Tamaï¿½o del mensaje*/
 static uint8_t gs_ba_envio[255]; /*Mensaje a enviar en formato byte*/
 static uint8_t gs_ba_recibido[255]; /*Mensaje recibido en formato byte*/
 static unsigned char gs_uc_caracter_barra = 0x2F;
@@ -69,7 +81,7 @@ static unsigned char gs_i_cero_ascii = 48; /*Caracter cero en ASCII*/
 ** 																	**
 **********************************************************************/
 /**
- * @brief  Función para inicializar el puerto UART.
+ * @brief  Funciï¿½n para inicializar el puerto UART.
  *
  * @return    -
  *
@@ -92,7 +104,7 @@ void BLUETOOTH_inicializacion(){
  *			NO CARRIER 0 ERROR 0
 */
 void BLUETOOTH_recepcion_mensajes(void){
-	tBoolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
+	boolean b_mensaje = false; /*Si se ha recibido un mensaje completo*/
 	unsigned char * pantalla; /*Donde se guarda lo que se va a escribir en pantalla*/
 
 	b_mensaje = BLUETOOTH_hay_mensaje();
@@ -125,12 +137,12 @@ void BLUETOOTH_recepcion_mensajes(void){
 	}
 }
 /**
- * @brief  Función para enviar una alerta mediante bluetooth.
+ * @brief  Funciï¿½n para enviar una alerta mediante bluetooth.
  *
  * @return    -
  *
  * Vacia el buffer de salida, formatea el mensaje a enviar y
- * lo envía mediante bluetooth
+ * lo envï¿½a mediante bluetooth
 */
 void BLUETOOTH_enviar_mensaje(MENSAJEClass mensaje){
 	BLUETOOTH_vaciar_buffer_salida();
@@ -147,8 +159,8 @@ void BLUETOOTH_enviar_mensaje(MENSAJEClass mensaje){
  * Donde los asteriscos significan datos que cambian cada
  * vez que se envia el mensaje
 */
-tBoolean BLUETOOTH_es_mensaje_emparejamiento(){
-	tBoolean resultado = false;
+boolean BLUETOOTH_es_mensaje_emparejamiento(){
+	boolean resultado = false;
 
 	if(!strncmp(gs_ba_recibido, "SSP CONFIRM", 11)){
 		resultado = true;
@@ -166,8 +178,8 @@ tBoolean BLUETOOTH_es_mensaje_emparejamiento(){
  * Donde los asteriscos significan datos que cambian cada
  * vez que se envia el mensaje
 */
-tBoolean BLUETOOTH_es_mensaje_conexion(){
-	tBoolean resultado = false;
+boolean BLUETOOTH_es_mensaje_conexion(){
+	boolean resultado = false;
 
 	if(!strncmp(gs_ba_recibido, "RING", 4)){
 		resultado = true;
@@ -183,8 +195,8 @@ tBoolean BLUETOOTH_es_mensaje_conexion(){
  * Se verifica que el mensaje recibido por bluetooth es de
  * desconexion: NO CARRIER 0 ERROR 0
 */
-tBoolean BLUETOOTH_es_mensaje_desconexion(){
-	tBoolean resultado = false;
+boolean BLUETOOTH_es_mensaje_desconexion(){
+	boolean resultado = false;
 
 	if(!strncmp(gs_ba_recibido, "NO CARRIER 0 ERROR 0", 20)){
 		resultado = true;
@@ -193,24 +205,24 @@ tBoolean BLUETOOTH_es_mensaje_desconexion(){
 	return resultado;
 }
 /**
- * @brief  Función que mira si se ha recibido un mensaje por bluetooth.
+ * @brief  Funciï¿½n que mira si se ha recibido un mensaje por bluetooth.
  *
  * @return    Si se ha recibido un mensaje.
  *
- * Mira si se han recibido más de 33 bytes mediante bluetooth, indicativo
+ * Mira si se han recibido mï¿½s de 33 bytes mediante bluetooth, indicativo
  * de que se ha recibido el mensaje completo.
 */
-tBoolean BLUETOOTH_hay_mensaje(void){
+boolean BLUETOOTH_hay_mensaje(void){
 	int numero_elementos = 0; /*Numero de elementos que hay en el buffer de software*/
-	tBoolean completo = false; /*Si se ha recibido un mensaje completo*/
+	boolean completo = false; /*Si se ha recibido un mensaje completo*/
 
 	numero_elementos = UART_nElementosIn(gs_i_puerto_bluetooth);
 	if(g_b_conectado){
-		if(numero_elementos >= 18){
+		if(numero_elementos >= longitud_trama_bluetooth/*18*/){
 			completo = true;
 		}
 	}else{
-		if(numero_elementos >= 33){
+		if(numero_elementos >= longitud_trama_bluetooth/*33*/){
 			completo = true;
 		}
 	}
@@ -218,7 +230,7 @@ tBoolean BLUETOOTH_hay_mensaje(void){
 	return completo;
 }
 /**
- * @brief  Función que recibe el mensaje de zigbee.
+ * @brief  Funciï¿½n que recibe el mensaje de zigbee.
  *
  * @return    El cuerpo del mensaje.
  *
@@ -257,7 +269,7 @@ void BLUETOOTH_recibir_mensaje(void){
 	}
 }
 /**
- * @brief  Función para darle formato al mensaje bluetooth.
+ * @brief  Funciï¿½n para darle formato al mensaje bluetooth.
  *
  * @return    -
  *
@@ -305,13 +317,13 @@ void BLUETOOTH_formatear_mensaje(MENSAJEClass mensaje){
 	gs_i_tamano = contador_trama;
 }
 /**
- * @brief  Función para calcular la llevada de los datos a
+ * @brief  Funciï¿½n para calcular la llevada de los datos a
  * enviar mediante bluetooth.
  *
  * @return    -
  *
  * Se calcula la llevada de ciertos datos (latitud, longitud,
- * etc.) porque se envían utilizando la codificacion ASCII.
+ * etc.) porque se envï¿½an utilizando la codificacion ASCII.
 */
 void BLUETOOTH_calcular_llevada(int dato, int *contador_trama){
 	int llevada_centena = 0; /*Llevada de la centena*/
@@ -345,11 +357,11 @@ void BLUETOOTH_calcular_llevada(int dato, int *contador_trama){
 	}
 }
 /**
- * @brief  Función para cargar el valor que tiene el mensaje.
+ * @brief  Funciï¿½n para cargar el valor que tiene el mensaje.
  *
  * @return    -
  *
- * Dependiendo del tipo de mensaje que sea habrá que tratar ese valor
+ * Dependiendo del tipo de mensaje que sea habrï¿½ que tratar ese valor
  * para que tenga sentido en la interfaz de destino.
 */
 void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje, int *contador_trama){
@@ -408,12 +420,12 @@ void BLUETOOTH_insertar_info_envio(MENSAJEClass mensaje, int *contador_trama){
 	}
 }
 /**
- * @brief  Función para enviar el mensaje de emparejamiento
+ * @brief  Funciï¿½n para enviar el mensaje de emparejamiento
  * de bluetooth.
  *
  * @return    -
  *
- * Se envía la respuesta al comando de emparejamiento enviado
+ * Se envï¿½a la respuesta al comando de emparejamiento enviado
  * por la aplicacion Android para que los dos dispositivos puedan
  * comunicarse entre ellos.
 */
@@ -438,7 +450,7 @@ void BLUETOOTH_enviar_emparejamiento(void){
 	UART_send(gs_i_puerto_bluetooth, mensaje_emparejamiento, &contador);
 }
 /**
- * @brief  Función para vaciar el buffer de recepcion.
+ * @brief  Funciï¿½n para vaciar el buffer de recepcion.
  *
  * @return    -
  *
@@ -452,7 +464,7 @@ void BLUETOOTH_vaciar_buffer_entrada(void){
 	}
 }
 /**
- * @brief  Función para vaciar el buffer de envio.
+ * @brief  Funciï¿½n para vaciar el buffer de envio.
  *
  * @return    -
  *

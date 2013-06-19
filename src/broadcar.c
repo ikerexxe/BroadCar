@@ -30,7 +30,7 @@
 //#include "sensorVelocidad.h"
 //#include "sensorVisibilidad.h"
 #include "bluetooth.h"
-#include "motorAutomatas.h"
+//#include "motorAutomatas.h"
 #include "zigbee.h"
 #ifdef STELLARIS
 #include "hw_types.h"
@@ -89,7 +89,7 @@ void BROADCAR_inicializacion(){
 	BLUETOOTH_inicializacion();
 }
 /**
- * @brief  Función donde se ejecuta la logica principal del programa.
+ * @brief  Funciï¿½n donde se ejecuta la logica principal del programa.
  *
  * @return    -
  *
